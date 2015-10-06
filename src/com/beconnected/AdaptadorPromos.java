@@ -58,7 +58,7 @@ public class AdaptadorPromos extends
 			byte[] image = promo.getLOGO();
 			if (image == null) {
 
-				// imageViewEscudo.setImageResource(R.drawable.ic_pelota_futbol);
+				imageViewLogo.setImageResource(R.drawable.ic_launcher);
 			} else {
 				Bitmap theImage = BitmapFactory.decodeByteArray(
 						promo.getLOGO(), 0,

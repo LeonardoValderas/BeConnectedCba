@@ -2,6 +2,9 @@ package com.beconnected;
 
 
 
+import com.beconnected.databases.BL;
+import com.beconnected.databases.DL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -28,9 +31,9 @@ public class TabsUsuario extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
 
-//		DL.getDl().setSqLiteDBConnection(this);
-//		BL.getBl().crearTablasBD();
-//		BL.getBl().creaDirectorios();
+		DL.getDl().setSqliteConnection(this);
+		BL.getBl().crearTablasBD();
+		BL.getBl().creaDirectorios();
 
 //		restarMap = getIntent().getIntExtra("restart", 0);
 		init();

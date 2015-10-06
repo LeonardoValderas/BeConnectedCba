@@ -3,6 +3,10 @@ package com.beconnected;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
+import com.beconnected.databases.BL;
+import com.beconnected.databases.DL;
+import com.beconnected.databases.Promo;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -41,18 +45,14 @@ public class FragmentPromos extends Fragment {
 
 	private static final int SELECT_SINGLE_PICTURE = 1;
 
-	private byte[] imagenEscudo = null;
+	//private byte[] imagenEscudo = null;
 	private RecyclerView recycleViewPromo;
-	// private AlertsMenuList alertMenuList;
-	private EditText editTextNombre;
-	private ImageButton imageButtonEquipo;
-	private ByteArrayOutputStream baos;
+	//private ImageButton imageButtonEquipo;
+	//private ByteArrayOutputStream baos;
 	private Bitmap myImage;
-	private FloatingActionButton botonFloating;
-//	private Equipo equipoAdeful;
-//	private ArrayList<Equipo> equipoAdefulArray;
-//	private AdaptadorEquipo adaptador;
-//	private AlertsMenu alertMenu;
+    private Promo promo;
+	private ArrayList<Promo> datosPromo;
+	private AdaptadorPromos adaptador;
 	private boolean insertar = true;
 	private int posicion;
 
@@ -82,10 +82,14 @@ public class FragmentPromos extends Fragment {
 
 	private void init() {
 
+		
+		promo = new Promo(0, "2 x 1 ", "Lleva dos hamburguesas y paga una", "Mc", null, "06/10/2015", "08/10/2015", "Adm", "05/10/2015");
+		
+		DL.getDl().getSqliteConnection().insertPromo(promo);
 
 		recycleViewPromo = (RecyclerView) getView().findViewById(
 				R.id.recycleViewPromo);
-		
+		recyclerViewLoadPromo();
 		
 		
 		recycleViewPromo.addOnItemTouchListener(new RecyclerTouchListener(
@@ -115,10 +119,12 @@ public class FragmentPromos extends Fragment {
 		recycleViewPromo.addItemDecoration(new DividerItemDecoration(
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewPromo.setItemAnimator(new DefaultItemAnimator());
-		//equipoAdefulArray = BL.getBl().selectListaEquipoAdeful();
-		//adaptador = new AdaptadorEquipo(equipoAdefulArray);
+		datosPromo = BL.getBl().selectListaPromo();
+		
+		
+		adaptador = new AdaptadorPromos(datosPromo);
 		//adaptador.notifyDataSetChanged();
-	//	recycleViewPromo.setAdapter(adaptador);
+		recycleViewPromo.setAdapter(adaptador);
 
 	}
 
