@@ -44,16 +44,39 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	 */
 	public void createTablesBD() {
 
-		// MODULO LIGA
-
+		String TABLA_EMPRESA = "CREATE TABLE IF NOT EXISTS EMPRESA (ID_EMPRESA INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " EMPRESA VARCHAR(100),"
+				+ " LONGITUD VARCHAR(100),"
+				+ " LATITUD VARCHAR(100),"
+				+ " LOGO BLOB);";
+		
 		String TABLA_PROMO = "CREATE TABLE IF NOT EXISTS PROMO (ID_PROMO INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ " TITULO VARCHAR(100),"
 				+ " DESCRIPCION VARCHAR(100),"
-				+ " EMPRESA VARCHAR(100),"
+				+ " ID_EMPRESA INTEGER,"
+				+ " FECHA_INICIO VARCHAR(100),"
+				+ " FECHA_FIN VARCHAR(100),"
+				+ " USUARIO VARCHAR(100)," + " FECHA_CREACION VARCHAR(100));";
+		
+		String TABLA_PROMO2 = "CREATE TABLE IF NOT EXISTS PROMO (ID_PROMO INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " TITULO VARCHAR(100),"
+				+ " DESCRIPCION VARCHAR(100),"
+				+ " ID_EMPRESA INTEGER,"
 				+ " LOGO BLOB,"
 				+ " FECHA_INICIO VARCHAR(100),"
 				+ " FECHA_FIN VARCHAR(100),"
 				+ " USUARIO VARCHAR(100)," + " FECHA_CREACION VARCHAR(100));";
+		
+		String TABLA_EMPRESAd= "CREATE TABLE IF NOT EXISTS MAPA (ID_EMPRESA INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " EMPRESA VARCHAR(100),"
+				+ " LONGITUD VARCHAR(100),"
+				+ " LATITUD VARCHAR(100),"
+				+ " FECHA_CREACION VARCHAR(100),"
+				+ " FECHA_ACTUALIZACION VARCHAR(100),"
+				+ " ESTADO VARCHAR(1),"
+				+ " TABLA VARCHAR(100));";
+		
+		
 
 		String TABLA_DIVISION_ADEFUL = "CREATE TABLE IF NOT EXISTS DIVISION_ADEFUL (ID_DIVISION INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ " DESCRIPCION VARCHAR(100),"
@@ -148,6 +171,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 			try {
 				// MODULO LIGA
 				database.execSQL(TABLA_PROMO);
+				database.execSQL(TABLA_EMPRESA);
+				
 				// database.execSQL(TABLA_EQUIPO_LIFUBA);
 				// database.execSQL(TABLA_DIVISION_ADEFUL);
 				// database.execSQL(TABLA_DIVISION_LIFUBA);
@@ -173,6 +198,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database = null;
 
 		TABLA_PROMO = null;
+		TABLA_EMPRESA = null;
 		// TABLA_EQUIPO_LIFUBA = null;
 		// TABLA_DIVISION_ADEFUL = null;
 		// TABLA_DIVISION_LIFUBA = null;
@@ -252,6 +278,149 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	// ////////////////////////////////////////
 	// /////Metodos tablas///////
 
+	
+	
+	
+	
+	public boolean insertEmpresa(Empresa empresa) throws SQLiteException {
+		boolean ban = false;
+
+		ContentValues cv = new ContentValues();
+		cv.put("EMPRESA", empresa.getEMPRESA());
+		cv.put("LONGITUD", empresa.getLONGITUD());
+		cv.put("LATITUD", empresa.getLATIDUD());
+		cv.put("LOGO", empresa.getLOGO());
+		
+		SQLiteDatabase database = this.getWritableDatabase();
+
+		database.insert("EMPRESA", null, cv);
+		return true;
+	}
+	
+	/**
+	 * 
+	 * Metodo que obtiene lista de equipos adeful.
+	 */
+	public ArrayList<Empresa> selectListaEmpresa() {
+
+		String sql = "SELECT * FROM EMPRESA";
+		ArrayList<Empresa> arrayEmpresa = new ArrayList<Empresa>();
+		String empresaa = null, longitud = null, latitud = null;
+		byte[] logo = null;
+		int id;
+		Cursor cursor = null;
+		// Integer isFueraFrecuencia;
+		SQLiteDatabase database = null;
+
+		database = getSqLiteDatabase("selectListaEmpresa");
+		if (database != null && database.isOpen()) {
+
+			try {
+				cursor = database.rawQuery(sql, null);
+				if (cursor != null && cursor.getCount() > 0) {
+
+					while (cursor.moveToNext()) {
+
+						Empresa empresa = null;
+						id = cursor.getInt(cursor.getColumnIndex("ID_EMPRESA"));
+						empresaa = cursor.getString(cursor
+								.getColumnIndex("EMPRESA"));
+
+						longitud = cursor.getString(cursor
+								.getColumnIndex("LONGITUD"));
+
+						latitud = cursor.getString(cursor
+								.getColumnIndex("LATITUD"));
+
+						logo = cursor.getBlob(cursor.getColumnIndex("LOGO"));
+
+						
+
+						empresa = new Empresa(id, empresaa, longitud, latitud,
+								logo);
+
+						arrayEmpresa.add(empresa);
+
+					}
+				}
+
+			} catch (Exception e) {
+				Log.e("selectListaEmpresa", e.toString());
+			}
+		} else {
+
+			Log.e("selectListaEmpresa", "Error Conexión Base de Datos");
+		}
+
+		sql = null;
+		
+		empresaa = null;
+		longitud = null; 
+		latitud = null;
+		cursor = null;
+		database = null;
+		return arrayEmpresa;
+	}
+
+	
+	public boolean actualizarEmpresa(Empresa empresa) throws SQLiteException {
+	boolean ban = false;
+
+	ContentValues cv = new ContentValues();
+	cv.put("EMPRESA", empresa.getEMPRESA());
+	cv.put("LONGITUD", empresa.getLONGITUD());
+	cv.put("LATITUD", empresa.getLATIDUD());
+	cv.put("LOGO", empresa.getLOGO());
+
+
+	SQLiteDatabase database = this.getWritableDatabase();
+
+	database.update("EMPRESA", cv,
+			"ID_EMPRESA" + "=" + empresa.getID_EMPRESA(), null);
+	return true;
+}
+
+	
+	
+	public boolean eliminarEmpresa(int id) {
+
+				boolean res = false;
+				SQLiteDatabase database = getSqLiteDatabase("eliminarEmpresa");
+				String sql = "DELETE FROM EMPRESA WHERE ID_EMPRESA = " + id;
+
+				if (database != null && database.isOpen()) {
+
+					try {
+
+						database.execSQL(sql);
+						res = true;
+		
+					} catch (Exception e) {
+		
+						res = false;
+						Log.e("eliminarEmpresa", e.toString());
+					}
+		
+				} else {
+		
+					res = false;
+					Log.e("eliminarEmpresa", "Error Conexión Base de Datos");
+				}
+		
+				database = null;
+				sql = null;
+				return res;
+			}
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Se usa ContentVales para la utilización de byte[] blob
 	 */

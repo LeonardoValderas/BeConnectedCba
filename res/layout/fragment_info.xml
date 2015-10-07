@@ -14,27 +14,26 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical" >
 
-                
-
-                <ImageButton
-                    android:id="@+id/imageButtonEquipo_Cancha"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_launcher" />
-
-                <EditText
-                    android:id="@+id/editTextDescripcion"
+   
+                <TextView
+                    android:id="@+id/editTextSomos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:gravity="center"
-                    android:hint="Ingrese el Equipo"
+                    android:hint="BeConnected es una empresa....."
                     android:textColor="#000000"
-                    android:textSize="30dp" >
-
-                    <requestFocus />
-                </EditText>
+                    android:textSize="20dp" />
+            
+                <TextView
+                    android:id="@+id/editTextContacto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="50dp"
+                    android:hint="Contactos: \n Telefonos:3513235315 - 3515351556 \n Mail: beconnected.cba@gamail.com"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+          
             </LinearLayout>
 
 

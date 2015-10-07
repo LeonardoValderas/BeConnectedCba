@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/button_pressed_group" android:state_pressed="true"/> <!-- pressed -->
+    <item android:drawable="@drawable/button_focused_group" android:state_focused="true"/> <!-- focused -->
+    <item android:drawable="@drawable/button_focused_group" android:state_hovered="true"/> <!-- hovered -->
+    <item android:drawable="@drawable/button_normal_group"/> <!-- default -->
+
+</selector>

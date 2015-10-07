@@ -59,10 +59,30 @@ public BL(){
 	}
 	
 
-	/**
-	 * Metodos get set base de datos Liga
-	 * @return
-	 */
+	
+	public boolean insertarEmpresa(Empresa empresa) {
+
+		return DL.getDl().getSqliteConnection().insertEmpresa(empresa);
+
+	}
+	public ArrayList<Empresa> selectListaEmpresa() {
+
+		return DL.getDl().getSqliteConnection().selectListaEmpresa();
+
+	}
+	
+	
+	public boolean actualizarEmpresa(Empresa empresa) {
+
+		return DL.getDl().getSqliteConnection().actualizarEmpresa(empresa);
+
+	}
+	public boolean eliminarEmpresa(int id) {
+
+		return DL.getDl().getSqliteConnection().eliminarEmpresa(id);
+
+	}
+	
 	
 	
 	public boolean insertarPromo(Promo promo) {
