@@ -30,8 +30,7 @@ public class AdaptadorEmpresa extends
 	public static class EmpresaViewHolder extends RecyclerView.ViewHolder {
 
 		private TextView tituloRecyclerView;
-		private TextView descripcionRecyclerView;
-		private TextView vigenciaRecyclerView;
+
 		private ImageView imageViewLogo;
 
 		public EmpresaViewHolder(View itemView) {
@@ -39,36 +38,25 @@ public class AdaptadorEmpresa extends
 
 			tituloRecyclerView = (TextView) itemView
 					.findViewById(R.id.tituloRecyclerView);
-			descripcionRecyclerView = (TextView) itemView
-					.findViewById(R.id.descripcionRecyclerView);
-			vigenciaRecyclerView = (TextView) itemView
-					.findViewById(R.id.vigenciaRecyclerView);
-			
+
 			imageViewLogo = (ImageView) itemView
 					.findViewById(R.id.imageViewLogo);
 		}
 
 		@SuppressLint("NewApi")
 		public void bindTitular(Empresa empresa) {
-		
-					
-			  tituloRecyclerView.setText(empresa.getEMPRESA());
-			//  descripcionRecyclerView.setText(empresa.);
-			//  vigenciaRecyclerView.setText(empresa.getFECHA_INICIO()+"-"+promo.getFECHA_FIN());
-		
+
+			tituloRecyclerView.setText(empresa.getEMPRESA());
 
 			byte[] image = empresa.getLOGO();
 			if (image == null) {
 
-				imageViewLogo.setImageResource(R.drawable.ic_launcher);
+				imageViewLogo.setImageResource(R.drawable.logo);
 			} else {
 				Bitmap theImage = BitmapFactory.decodeByteArray(
-						empresa.getLOGO(), 0,
-						empresa.getLOGO().length);
-				
+						empresa.getLOGO(), 0, empresa.getLOGO().length);
+
 				imageViewLogo.setImageBitmap(theImage);
-//				Drawable escudo = new BitmapDrawable(theImage);
-//				imageViewEscudo.setImageDrawable(escudo);
 
 			}
 		}
@@ -83,7 +71,7 @@ public class AdaptadorEmpresa extends
 	public EmpresaViewHolder onCreateViewHolder(ViewGroup viewGroup,
 			int viewType) {
 		View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(
-				R.layout.recyclerview_item, viewGroup, false);
+				R.layout.recyclerview_item_empresa, viewGroup, false);
 
 		itemView.setOnClickListener(this);
 		// android:background="?android:attr/selectableItemBackground"
@@ -106,11 +94,6 @@ public class AdaptadorEmpresa extends
 	public int getItemCount() {
 		return datosEmpresa.size();
 	}
-
-	// public void add(EquipoAdeful item, int position) {
-	// datosEquipoArray.add(position, item);
-	// notifyItemInserted(position);
-	// }
 
 	public void setOnClickListener(View.OnClickListener listener) {
 		this.listener = listener;

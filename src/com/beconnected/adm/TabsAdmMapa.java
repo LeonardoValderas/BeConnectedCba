@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TabsAdmMapa extends AppCompatActivity {
@@ -25,6 +26,7 @@ public class TabsAdmMapa extends AppCompatActivity {
 	private ActionBarDrawerToggle drawerToggle;
 	private ViewPager viewPager;
 	private TabLayout tabLayout;
+//	private ImageView 
 	private int restarMap = 0;
 	TextView txtAbSubTitulo;
 	// private TextView txtAbSubTitulo;
@@ -52,9 +54,9 @@ public class TabsAdmMapa extends AppCompatActivity {
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-		 txtAbSubTitulo = (TextView)
-		 toolbar.findViewById(R.id.txtAbSubTitulo);
-		 txtAbSubTitulo.setText("EMPRESA");
+//		 txtAbSubTitulo = (TextView)
+//		 toolbar.findViewById(R.id.txtAbSubTitulo);
+//		 txtAbSubTitulo.setText("EMPRESA");
 
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPager

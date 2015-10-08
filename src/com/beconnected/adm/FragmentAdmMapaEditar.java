@@ -48,12 +48,12 @@ public class FragmentAdmMapaEditar extends Fragment {
 
 	private static final int SELECT_SINGLE_PICTURE = 1;
 
-	//private byte[] imagenEscudo = null;
+	// private byte[] imagenEscudo = null;
 	private RecyclerView recycleViewMapa;
-	//private ImageButton imageButtonEquipo;
-	//private ByteArrayOutputStream baos;
+	// private ImageButton imageButtonEquipo;
+	// private ByteArrayOutputStream baos;
 	private Bitmap myImage;
-    private Promo promo;
+	private Promo promo;
 	private ArrayList<Empresa> datosEmpresa;
 	private AdaptadorEmpresa adaptador;
 	private boolean insertar = true;
@@ -79,59 +79,57 @@ public class FragmentAdmMapaEditar extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_mapa_editar, container,
-				false);
+		return inflater
+				.inflate(R.layout.fragment_mapa_editar, container, false);
 
 	}
-	
-	
-//	@Override
-//	public void onPause() {
-//	 //   Fragment fragment = (getChildFragmentManager().findFragmentById(R.id.map));
-//	    FragmentAdmMapaEditar fragment = new FragmentAdmMapaEditar();
-//	    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//	    ft.remove(fragment);
-//	    ft.commit();
-//		
-//		//init();
-//	    super.onPause();
-//	}
-//	
+
+	// @Override
+	// public void onPause() {
+	// // Fragment fragment =
+	// (getChildFragmentManager().findFragmentById(R.id.map));
+	// FragmentAdmMapaEditar fragment = new FragmentAdmMapaEditar();
+	// FragmentTransaction ft =
+	// getActivity().getSupportFragmentManager().beginTransaction();
+	// ft.remove(fragment);
+	// ft.commit();
+	//
+	// //init();
+	// super.onPause();
+	// }
+	//
 
 	private void init() {
 
-		recycleViewMapa= (RecyclerView) getView().findViewById(R.id.recycleViewMapa);
-	
-		
+		recycleViewMapa = (RecyclerView) getView().findViewById(
+				R.id.recycleViewMapa);
+
 		recyclerViewLoadEmpresa();
 		recycleViewMapa.addOnItemTouchListener(new RecyclerTouchListener(
 				getActivity(), recycleViewMapa, new ClickListener() {
 
-					
 					@Override
 					public void onClick(View view, int position) {
 						// TODO Auto-generated method stub
-						
-						
+
 						Intent empresaEdit = new Intent(getActivity(),
 								TabsAdmMapa.class);
 						empresaEdit.putExtra("actualizar", true);
-						empresaEdit.putExtra("empresa", datosEmpresa.get(position)
-								.getEMPRESA());
+						empresaEdit.putExtra("empresa",
+								datosEmpresa.get(position).getEMPRESA());
 						empresaEdit.putExtra("longitud",
 								datosEmpresa.get(position).getLONGITUD());
-						empresaEdit.putExtra("latitud", datosEmpresa
-								.get(position).getLATIDUD());
+						empresaEdit.putExtra("latitud",
+								datosEmpresa.get(position).getLATIDUD());
 						empresaEdit.putExtra("posicion", position);
 
 						startActivity(empresaEdit);
-						
-						
+
 					}
-					
+
 					@Override
 					public void onLongClick(View view, final int position) {
-					
+
 						alertsMenu = new AlertsMenu(getActivity(), "ALERTA",
 								"Desea eliminar el equipo?", null, null);
 						alertsMenu.btnAceptar.setText("Aceptar");
@@ -153,43 +151,41 @@ public class FragmentAdmMapaEditar extends Fragment {
 												getActivity(),
 												"Empresa Eliminada Correctamente",
 												Toast.LENGTH_SHORT).show();
-										 
+
 										alertsMenu.alertDialog.dismiss();
 
-					}
-								
-					});
+									}
+
+								});
 					}
 				}));
 
-					}
-
-	
+	}
 
 	public void recyclerViewLoadEmpresa() {
 
-		recycleViewMapa.setLayoutManager(new LinearLayoutManager(
-				getActivity(), LinearLayoutManager.VERTICAL, false));
+		recycleViewMapa.setLayoutManager(new LinearLayoutManager(getActivity(),
+				LinearLayoutManager.VERTICAL, false));
 		recycleViewMapa.addItemDecoration(new DividerItemDecoration(
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewMapa.setItemAnimator(new DefaultItemAnimator());
 		datosEmpresa = BL.getBl().selectListaEmpresa();
-		
-		
+
 		adaptador = new AdaptadorEmpresa(datosEmpresa);
-		//adaptador.notifyDataSetChanged();
+		// adaptador.notifyDataSetChanged();
 		recycleViewMapa.setAdapter(adaptador);
 
 	}
-//
-//
-//	/**
-//	 * Metodo click item recycler
-//	 * 
-//	 * @author LEO
-//	 * 
-//	 */
-//
+
+	//
+	//
+	// /**
+	// * Metodo click item recycler
+	// *
+	// * @author LEO
+	// *
+	// */
+	//
 	public static interface ClickListener {
 
 		public void onClick(View view, int position);
@@ -253,6 +249,4 @@ public class FragmentAdmMapaEditar extends Fragment {
 
 	}
 
-
-	}
-
+}

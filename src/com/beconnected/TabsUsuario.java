@@ -50,9 +50,9 @@ public class TabsUsuario extends AppCompatActivity {
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-		 txtAbSubTitulo = (TextView)
-		 toolbar.findViewById(R.id.txtAbSubTitulo);
-		 txtAbSubTitulo.setText("Bienvenido");
+//		 txtAbSubTitulo = (TextView)
+//		 toolbar.findViewById(R.id.txtAbSubTitulo);
+//		 txtAbSubTitulo.setText("Bienvenido");
 
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPager
