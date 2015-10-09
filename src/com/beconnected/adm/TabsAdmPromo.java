@@ -21,7 +21,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class TabsAdmMapa extends AppCompatActivity {
+public class TabsAdmPromo extends AppCompatActivity {
 
 	private Toolbar toolbar;
 	private ActionBarDrawerToggle drawerToggle;
@@ -36,9 +36,9 @@ public class TabsAdmMapa extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
 
-		DL.getDl().setSqliteConnection(this);
-		BL.getBl().crearTablasBD();
-		BL.getBl().creaDirectorios();
+//		DL.getDl().setSqliteConnection(this);
+//		BL.getBl().crearTablasBD();
+//		BL.getBl().creaDirectorios();
 
 //		restarMap = getIntent().getIntExtra("restart", 0);
 		init();
@@ -61,7 +61,7 @@ public class TabsAdmMapa extends AppCompatActivity {
 
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPager
-				.setAdapter(new TabsAdapterAdmMapa(getSupportFragmentManager()));
+				.setAdapter(new TabsAdapterAdmPromo(getSupportFragmentManager()));
 	
 		
 		 
@@ -122,19 +122,13 @@ public class TabsAdmMapa extends AppCompatActivity {
 		// noinspection SimplifiableIfStatement
 		if (id == R.id.action_usuario) {
 
-			Intent usuario = new Intent(TabsAdmMapa.this,
+			Intent usuario = new Intent(TabsAdmPromo.this,
 					TabsUsuario.class);
 			startActivity(usuario);
 
 			return true;
 		}
-        if (id == R.id.action_promo) {
-        	Intent promo = new Intent(TabsAdmMapa.this,
-					TabsAdmPromo.class);
-			startActivity(promo);
-			
-			return true;
-        }
+
 		if (id == R.id.action_subir) {
 			
 			

@@ -5,28 +5,26 @@ public class Promo {
 private int ID_PROMO;
 private String TITULO=null;
 private String DESCRIPCION=null;
-private String EMPRESA=null;
-private byte[] LOGO;
+
+private int ID_EMPRESA;
+private byte[] LOGO=null;
 private String FECHA_INICIO=null;
 private String FECHA_FIN=null;
-private String USUARIO=null;
-private String FECHA_CREACION=null;
 
 
 
-public Promo(int id,String titulo,String descripcion,String empresa,byte[] logo,String fecha_inicio,String fecha_fin,String usuario,String fecha_creacion ){
+public Promo(int id,String titulo,String descripcion,int id_empresa,byte[] logo,String fecha_inicio,String fecha_fin){
 	
 	
 
  ID_PROMO=id;
  TITULO=titulo;
  DESCRIPCION=descripcion;
- EMPRESA=empresa;
- LOGO=logo;
+ ID_EMPRESA=id_empresa;
+ LOGO = logo;
  FECHA_INICIO=fecha_inicio;
  FECHA_FIN=fecha_fin;
- USUARIO=usuario;
- FECHA_CREACION = fecha_creacion;	
+
 }
 
 
@@ -67,14 +65,14 @@ public void setDESCRIPCION(String dESCRIPCION) {
 
 
 
-public String getEMPRESA() {
-	return EMPRESA;
+public int getID_EMPRESA() {
+	return ID_EMPRESA;
 }
 
 
 
-public void setEMPRESA(String eMPRESA) {
-	EMPRESA = eMPRESA;
+public void setID_EMPRESA(int iD_EMPRESA) {
+	ID_EMPRESA = iD_EMPRESA;
 }
 
 
@@ -115,26 +113,5 @@ public void setFECHA_FIN(String fECHA_FIN) {
 
 
 
-public String getUSUARIO() {
-	return USUARIO;
-}
-
-
-
-public void setUSUARIO(String uSUARIO) {
-	USUARIO = uSUARIO;
-}
-
-
-
-public String getFECHA_CREACION() {
-	return FECHA_CREACION;
-}
-
-
-
-public void setFECHA_CREACION(String fECHA_CREACION) {
-	FECHA_CREACION = fECHA_CREACION;
-}
 
 }

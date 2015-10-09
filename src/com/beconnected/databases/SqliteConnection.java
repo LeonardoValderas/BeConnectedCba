@@ -55,8 +55,11 @@ public class SqliteConnection extends SQLiteOpenHelper {
 				+ " DESCRIPCION VARCHAR(100),"
 				+ " ID_EMPRESA INTEGER,"
 				+ " FECHA_INICIO VARCHAR(100),"
-				+ " FECHA_FIN VARCHAR(100),"
-				+ " USUARIO VARCHAR(100)," + " FECHA_CREACION VARCHAR(100));";
+				+ " FECHA_FIN VARCHAR(100));";
+		
+		
+		
+		
 		
 		String TABLA_PROMO2 = "CREATE TABLE IF NOT EXISTS PROMO (ID_PROMO INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ " TITULO VARCHAR(100),"
@@ -428,16 +431,14 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	public boolean insertPromo(Promo promo) throws SQLiteException {
 		boolean ban = false;
 
+	
 		ContentValues cv = new ContentValues();
 		cv.put("TITULO", promo.getTITULO());
 		cv.put("DESCRIPCION", promo.getDESCRIPCION());
-		cv.put("EMPRESA", promo.getEMPRESA());
-		cv.put("LOGO", promo.getLOGO());
+		cv.put("ID_EMPRESA", promo.getID_EMPRESA());
 		cv.put("FECHA_INICIO", promo.getFECHA_INICIO());
 		cv.put("FECHA_FIN", promo.getFECHA_FIN());
-		cv.put("USUARIO", promo.getUSUARIO());
-		cv.put("FECHA_CREACION", promo.getFECHA_CREACION());
-
+		
 		SQLiteDatabase database = this.getWritableDatabase();
 
 		database.insert("PROMO", null, cv);
@@ -449,12 +450,13 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	 * Metodo que obtiene lista de equipos adeful.
 	 */
 	public ArrayList<Promo> selectListaPromo() {
-
-		String sql = "SELECT * FROM PROMO";
+	                                                                          
+		String sql = "SELECT  PROMO.ID_PROMO, PROMO.TITULO, PROMO.DESCRIPCION, PROMO.ID_EMPRESA, EMPRESA.LOGO, PROMO.FECHA_INICIO, PROMO.FECHA_FIN FROM PROMO, EMPRESA WHERE PROMO.ID_EMPRESA=EMPRESA.ID_EMPRESA";
 		ArrayList<Promo> arrayPromo = new ArrayList<Promo>();
-		String titulo = null, descripcion = null, empresa = null, fechainicio = null, fechafin = null, usuario = null, fechacreador = null;
+		String titulo = null, descripcion = null,  fechainicio = null, fechafin = null, usuario = null, fechacreador = null;
 		byte[] logo = null;
 		int id;
+		int empresa;
 		Cursor cursor = null;
 		// Integer isFueraFrecuencia;
 		SQLiteDatabase database = null;
@@ -476,8 +478,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 						descripcion = cursor.getString(cursor
 								.getColumnIndex("DESCRIPCION"));
 
-						empresa = cursor.getString(cursor
-								.getColumnIndex("EMPRESA"));
+						empresa = cursor.getInt(cursor
+								.getColumnIndex("ID_EMPRESA"));
 
 						logo = cursor.getBlob(cursor.getColumnIndex("LOGO"));
 
@@ -485,14 +487,10 @@ public class SqliteConnection extends SQLiteOpenHelper {
 								.getColumnIndex("FECHA_INICIO"));
 						fechafin = cursor.getString(cursor
 								.getColumnIndex("FECHA_FIN"));
-						usuario = cursor.getString(cursor
-								.getColumnIndex("USUARIO"));
-						fechacreador = cursor.getString(cursor
-								.getColumnIndex("FECHA_CREACION"));
+						
 
 						promo = new Promo(id, titulo, descripcion, empresa,
-								logo, fechainicio, fechafin, usuario,
-								fechacreador);
+								logo, fechainicio, fechafin);
 
 						arrayPromo.add(promo);
 
@@ -511,11 +509,9 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		
 		titulo = null;
 		descripcion = null; 
-		empresa = null;
 		fechainicio = null; 
 		fechafin = null;
-		usuario = null;
-		fechacreador = null;
+
 		cursor = null;
 		database = null;
 		return arrayPromo;

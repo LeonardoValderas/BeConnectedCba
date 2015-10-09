@@ -3,10 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.beconnected.MainActivity" >
 
-    <item
-        android:id="@+id/action_settings"
+    
+    
+     <item
+        android:id="@+id/action_usuario"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_usuario"
         app:showAsAction="never"/>
+       <item
+        android:id="@+id/action_promo"
+        android:orderInCategory="100"
+        android:title="@string/action_promo"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_subir"
+        android:orderInCategory="100"
+        android:title="@string/action_subir"
+        app:showAsAction="never"/>
+    
+     <item
+        android:id="@+id/action_cerrar"
+        android:orderInCategory="100"
+        android:title="@string/action_cerrar"
+        app:showAsAction="never"/>
+   
+   
 
 </menu>

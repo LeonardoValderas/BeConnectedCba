@@ -44,6 +44,9 @@ public String getEMPRESA() {
 	return EMPRESA;
 }
 
+public String toString() {
+	return EMPRESA;
+}
 
 
 

@@ -3,8 +3,10 @@ package com.beconnected.adm;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
+import com.beconnected.AdaptadorPromos;
 import com.beconnected.DividerItemDecoration;
 import com.beconnected.R;
+import com.beconnected.FragmentPromos.ClickListener;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
@@ -44,28 +46,28 @@ import android.widget.Toast;
  * {@link FragmentGenerarNoticia.sgoliver.android.toolbartabs.Fragment1#newInstance}
  * factory method to create an instance of this fragment.
  */
-public class FragmentAdmMapaEditar extends Fragment {
+public class FragmentAdmPromoEditar extends Fragment {
 
 	private static final int SELECT_SINGLE_PICTURE = 1;
-
+	private RecyclerView recycleViewPromo;
 	// private byte[] imagenEscudo = null;
 	private RecyclerView recycleViewMapa;
 	// private ImageButton imageButtonEquipo;
 	// private ByteArrayOutputStream baos;
 	private Bitmap myImage;
 	private Promo promo;
-	private ArrayList<Empresa> datosEmpresa;
-	private AdaptadorEmpresa adaptador;
+	private ArrayList<Promo> datosPromo;
+	private AdaptadorPromos adaptador;
 	private boolean insertar = true;
 	private int posicion;
 	private AlertsMenu alertsMenu;
 
-	public static FragmentAdmMapaEditar newInstance() {
-		FragmentAdmMapaEditar fragment = new FragmentAdmMapaEditar();
+	public static FragmentAdmPromoEditar newInstance() {
+		FragmentAdmPromoEditar fragment = new FragmentAdmPromoEditar();
 		return fragment;
 	}
 
-	public FragmentAdmMapaEditar() {
+	public FragmentAdmPromoEditar() {
 		// Required empty public constructor
 	}
 
@@ -80,112 +82,63 @@ public class FragmentAdmMapaEditar extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater
-				.inflate(R.layout.fragment_mapa_editar, container, false);
+				.inflate(R.layout.fragment_promo, container, false);
 
 	}
 
-	// @Override
-	// public void onPause() {
-	// // Fragment fragment =
-	// (getChildFragmentManager().findFragmentById(R.id.map));
-	// FragmentAdmMapaEditar fragment = new FragmentAdmMapaEditar();
-	// FragmentTransaction ft =
-	// getActivity().getSupportFragmentManager().beginTransaction();
-	// ft.remove(fragment);
-	// ft.commit();
-	//
-	// //init();
-	// super.onPause();
-	// }
-	//
+	
 
 	private void init() {
 
-		recycleViewMapa = (RecyclerView) getView().findViewById(
-				R.id.recycleViewMapa);
+		recycleViewPromo = (RecyclerView) getView().findViewById(
+				R.id.recycleViewPromo);
+		recyclerViewLoadPromo();
+		
+		
+		recycleViewPromo.addOnItemTouchListener(new RecyclerTouchListener(
+				getActivity(), recycleViewPromo, new ClickListener() {
 
-		recyclerViewLoadEmpresa();
-		recycleViewMapa.addOnItemTouchListener(new RecyclerTouchListener(
-				getActivity(), recycleViewMapa, new ClickListener() {
+					@Override
+					public void onLongClick(View view, final int position) {
+					
+					}
 
 					@Override
 					public void onClick(View view, int position) {
 						// TODO Auto-generated method stub
-
-						Intent empresaEdit = new Intent(getActivity(),
-								TabsAdmMapa.class);
-						empresaEdit.putExtra("actualizar", true);
-						empresaEdit.putExtra("empresa",
-								datosEmpresa.get(position).getEMPRESA());
-						empresaEdit.putExtra("longitud",
-								datosEmpresa.get(position).getLONGITUD());
-						empresaEdit.putExtra("latitud",
-								datosEmpresa.get(position).getLATIDUD());
-						empresaEdit.putExtra("posicion", position);
-
-						startActivity(empresaEdit);
-
-					}
-
-					@Override
-					public void onLongClick(View view, final int position) {
-
-						alertsMenu = new AlertsMenu(getActivity(), "ALERTA",
-								"Desea eliminar la Empresa?", null, null);
-						alertsMenu.btnAceptar.setText("Aceptar");
-						alertsMenu.btnCancelar.setText("Cancelar");
-
-						alertsMenu.btnAceptar
-								.setOnClickListener(new View.OnClickListener() {
-
-									@SuppressLint("NewApi")
-									@Override
-									public void onClick(View v) {
-										// TODO Auto-generated method stub
-										BL.getBl().eliminarEmpresa(
-												datosEmpresa.get(position)
-														.getID_EMPRESA());
-										recyclerViewLoadEmpresa();
-
-										Toast.makeText(
-												getActivity(),
-												"Empresa Eliminada Correctamente",
-												Toast.LENGTH_SHORT).show();
-
-										alertsMenu.alertDialog.dismiss();
-
-									}
-
-								});
+						
 					}
 				}));
 
-	}
+					}
 
-	public void recyclerViewLoadEmpresa() {
 
-		recycleViewMapa.setLayoutManager(new LinearLayoutManager(getActivity(),
-				LinearLayoutManager.VERTICAL, false));
-		recycleViewMapa.addItemDecoration(new DividerItemDecoration(
+                	
+//
+	public void recyclerViewLoadPromo() {
+
+		recycleViewPromo.setLayoutManager(new LinearLayoutManager(
+				getActivity(), LinearLayoutManager.VERTICAL, false));
+		recycleViewPromo.addItemDecoration(new DividerItemDecoration(
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
-		recycleViewMapa.setItemAnimator(new DefaultItemAnimator());
-		datosEmpresa = BL.getBl().selectListaEmpresa();
-
-		adaptador = new AdaptadorEmpresa(datosEmpresa);
-		// adaptador.notifyDataSetChanged();
-		recycleViewMapa.setAdapter(adaptador);
+		recycleViewPromo.setItemAnimator(new DefaultItemAnimator());
+		datosPromo = BL.getBl().selectListaPromo();
+		
+		
+		adaptador = new AdaptadorPromos(datosPromo);
+		//adaptador.notifyDataSetChanged();
+		recycleViewPromo.setAdapter(adaptador);
 
 	}
 
-	//
-	//
-	// /**
-	// * Metodo click item recycler
-	// *
-	// * @author LEO
-	// *
-	// */
-	//
+
+	/**
+	 * Metodo click item recycler
+	 * 
+	 * @author LEO
+	 * 
+	 */
+
 	public static interface ClickListener {
 
 		public void onClick(View view, int position);
@@ -248,5 +201,4 @@ public class FragmentAdmMapaEditar extends Fragment {
 		}
 
 	}
-
 }

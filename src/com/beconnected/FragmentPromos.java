@@ -83,9 +83,9 @@ public class FragmentPromos extends Fragment {
 	private void init() {
 
 		
-		promo = new Promo(0, "2 x 1 ", "Lleva dos hamburguesas y paga una", "Mc", null, "06/10/2015", "08/10/2015", "Adm", "05/10/2015");
+		//promo = new Promo(0, "2 x 1 ", "Lleva dos hamburguesas y paga una", "Mc", null, "06/10/2015", "08/10/2015", "Adm", "05/10/2015");
 		
-		DL.getDl().getSqliteConnection().insertPromo(promo);
+	//	DL.getDl().getSqliteConnection().insertPromo(promo);
 
 		recycleViewPromo = (RecyclerView) getView().findViewById(
 				R.id.recycleViewPromo);

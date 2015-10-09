@@ -2,8 +2,13 @@
 <resources>
 
     <string name="app_name">Be Connected</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_usuario">USUARIO</string>
+    <string name="action_subir">SUBIR CAMBIOS</string>
+    <string name="action_cerrar">CERRAR</string>
+       <string name="action_promo">PROMO</string>
+    
+  
+    
     
 
 </resources>
