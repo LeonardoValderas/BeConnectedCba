@@ -98,15 +98,36 @@ public class FragmentAdmPromoEditar extends Fragment {
 		recycleViewPromo.addOnItemTouchListener(new RecyclerTouchListener(
 				getActivity(), recycleViewPromo, new ClickListener() {
 
-					@Override
-					public void onLongClick(View view, final int position) {
-					
-					}
+			
 
 					@Override
 					public void onClick(View view, int position) {
 						// TODO Auto-generated method stub
+						Intent promoEdit = new Intent(getActivity(),
+								TabsAdmPromo.class);
+						promoEdit.putExtra("actualizar", true);
+						promoEdit.putExtra("empresa",
+								datosPromo.get(position).getID_EMPRESA());
+						promoEdit.putExtra("titulo",
+								datosPromo.get(position).getTITULO());
+						promoEdit.putExtra("descripcion",
+								datosPromo.get(position).getDESCRIPCION());
+						promoEdit.putExtra("desde",
+								datosPromo.get(position).getFECHA_INICIO());
+						promoEdit.putExtra("hasta",
+								datosPromo.get(position).getFECHA_FIN());
+						promoEdit.putExtra("posicion", position);
+
+						startActivity(promoEdit);
 						
+					}
+					
+					@Override
+					public void onLongClick(View view, final int position) {
+						
+						
+						
+					
 					}
 				}));
 

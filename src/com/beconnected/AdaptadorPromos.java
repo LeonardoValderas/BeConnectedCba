@@ -58,7 +58,7 @@ public class AdaptadorPromos extends
 			byte[] image = promo.getLOGO();
 			if (image == null) {
 
-				imageViewLogo.setImageResource(R.drawable.ic_launcher);
+				imageViewLogo.setImageResource(R.drawable.logo);
 			} else {
 				Bitmap theImage = BitmapFactory.decodeByteArray(
 						promo.getLOGO(), 0,

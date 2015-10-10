@@ -8,7 +8,19 @@
        <string name="action_promo">PROMO</string>
     
   
+<!--Toast menssage promo -->
+
+  <string name="fecha_inicio">Seleccione fecha de comienzo de la promo.</string>
+  <string name="fecha_fin">Seleccione fecha de fin de la promo.</string>
+  <string name="datos_vacios">Complete todos los datos.</string> 
+    <string name="promo_cargada">Promo cargada correctamente.</string> 
+    <string name="promo_actualizada">Promo actualizada correctamente.</string> 
+    <string name="promo_eliminada">Promo eliminada correctamente.</string> 
+  
     
+  
+  <!--Promo-->
+  <string name="agotar_stock">Agotar Stock.</string> 
     
 
 </resources>

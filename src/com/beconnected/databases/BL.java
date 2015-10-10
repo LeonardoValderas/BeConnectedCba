@@ -96,6 +96,12 @@ public BL(){
 
 	}
 	
+	public boolean actualizarPromo(Promo promo) {
+
+		return DL.getDl().getSqliteConnection().actualizarPromo(promo);
+
+	}
+	
 //	public boolean actualizarEquipoAdeful(Equipo equipo) {
 //
 //		return DL.getDl().getSqLiteDBConnection().actualizarEquipoAdeful(equipo);

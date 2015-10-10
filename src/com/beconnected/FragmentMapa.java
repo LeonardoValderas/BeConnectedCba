@@ -2,6 +2,7 @@ package com.beconnected;
 
 import java.util.ArrayList;
 
+import com.beconnected.adm.TabsAdmMapa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
@@ -27,6 +29,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -65,6 +68,13 @@ public class FragmentMapa extends Fragment {
 	}
 
 	@Override
+	public void onAttach (Activity activity) {
+		super.onAttach(activity);
+		Log.i("leo", "onAttach");
+	}
+
+	
+	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
 
@@ -79,14 +89,68 @@ public class FragmentMapa extends Fragment {
 	}
 
 	@Override
+	public void onViewStateRestored (Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);
+		Log.i("leo", "onViewStateRestored");
+	}
+	
+	
+	@Override
+	public void onStart () {
+		
+		Log.i("leo", "onStart");
+		super.onStart();
+	
+	}
+	
+	@Override
+	public void onResume () {
+		Log.i("leo", "onResume");
+		super.onResume();
+		
+	}
+	
+	@Override
 	public void onPause() {
+		
+		
 		Fragment fragment = (getChildFragmentManager()
 				.findFragmentById(R.id.map));
 		FragmentTransaction ft = getActivity().getSupportFragmentManager()
 				.beginTransaction();
 		ft.remove(fragment);
 		ft.commit();
+		
 		super.onPause();
+	}
+	
+	
+	@Override
+	public void onStop () {
+		Log.i("leo", "onStop");
+		super.onStop();
+		
+	}
+
+	@Override
+	public void onDestroyView () {
+		Log.i("leo", "onDestroyView");
+		super.onDestroyView();
+	
+	}
+
+	@Override
+	public void onDestroy () {
+		Log.i("leo", "onDestroy");
+		super.onDestroy();
+	
+	}
+
+	@Override
+	public void onDetach () {
+		Log.i("leo", "onDetach");
+		super.onDetach();
+	
 	}
 
 	private void init() {

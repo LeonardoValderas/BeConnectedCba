@@ -40,6 +40,7 @@ import android.widget.Toast;
 public class FragmentAdmPromo extends Fragment {
 
 	private ArrayList<Empresa> empresaArray;
+	private ArrayList<Promo> promoArray;
 	private EditText editTextTitulo;
 	private EditText editTextDescripcion;
     private Spinner spinnerEmpresa;
@@ -62,6 +63,11 @@ public class FragmentAdmPromo extends Fragment {
 	private RadioButton radioButtonStock;
 	private DateFormat formate = DateFormat.getDateInstance();
 	private Calendar calendar = Calendar.getInstance();
+    private int idEmpresaExtra;
+    private	String tituloExtra;
+	private	String descripcionExtra;
+	private	String desdeExtra;
+	private	String hastaExtra;
 	
 	public static FragmentAdmPromo newInstance() {
 		FragmentAdmPromo fragment = new FragmentAdmPromo();
@@ -116,12 +122,36 @@ public class FragmentAdmPromo extends Fragment {
 		
 		if (actualizar) {
 
-		}
 		
-//			posicion = getActivity().getIntent().getIntExtra("posicion", 0);
-//			empresaExtra = getActivity().getIntent().getStringExtra("empresa");
-//			editTextEmpresa.setText(empresaExtra);
-//			empresaArray = BL.getBl().selectListaEmpresa();
+
+		
+			posicion = getActivity().getIntent().getIntExtra("posicion", 0);
+		    
+		    idEmpresaExtra = getActivity().getIntent().getIntExtra("empresa",0);
+			tituloExtra = getActivity().getIntent().getStringExtra("titulo");
+			descripcionExtra = getActivity().getIntent().getStringExtra("descripcion");
+			desdeExtra = getActivity().getIntent().getStringExtra("desde");
+		    hastaExtra = getActivity().getIntent().getStringExtra("hasta");
+
+		    spinnerEmpresa.setSelection(idEmpresaExtra-1);
+		    editTextTitulo.setText(tituloExtra) ;  
+		    editTextDescripcion.setText(descripcionExtra);
+		    buttonDesde.setText(desdeExtra);
+		   
+		    if(!hastaExtra.equals(getActivity().getResources().getString(R.string.agotar_stock)))
+		    {
+		    	
+		    	buttonHasta.setText(hastaExtra);
+		    }else{
+		    	radioButtonStock.setChecked(true);
+		    	buttonHasta.setEnabled(false);
+		    	radiobutton = false;
+		    }
+		    
+		    
+		    insertar = false;
+		    
+		}
 //			imagenLogo = empresaArray.get(posicion).getLOGO();
 //
 //			if (imagenLogo != null) {
@@ -207,7 +237,7 @@ public class FragmentAdmPromo extends Fragment {
 				if(editTextTitulo.getText().toString().equals("")||editTextDescripcion.getText().toString().equals("")){
 					
 					Toast.makeText(getActivity(),
-							"Complete los datos.",
+							getResources().getString(R.string.datos_vacios),
 							Toast.LENGTH_SHORT).show();
 					
 				}
@@ -215,15 +245,15 @@ public class FragmentAdmPromo extends Fragment {
 				
 
 					Toast.makeText(getActivity(),
-							"Seleccione fecha de comienzo de la promo.",
+							getActivity().getResources().getString(R.string.fecha_inicio),
 							Toast.LENGTH_SHORT).show();
 					
 				}
-					else if(buttonDesde.getText().toString().equals("Hasta")&&!radioButtonStock.isChecked()){
+					else if(buttonHasta.getText().toString().equals("Hasta")&&!radioButtonStock.isChecked()){
 						
 
-						Toast.makeText(getActivity(),
-								"Seleccione fecha de fin de la promo.",
+						Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.fecha_fin),
+								
 								Toast.LENGTH_SHORT).show();
 							
 				
@@ -237,19 +267,9 @@ public class FragmentAdmPromo extends Fragment {
 							
 							promo = new Promo(0, editTextTitulo.getText()
 									.toString(), editTextDescripcion.getText()
-									.toString(),empresa.getID_EMPRESA(),null,buttonDesde.getText().toString(),"Hasta Agotar Stock");
+									.toString(),empresa.getID_EMPRESA(),null,buttonDesde.getText().toString(),getActivity().getResources().getString(R.string.agotar_stock));
 							BL.getBl().insertarPromo(promo);
-							Intent i = new Intent(getActivity(), TabsAdmPromo.class);
-							startActivity(i);
-							
-							Toast.makeText(getActivity(),
-									"Promo cargada correctamente.",
-									Toast.LENGTH_SHORT).show();
-							editTextTitulo.setText("");
-							editTextDescripcion.setText("");
-							buttonDesde.setText("Desde");
-							buttonHasta.setText("Hasta");
-							radioButtonStock.setChecked(false);
+
 						}else{
 						
 						
@@ -258,11 +278,11 @@ public class FragmentAdmPromo extends Fragment {
 								.toString(),empresa.getID_EMPRESA(),null,buttonDesde.getText().toString(),buttonHasta.getText().toString());
 
 						BL.getBl().insertarPromo(promo);
-
+						}
 						Intent i = new Intent(getActivity(), TabsAdmPromo.class);
 						startActivity(i);
 						Toast.makeText(getActivity(),
-								"Promo cargada correctamente.",
+								getActivity().getResources().getString(R.string.promo_cargada),
 								Toast.LENGTH_SHORT).show();
 						editTextTitulo.setText("");
 						editTextDescripcion.setText("");
@@ -270,33 +290,42 @@ public class FragmentAdmPromo extends Fragment {
 						buttonHasta.setText("Hasta");
 						radioButtonStock.setChecked(false);
 						}
-					} else {
+				        else {
 
-//						empresaArray = BL.getBl().selectListaEmpresa();
-//						empresa = new Empresa(empresaArray.get(posicion)
-//								.getID_EMPRESA(), editTextEmpresa.getText()
-//								.toString(), String.valueOf(longitud), String
-//								.valueOf(latitud), imagenLogo);
-//						BL.getBl().actualizarEmpresa(empresa);
-//
-//						mapa.clear();
-//
-//						if (imagenLogo != null) {
-//
-//							imagenLogo = null;
-//						}
-//						insertar = true;
-//
-//						Intent i = new Intent(getActivity(), TabsAdmMapa.class);
-//						startActivity(i);
-//
-//						Toast.makeText(getActivity(),
-//								"Empresa actualizado correctamente.",
-//								Toast.LENGTH_SHORT).show();
-//						editTextEmpresa.setText("");
-//						mapa.clear();
-//						imageLogo.setImageResource(R.drawable.logo);
-//						imagenLogo = null;
+						promoArray = BL.getBl().selectListaPromo();
+                            if(radioButtonStock.isChecked()){
+							
+							promo = new Promo(promoArray.get(posicion)
+									.getID_PROMO(), editTextTitulo.getText()
+									.toString(), editTextDescripcion.getText()
+									.toString(),promoArray.get(posicion).getID_EMPRESA(),null,buttonDesde.getText().toString(),"Hasta Agotar Stock");
+							BL.getBl().actualizarPromo(promo);
+
+							
+						}else{
+							promoArray = BL.getBl().selectListaPromo();
+						
+							promo = new Promo(promoArray.get(posicion)
+									.getID_PROMO(), editTextTitulo.getText()
+									.toString(), editTextDescripcion.getText()
+									.toString(),promoArray.get(posicion).getID_EMPRESA(),null,buttonDesde.getText().toString(),buttonHasta.getText().toString());
+                         
+							BL.getBl().actualizarPromo(promo);
+						}
+                            Intent i = new Intent(getActivity(), TabsAdmPromo.class);
+							startActivity(i);
+							
+							Toast.makeText(getActivity(),
+									getActivity().getResources().getString(R.string.promo_actualizada),
+									Toast.LENGTH_SHORT).show();
+							editTextTitulo.setText("");
+							editTextDescripcion.setText("");
+							buttonDesde.setText("Desde");
+							buttonHasta.setText("Hasta");
+							radioButtonStock.setChecked(false);
+						
+
+						insertar = true;
 
 					}
 				}

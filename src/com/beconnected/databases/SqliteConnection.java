@@ -516,6 +516,42 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database = null;
 		return arrayPromo;
 	}
+	
+	
+	public boolean actualizarPromo(Promo promo) {
+
+		boolean res = false;
+		SQLiteDatabase database = getSqLiteDatabase("actualizarPromo");
+		String sql = "UPDATE PROMO SET TITULO='"
+				+ promo.getTITULO() + "', DESCRIPCION='"
+				+ promo.getDESCRIPCION()+ "', ID_EMPRESA='"
+				+ promo.getID_EMPRESA() + "', FECHA_INICIO='"
+				+ promo.getFECHA_INICIO() + "', FECHA_FIN = '" + promo.getFECHA_FIN()
+				+ "' WHERE ID_PROMO ='" + promo.getID_PROMO() + "'";
+
+		if (database != null && database.isOpen()) {
+
+			try {
+
+				database.execSQL(sql);
+				res = true;
+
+			} catch (Exception e) {
+
+				res = false;
+				Log.e("actualizarPromo", e.toString());
+			}
+
+		} else {
+
+			res = false;
+			Log.e("actualizarPromo", "Error Conexión Base de Datos");
+		}
+
+		database = null;
+		sql = null;
+		return res;
+	}
 
 //	public boolean actualizarEquipoAdeful(Equipo equipo) throws SQLiteException {
 //		boolean ban = false;
