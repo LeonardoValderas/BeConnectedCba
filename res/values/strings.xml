@@ -2,25 +2,43 @@
 <resources>
 
     <string name="app_name">Be Connected</string>
+
+    <!-- Menu Adm -->
     <string name="action_usuario">USUARIO</string>
     <string name="action_subir">SUBIR CAMBIOS</string>
     <string name="action_cerrar">CERRAR</string>
-       <string name="action_promo">PROMO</string>
-    
-  
-<!--Toast menssage promo -->
+    <string name="action_promo">PROMO</string>
+    <string name="action_info">INFO</string>
 
-  <string name="fecha_inicio">Seleccione fecha de comienzo de la promo.</string>
-  <string name="fecha_fin">Seleccione fecha de fin de la promo.</string>
-  <string name="datos_vacios">Complete todos los datos.</string> 
-    <string name="promo_cargada">Promo cargada correctamente.</string> 
-    <string name="promo_actualizada">Promo actualizada correctamente.</string> 
-    <string name="promo_eliminada">Promo eliminada correctamente.</string> 
-  
-    
-  
-  <!--Promo-->
-  <string name="agotar_stock">Agotar Stock.</string> 
-    
+    <!-- Menu Usuario -->
+    <string name="action_administrador">ADMINISTRADOR</string>
+    <string name="action_cerrar_usuario">CERRAR</string>
+
+    <!-- Toast menssage info -->
+
+    <string name="info_actualizada">Datos actualizada correctamente.</string>
+    <!-- Toast menssage promo -->
+    <string name="fecha_inicio">Seleccione fecha de comienzo de la promo.</string>
+    <string name="fecha_fin">Seleccione fecha de fin de la promo.</string>
+    <string name="datos_vacios">Complete todos los datos.</string>
+    <string name="promo_cargada">Promo cargada correctamente.</string>
+    <string name="promo_actualizada">Promo actualizada correctamente.</string>
+    <string name="promo_eliminada">Promo eliminada correctamente.</string>
+
+    <!-- Toast menssage Empresa -->
+    <string name="empresa_cargada">Empresa cargada correctamente.</string>
+    <string name="empresa_actualizada">Empresa actualizada correctamente.</string>
+    <string name="empresa_eliminada">Empresa eliminada correctamente.</string>
+    <string name="empresa_foto">No se seleccionó ninguna imagen.</string>
+    <string name="empresa_nombre_vacio">Ingrese el nombre de la empresa.</string>
+    <string name="empresa_mapa_vacio">Seleccione un punto en el mapa.</string>
+    <string name="gps_no_activo">Su GPS no esta activo. Desea activarlo?</string>
+
+    <!-- Promo -->
+    <string name="agotar_stock">Agotar Stock.</string>
+
+    <!-- alert -->
+    <string name="alert_empresa">Desea eliminar la Empresa?...</string>
+    <string name="alert_promo">Desea eliminar la Promo?...</string>
 
 </resources>

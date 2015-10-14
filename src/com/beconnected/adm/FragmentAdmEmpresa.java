@@ -8,6 +8,8 @@ import com.beconnected.R;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
+import com.beconnected.databases.GeneralLogic;
+import com.beconnected.databases.Request;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,11 +27,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,7 +48,7 @@ import android.widget.Toast;
  * {@link FragmentGenerarNoticia.sgoliver.android.toolbartabs.Fragment1#newInstance}
  * factory method to create an instance of this fragment.
  */
-public class FragmentAdmMapa extends Fragment {
+public class FragmentAdmEmpresa extends Fragment {
 	private GoogleMap mapa;
 	public static double latCba = -31.400000000000000;
 	public static double longCba = -64.183300000000000;
@@ -61,13 +67,14 @@ public class FragmentAdmMapa extends Fragment {
 	private String empresaExtra;
 	private boolean actualizar = false;
 	private ImageView imageLogo;
+	private SubirDatos subirDatos;
 
-	public static FragmentAdmMapa newInstance() {
-		FragmentAdmMapa fragment = new FragmentAdmMapa();
+	public static FragmentAdmEmpresa newInstance() {
+		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
 		return fragment;
 	}
 
-	public FragmentAdmMapa() {
+	public FragmentAdmEmpresa() {
 		// Required empty public constructor
 	}
 
@@ -169,26 +176,55 @@ public class FragmentAdmMapa extends Fragment {
 
 				if (editTextEmpresa.getText().toString().equals("")) {
 					Toast.makeText(getActivity(),
-							"Ingrese el nombre de la empresa.",
+							getActivity().getResources().getString(
+									R.string.empresa_nombre_vacio),
 							Toast.LENGTH_SHORT).show();
 				} else if (latitud == 0.0 || longitud == 0.0) {
 					Toast.makeText(getActivity(),
-							"Seleccione un punto en el mapa.",
+							getActivity().getResources().getString(
+									R.string.empresa_mapa_vacio),
 							Toast.LENGTH_SHORT).show();
 				} else {
 
 					if (insertar) {
 
+					//	if(imagenLogo==null)
 						empresa = new Empresa(0, editTextEmpresa.getText()
 								.toString(), String.valueOf(longitud), String
-								.valueOf(latitud), imagenLogo);
+								.valueOf(latitud), imagenLogo,GeneralLogic.URL_LOGO+editTextEmpresa.getText()
+								.toString()+".PGN");
 
 						DL.getDl().getSqliteConnection().insertEmpresa(empresa);
 
-						Intent i = new Intent(getActivity(), TabsAdmMapa.class);
+						
+						
+						//subimos los datos al server.
+												
+						String encodedImage = Base64.encodeToString(imagenLogo, Base64.DEFAULT);
+						
+						Request p = new Request();
+//						p.setMethod("GET");
+						p.setMethod("POST");
+						p.setQuery("SUBIR");
+//						p.setUri(uri);
+						p.setParametrosDatos("empresa", empresa.getEMPRESA());
+						p.setParametrosDatos("longitud", empresa.getLONGITUD());
+						p.setParametrosDatos("latitud", empresa.getLATIDUD());
+						p.setParametrosDatos("logo", encodedImage);
+						p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
+						
+					
+						subirDatos= new SubirDatos(getActivity());
+						subirDatos.resquestDataEmpresa(p);
+						
+						
+						//actualizamos el activity. ver este punto 
+						Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
 						startActivity(i);
-						Toast.makeText(getActivity(),
-								"Empresa cargado correctamente.",
+						Toast.makeText(
+								getActivity(),
+								getActivity().getResources().getString(
+										R.string.empresa_cargada),
 								Toast.LENGTH_SHORT).show();
 						imageLogo.setImageResource(R.drawable.logo);
 						editTextEmpresa.setText("");
@@ -200,9 +236,29 @@ public class FragmentAdmMapa extends Fragment {
 						empresa = new Empresa(empresaArray.get(posicion)
 								.getID_EMPRESA(), editTextEmpresa.getText()
 								.toString(), String.valueOf(longitud), String
-								.valueOf(latitud), imagenLogo);
+								.valueOf(latitud), imagenLogo,GeneralLogic.URL_LOGO+editTextEmpresa.getText()
+								.toString()+".PGN");
 						BL.getBl().actualizarEmpresa(empresa);
 
+						String encodedImage = Base64.encodeToString(imagenLogo, Base64.DEFAULT);
+						Request p = new Request();
+//						p.setMethod("GET");
+						p.setMethod("POST");
+						p.setQuery("EDITAR");
+//						p.setUri(uri);
+						p.setParametrosDatos("id_empresa", String.valueOf(empresa.getID_EMPRESA()));
+						p.setParametrosDatos("empresa", empresa.getEMPRESA());
+						p.setParametrosDatos("longitud", empresa.getLONGITUD());
+						p.setParametrosDatos("latitud", empresa.getLATIDUD());
+						p.setParametrosDatos("logo", encodedImage);
+						p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
+						
+					
+						subirDatos= new SubirDatos(getActivity());
+						subirDatos.resquestDataEmpresa(p);
+						
+						
+						
 						mapa.clear();
 
 						if (imagenLogo != null) {
@@ -211,11 +267,13 @@ public class FragmentAdmMapa extends Fragment {
 						}
 						insertar = true;
 
-						Intent i = new Intent(getActivity(), TabsAdmMapa.class);
+						Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
 						startActivity(i);
 
-						Toast.makeText(getActivity(),
-								"Empresa actualizado correctamente.",
+						Toast.makeText(
+								getActivity(),
+								getActivity().getResources().getString(
+										R.string.empresa_actualizada),
 								Toast.LENGTH_SHORT).show();
 						editTextEmpresa.setText("");
 						mapa.clear();
@@ -235,8 +293,8 @@ public class FragmentAdmMapa extends Fragment {
 
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
 				getActivity());
-		myAlertDialog.setTitle("Pictures Option");
-		myAlertDialog.setMessage("Select Picture Mode");
+		myAlertDialog.setTitle("Galeria");
+		myAlertDialog.setMessage("Selecciones una Imagen");
 
 		myAlertDialog.setPositiveButton("Gallery",
 				new DialogInterface.OnClickListener() {
@@ -271,22 +329,76 @@ public class FragmentAdmMapa extends Fragment {
 		// }
 	}
 
+	
+	// ver para cambiar el icono del mapa
+	
+	public static Bitmap createDrawableFromView(View view) {
+
+		view.setDrawingCacheEnabled(true);
+		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+		view.buildDrawingCache(true);
+		Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+		view.setDrawingCacheEnabled(false);
+
+		return bitmap;
+	}
+	
 	public void Image_Selecting_Task(Intent data) {
 		try {
 			Utility.uri = data.getData();
+			
+		  //   String[] column = { MediaStore.Images.Media.DATA }; 
+			// String sel = MediaStore.Images.Media._ID + "=?";
+			  
 			if (Utility.uri != null) {
-				// User had pick an image.
-				Cursor cursor = getActivity()
-						.getContentResolver()
-						.query(Utility.uri,
-								new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
-								null, null, null);
+			 
+				
+				Cursor cursor = getActivity().getContentResolver().
+                        query(Utility.uri, null,null,null,null);
+				
 				cursor.moveToFirst();
-				// Link to the image
-				final String imageFilePath = cursor.getString(0);
+				String document_id = cursor.getString(0);
+				   document_id = document_id.substring(document_id.lastIndexOf(":")+1);
+			
+				   
+				   cursor = getActivity().getContentResolver().query( 
+						   android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+						   null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+						   cursor.moveToFirst();
+						   String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+						   cursor.close();
+				   
+				   
+				   
+				   //int columnIndex = cursor.getColumnIndex(column[0]);
+				//int columnindex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA); 
+				//String filePath=null;
+				
+				
+			
+			
+			//	 filePath = cursor.getString(columnindex);
+				 
+				 
+				 
+//	            if (cursor.moveToFirst()) {
+//	             filePath = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//	            }   
+//	            cursor.close();
+				// User had pick an image.
+//				Cursor cursor = getActivity()
+//						.getContentResolver()
+//						.query(Utility.uri,
+//								new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
+//								null, null, null);
+//				cursor.moveToFirst();
+//				// Link to the image
+//				final String imageFilePath = cursor.getString(0);
 
 				// Assign string path to File
-				Utility.Default_DIR = new File(imageFilePath);
+				Utility.Default_DIR = new File(path);
 
 				// Create new dir MY_IMAGES_DIR if not created and copy image
 				// into that dir and store that image path in valid_photo
@@ -311,8 +423,9 @@ public class FragmentAdmMapa extends Fragment {
 				imagenLogo = baos.toByteArray();
 
 			} else {
-				Toast toast = Toast.makeText(getActivity(),
-						"No se selecciono ninguna imagen.", Toast.LENGTH_LONG);
+				Toast toast = Toast.makeText(getActivity(), getActivity()
+						.getResources().getString(R.string.empresa_foto),
+						Toast.LENGTH_LONG);
 				toast.show();
 			}
 		} catch (Exception e) {

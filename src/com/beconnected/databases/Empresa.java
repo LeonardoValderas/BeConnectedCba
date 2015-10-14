@@ -7,11 +7,12 @@ private String EMPRESA=null;
 private String LONGITUD=null;
 private String LATIDUD=null;
 private byte[] LOGO;
+private String URL_LOGO=null;
 
 
 
 
-public Empresa(int id,String empresa,String longitud,String latitud,byte[] logo ){
+public Empresa(int id,String empresa,String longitud,String latitud,byte[] logo,String url_logo ){
 	
 	
 
@@ -20,7 +21,7 @@ public Empresa(int id,String empresa,String longitud,String latitud,byte[] logo 
 	LONGITUD=longitud;
 	LATIDUD=latitud ;
     LOGO=logo;
-	
+    URL_LOGO =url_logo;
 }
 
 
@@ -96,6 +97,15 @@ public void setLOGO(byte[] lOGO) {
 	LOGO = lOGO;
 }
 
+public String getURL_LOGO() {
+	return URL_LOGO;
+}
 
+
+
+
+public void setURL_LOGO(String uRL_LOGO) {
+	URL_LOGO = uRL_LOGO;
+}
 
 }

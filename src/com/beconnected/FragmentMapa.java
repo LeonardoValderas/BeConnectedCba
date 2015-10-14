@@ -2,7 +2,7 @@ package com.beconnected;
 
 import java.util.ArrayList;
 
-import com.beconnected.adm.TabsAdmMapa;
+import com.beconnected.adm.TabsAdmEmpresa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -167,7 +167,7 @@ public class FragmentMapa extends Fragment {
 		}
 		
 		
-		empresaArray = BL.getBl().selectListaEmpresa();
+		empresaArray = BL.getBl().selectListaEmpresaUsuario();
 		mapa = ((SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
 

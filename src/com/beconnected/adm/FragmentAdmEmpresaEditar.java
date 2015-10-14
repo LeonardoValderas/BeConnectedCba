@@ -9,6 +9,8 @@ import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.Promo;
+import com.beconnected.databases.Request;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -44,7 +46,7 @@ import android.widget.Toast;
  * {@link FragmentGenerarNoticia.sgoliver.android.toolbartabs.Fragment1#newInstance}
  * factory method to create an instance of this fragment.
  */
-public class FragmentAdmMapaEditar extends Fragment {
+public class FragmentAdmEmpresaEditar extends Fragment {
 
 	private static final int SELECT_SINGLE_PICTURE = 1;
 
@@ -59,13 +61,13 @@ public class FragmentAdmMapaEditar extends Fragment {
 	private boolean insertar = true;
 	private int posicion;
 	private AlertsMenu alertsMenu;
-
-	public static FragmentAdmMapaEditar newInstance() {
-		FragmentAdmMapaEditar fragment = new FragmentAdmMapaEditar();
+	private SubirDatos subirDatos;
+	public static FragmentAdmEmpresaEditar newInstance() {
+		FragmentAdmEmpresaEditar fragment = new FragmentAdmEmpresaEditar();
 		return fragment;
 	}
 
-	public FragmentAdmMapaEditar() {
+	public FragmentAdmEmpresaEditar() {
 		// Required empty public constructor
 	}
 
@@ -113,7 +115,7 @@ public class FragmentAdmMapaEditar extends Fragment {
 						// TODO Auto-generated method stub
 
 						Intent empresaEdit = new Intent(getActivity(),
-								TabsAdmMapa.class);
+								TabsAdmEmpresa.class);
 						empresaEdit.putExtra("actualizar", true);
 						empresaEdit.putExtra("empresa",
 								datosEmpresa.get(position).getEMPRESA());
@@ -131,7 +133,7 @@ public class FragmentAdmMapaEditar extends Fragment {
 					public void onLongClick(View view, final int position) {
 
 						alertsMenu = new AlertsMenu(getActivity(), "ALERTA",
-								"Desea eliminar la Empresa?", null, null);
+								getActivity().getResources().getString(R.string.alert_empresa), null, null);
 						alertsMenu.btnAceptar.setText("Aceptar");
 						alertsMenu.btnCancelar.setText("Cancelar");
 
@@ -145,11 +147,21 @@ public class FragmentAdmMapaEditar extends Fragment {
 										BL.getBl().eliminarEmpresa(
 												datosEmpresa.get(position)
 														.getID_EMPRESA());
-										recyclerViewLoadEmpresa();
+										
 
+										
+										Request p = new Request();
+										p.setMethod("POST");
+										p.setQuery("ELIMINAR");
+										p.setParametrosDatos("id_empresa", String.valueOf(datosEmpresa.get(position)
+												.getID_EMPRESA()));
+										
+										subirDatos= new SubirDatos(getActivity());
+										subirDatos.resquestDataEmpresa(p);
+										recyclerViewLoadEmpresa();
 										Toast.makeText(
 												getActivity(),
-												"Empresa Eliminada Correctamente",
+												getActivity().getResources().getString(R.string.empresa_eliminada),
 												Toast.LENGTH_SHORT).show();
 
 										alertsMenu.alertDialog.dismiss();

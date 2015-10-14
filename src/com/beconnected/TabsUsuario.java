@@ -2,10 +2,20 @@ package com.beconnected;
 
 
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.beconnected.adm.TabsAdmEmpresa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
+import com.beconnected.databases.Empresa;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
@@ -16,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TabsUsuario extends AppCompatActivity {
 
@@ -24,19 +35,21 @@ public class TabsUsuario extends AppCompatActivity {
 	private ViewPager viewPager;
 	private TabLayout tabLayout;
 	private int restarMap = 0;
-	TextView txtAbSubTitulo;
+	private TextView txtAbSubTitulo;
+	private ProgressDialog dialog;
 	// private TextView txtAbSubTitulo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
 
-		DL.getDl().setSqliteConnection(this);
-		BL.getBl().crearTablasBD();
-		BL.getBl().creaDirectorios();
+//		DL.getDl().setSqliteConnection(this);
+//		BL.getBl().crearTablasBD();
+//		BL.getBl().creaDirectorios();
 
 //		restarMap = getIntent().getIntExtra("restart", 0);
 		init();
+		// new MyTask().execute("");
 	}
 
 	public void init() {
@@ -87,136 +100,130 @@ public class TabsUsuario extends AppCompatActivity {
 
 	}
 
+	
+	
+	public class MyTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(TabsUsuario.this);
+			dialog.setMessage("Enviando Datos...");
+			dialog.show();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+
+			//inicia el metodo que trae los datos según su url
+			//retorna string sb.toestring()
+			
+			  String content =  BL.getBl().getConnManager().traerEmpresa();
+			  return content;  //retorna string al metodo onPostExecute
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			
+			
+			
+			//para listView
+			parseFeed(result);
+		
+			Toast.makeText(TabsUsuario.this, result, Toast.LENGTH_SHORT)
+			.show();
+			dialog.dismiss();
+		//	textViewDato.setText(result);
+			
+			
+			
+			
+			//
+			// upDateDisplay();
+			// task.remove(this);
+			// if(task.size()==0)
+			// {
+			// progressBar1.setVisibility(View.INVISIBLE);
+			// }
+			//
+			// if (result==null) {
+			// // Toast.makeText(this, "Sin datos", Toast.LENGTH_LONG).show();
+			// return;
+			// }else{
+			//
+			// datasJson = ListaJson.parseFeed(result);
+			// }
+			//
+			//
+			//
+			// }
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			//textViewDato.append(values[0]+"\n");
+		}
+	}
+	
+	
+	
+	
+	
+	public static ArrayList<Empresa> parseFeed(String content)	{
+		
+		try {
+			JSONArray ar = new JSONArray(content);
+			ArrayList<Empresa> datasJson = new ArrayList<>();
+			
+			for (int i = 0; i < ar.length(); i++) {
+				
+			JSONObject obj = ar.getJSONObject(i);
+			Empresa empresa = new Empresa(0, obj.getString("EMPRESA"), obj.getString("LONGITUD"), obj.getString("LATITUD"), null,obj.getString("URL_LOGO"));
+			
+			BL.getBl().insertarEmpresa(empresa);
+			
+			datasJson.add(empresa);
+			}
+			return datasJson;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+			
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-//		if (viewPager.getCurrentItem() == 0) {
-//			// menu.getItem(0).setVisible(false);//usuario
-//			// menu.getItem(1).setVisible(false);//permiso
-//			// menu.getItem(2).setVisible(false);//lifuba
-//			menu.getItem(3).setVisible(false);// adeful
-//			menu.getItem(4).setVisible(false);// puesto
-//			menu.getItem(5).setVisible(false);// posicion
-//			menu.getItem(6).setVisible(false);// cargo
-//			// menu.getItem(7).setVisible(false);//cerrar
-//			menu.getItem(8).setVisible(false);// guardar
-//			menu.getItem(9).setVisible(false);// Subir
-//			menu.getItem(10).setVisible(false); // eliminar
-//			menu.getItem(11).setVisible(false); // consultar
-//		} else if (viewPager.getCurrentItem() == 1) {
-//			// menu.getItem(0).setVisible(false);//usuario
-//			// menu.getItem(1).setVisible(false);//permiso
-//			// menu.getItem(2).setVisible(false);//lifuba
-//			menu.getItem(3).setVisible(false);// adeful
-//			menu.getItem(4).setVisible(false);// puesto
-//			menu.getItem(5).setVisible(false);// posicion
-//			menu.getItem(6).setVisible(false);// cargo
-//			// menu.getItem(7).setVisible(false);//cerrar
-//			menu.getItem(8).setVisible(false);// guardar
-//			menu.getItem(9).setVisible(false);// Subir
-//			menu.getItem(10).setVisible(false); // eliminar
-//			menu.getItem(11).setVisible(false); // consultar
-//		} else if (viewPager.getCurrentItem() == 2) {
-//			// menu.getItem(0).setVisible(false);//usuario
-//			// menu.getItem(1).setVisible(false);//permiso
-//			// menu.getItem(2).setVisible(false);//lifuba
-//			menu.getItem(3).setVisible(false);// adeful
-//			menu.getItem(4).setVisible(false);// puesto
-//			menu.getItem(5).setVisible(false);// posicion
-//			menu.getItem(6).setVisible(false);// cargo
-//			// menu.getItem(7).setVisible(false);//cerrar
-//			menu.getItem(8).setVisible(false);// guardar
-//			menu.getItem(9).setVisible(false);// Subir
-//			menu.getItem(10).setVisible(false); // eliminar
-//			menu.getItem(11).setVisible(false); // consultar
-//		} else if (viewPager.getCurrentItem() == 3) {
-//			// menu.getItem(0).setVisible(false);//usuario
-//			// menu.getItem(1).setVisible(false);//permiso
-//			// menu.getItem(2).setVisible(false);//lifuba
-//			menu.getItem(3).setVisible(false);// adeful
-//			menu.getItem(4).setVisible(false);// puesto
-//			menu.getItem(5).setVisible(false);// posicion
-//			menu.getItem(6).setVisible(false);// cargo
-//			// menu.getItem(7).setVisible(false);//cerrar
-//			menu.getItem(8).setVisible(false);// guardar
-//			menu.getItem(9).setVisible(false);// Subir
-//			menu.getItem(10).setVisible(false); // eliminar
-//			menu.getItem(11).setVisible(false); // consultar
-//		}
+		getMenuInflater().inflate(R.menu.main_usuario, menu);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-	//	return true;
-		// if (drawerToggle.onOptionsItemSelected(item)) {
-		// return true;
-		// }
+		int id = item.getItemId();
+		// noinspection SimplifiableIfStatement
+		if (id == R.id.action_administrador) {
 
-//		int id = item.getItemId();
-//		// noinspection SimplifiableIfStatement
-//		if (id == R.id.action_usuario) {
-//
-//			Intent usuario = new Intent(TabsAdeful.this,
-//					NavigationDrawerUsuario.class);
-//			startActivity(usuario);
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_permisos) {
-//			return true;
-//		}
-//
-//		if (id == R.id.action_guardar) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_subir) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_eliminar) {
-//
-//			return true;
-//		}
-//		if (id == R.id.action_adeful) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_lifuba) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_puesto) {
-//
-//			return true;
-//
-//		}
-//		if (id == R.id.action_posicion) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_cargo) {
-//
-//			return true;
-//		}
-//
-//		if (id == android.R.id.home) {
-//
-//			NavUtils.navigateUpFromSameTask(this);
-//
-//			return true;
-//		}
+			Intent usuario = new Intent(TabsUsuario.this, TabsAdmEmpresa.class);
+			startActivity(usuario);
+
+			return true;
+		}
+		if (id == R.id.action_cerrar) {
+
+		
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 //	}
 	}

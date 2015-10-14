@@ -11,6 +11,8 @@ import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.Promo;
+import com.beconnected.databases.Request;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -61,7 +63,9 @@ public class FragmentAdmPromoEditar extends Fragment {
 	private boolean insertar = true;
 	private int posicion;
 	private AlertsMenu alertsMenu;
-
+	private SubirDatos subirDatos;
+	
+	
 	public static FragmentAdmPromoEditar newInstance() {
 		FragmentAdmPromoEditar fragment = new FragmentAdmPromoEditar();
 		return fragment;
@@ -125,17 +129,61 @@ public class FragmentAdmPromoEditar extends Fragment {
 					@Override
 					public void onLongClick(View view, final int position) {
 						
-						
+						alertsMenu = new AlertsMenu(getActivity(), "ALERTA",getActivity().getResources().getString(R.string.alert_promo)
+								, null, null);
+						alertsMenu.btnAceptar.setText("Aceptar");
+						alertsMenu.btnCancelar.setText("Cancelar");
+
+						alertsMenu.btnAceptar
+								.setOnClickListener(new View.OnClickListener() {
+
+									@SuppressLint("NewApi")
+									@Override
+									public void onClick(View v) {
+										// TODO Auto-generated method stub
+										BL.getBl().eliminarPromo(
+												datosPromo.get(position)
+														.getID_PROMO());
+										
+										
+			                            Request p = new Request();
+//			    						p.setMethod("GET");
+			    						p.setMethod("POST");
+			    						p.setQuery("ELIMINAR");
+//			    						p.setUri(uri);
+			    						p.setParametrosDatos("id_promo", String.valueOf(datosPromo.get(position)
+												.getID_PROMO()));
+			    						
+			    						
+			    					
+			    						subirDatos= new SubirDatos(getActivity());
+			    						subirDatos.resquestDataPromo(p);
+			    						
+										
+										
+										recyclerViewLoadPromo();
+
+										Toast.makeText(
+												getActivity(),
+												getActivity().getResources().getString(R.string.promo_eliminada),
+												Toast.LENGTH_SHORT).show();
+
+										alertsMenu.alertDialog.dismiss();
+
+									}
+
+								});
+					}
 						
 					
-					}
+					
 				}));
 
 					}
 
 
                 	
-//
+
 	public void recyclerViewLoadPromo() {
 
 		recycleViewPromo.setLayoutManager(new LinearLayoutManager(

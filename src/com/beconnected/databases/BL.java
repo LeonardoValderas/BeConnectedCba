@@ -26,9 +26,18 @@ public BL(){
         return bl;
     }
 
-    public void crearTablasBD() {
+    public void crearTablasBDAmd() {
 
-        DL.getDl().getSqliteConnection().createTablesBD();
+        DL.getDl().getSqliteConnection().createTablesBDAdm();
+    }
+    public void crearTablasBDUsuario() {
+
+        DL.getDl().getSqliteConnection().createTablesBDUsuario();
+    }
+    
+    public void dropTablasBDUsuario() {
+
+        DL.getDl().getSqliteConnection().dropTablasBDUsuario();
     }
     
     
@@ -65,11 +74,37 @@ public BL(){
 		return DL.getDl().getSqliteConnection().insertEmpresa(empresa);
 
 	}
+	
+	public boolean insertarEmpresaUsuario(Empresa empresa) {
+
+		return DL.getDl().getSqliteConnection().insertEmpresaUsuario(empresa);
+
+	}
+	
+	public boolean insertarEmpresaUsuarioUrl(Empresa empresa) {
+
+		return DL.getDl().getSqliteConnection().insertEmpresaUsuarioUrl(empresa);
+
+	}
 	public ArrayList<Empresa> selectListaEmpresa() {
 
 		return DL.getDl().getSqliteConnection().selectListaEmpresa();
 
 	}
+	
+	public ArrayList<Empresa> selectListaEmpresaUsuario() {
+
+		return DL.getDl().getSqliteConnection().selectListaEmpresaUsuario();
+
+	}
+	public ArrayList<Empresa> selectListaUrl() {
+
+		return DL.getDl().getSqliteConnection().selectListaUrl();
+
+	}
+	
+	
+	
 	
 	
 	public boolean actualizarEmpresa(Empresa empresa) {
@@ -90,15 +125,57 @@ public BL(){
 		return DL.getDl().getSqliteConnection().insertPromo(promo);
 
 	}
+	public boolean insertarPromoUsuario(Promo promo) {
+
+		return DL.getDl().getSqliteConnection().insertPromoUsuario(promo);
+
+	}
+	
 	public ArrayList<Promo> selectListaPromo() {
 
 		return DL.getDl().getSqliteConnection().selectListaPromo();
 
 	}
 	
+	public ArrayList<Promo> selectListaPromoUsuario() {
+
+		return DL.getDl().getSqliteConnection().selectListaPromoUsuario();
+
+	}
+	
 	public boolean actualizarPromo(Promo promo) {
 
 		return DL.getDl().getSqliteConnection().actualizarPromo(promo);
+
+	}
+	
+	public boolean eliminarPromo(int id) {
+
+		return DL.getDl().getSqliteConnection().eliminarPromo(id);
+
+	}
+	
+	public boolean insertarInfo() {
+
+		return DL.getDl().getSqliteConnection().insertInfo();
+
+	}
+	
+	public boolean insertarInfoUsuario() {
+
+		return DL.getDl().getSqliteConnection().insertInfoUsuario();
+
+	}
+	
+	public ArrayList<Info> selectListaInfo() {
+
+		return DL.getDl().getSqliteConnection().selectListaInfo();
+
+	}
+	
+	public boolean actualizarInfo(Info info) {
+
+		return DL.getDl().getSqliteConnection().actualizarInfo(info);
 
 	}
 	

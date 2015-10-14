@@ -119,7 +119,7 @@ public class FragmentPromos extends Fragment {
 		recycleViewPromo.addItemDecoration(new DividerItemDecoration(
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewPromo.setItemAnimator(new DefaultItemAnimator());
-		datosPromo = BL.getBl().selectListaPromo();
+		datosPromo = BL.getBl().selectListaPromoUsuario();
 		
 		
 		adaptador = new AdaptadorPromos(datosPromo);

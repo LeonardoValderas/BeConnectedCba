@@ -83,7 +83,7 @@ public class TabsAdmPromo extends AppCompatActivity {
 			public void onPageSelected(int position) {
 				Fragment fragmentTab = null;
 	             if(position==1){
-	            	 fragmentTab = FragmentAdmMapaEditar.newInstance();
+	            	 fragmentTab = FragmentAdmEmpresaEditar.newInstance();
 	            	 
 	            	
 				}

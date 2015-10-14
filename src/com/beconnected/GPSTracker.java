@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
 public class GPSTracker extends Service implements LocationListener{
@@ -126,7 +129,13 @@ public class GPSTracker extends Service implements LocationListener{
 		
 		alertDialog.setTitle("Activar GPS");
 		
-		alertDialog.setMessage("Su GPS no esta activo. Desea activarlo?");
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			alertDialog.setMessage("Su GPS no esta activo. Desea activarlo?");
+		   } else {
+			   alertDialog.setMessage(getResources().getString(R.string.gps_no_activo));
+		}
+		
+		//alertDialog.setMessage(ResourcesCompat..getString(R.string.gps_no_activo));
 		
 		alertDialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 			

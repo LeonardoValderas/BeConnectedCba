@@ -10,6 +10,7 @@ import com.beconnected.R;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.Promo;
+import com.beconnected.databases.Request;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -68,7 +69,7 @@ public class FragmentAdmPromo extends Fragment {
 	private	String descripcionExtra;
 	private	String desdeExtra;
 	private	String hastaExtra;
-	
+	private SubirDatos subirDatos;
 	public static FragmentAdmPromo newInstance() {
 		FragmentAdmPromo fragment = new FragmentAdmPromo();
 		return fragment;
@@ -279,6 +280,26 @@ public class FragmentAdmPromo extends Fragment {
 
 						BL.getBl().insertarPromo(promo);
 						}
+						
+						Request p = new Request();
+//						p.setMethod("GET");
+						p.setMethod("POST");
+						p.setQuery("SUBIR");
+//						p.setUri(uri);
+						p.setParametrosDatos("titulo", promo.getTITULO());
+						p.setParametrosDatos("descripcion", promo.getDESCRIPCION());
+						p.setParametrosDatos("id_empresa", String.valueOf(promo.getID_EMPRESA()));
+						p.setParametrosDatos("fecha_inicio", promo.getFECHA_INICIO());
+						p.setParametrosDatos("fecha_fin",promo.getFECHA_FIN());
+						
+					
+						subirDatos= new SubirDatos(getActivity());
+						subirDatos.resquestDataPromo(p);
+						
+						
+						
+						
+						
 						Intent i = new Intent(getActivity(), TabsAdmPromo.class);
 						startActivity(i);
 						Toast.makeText(getActivity(),
@@ -312,6 +333,28 @@ public class FragmentAdmPromo extends Fragment {
                          
 							BL.getBl().actualizarPromo(promo);
 						}
+                            
+                            
+                            
+                            Request p = new Request();
+//    						p.setMethod("GET");
+    						p.setMethod("POST");
+    						p.setQuery("EDITAR");
+//    						p.setUri(uri);
+    						p.setParametrosDatos("id_promo", String.valueOf(promo.getID_PROMO()));
+    						p.setParametrosDatos("titulo", promo.getTITULO());
+    						p.setParametrosDatos("descripcion", promo.getDESCRIPCION());
+    						p.setParametrosDatos("id_empresa", String.valueOf(promo.getID_EMPRESA()));
+    						p.setParametrosDatos("fecha_inicio", promo.getFECHA_INICIO());
+    						p.setParametrosDatos("fecha_fin",promo.getFECHA_FIN());
+    						
+    					
+    						subirDatos= new SubirDatos(getActivity());
+    						subirDatos.resquestDataPromo(p);
+    						
+                            
+                            
+                            
                             Intent i = new Intent(getActivity(), TabsAdmPromo.class);
 							startActivity(i);
 							

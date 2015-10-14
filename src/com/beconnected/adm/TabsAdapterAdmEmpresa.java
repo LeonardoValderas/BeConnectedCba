@@ -7,12 +7,12 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 
-public class TabsAdapterAdmMapa extends FragmentPagerAdapter {
+public class TabsAdapterAdmEmpresa extends FragmentPagerAdapter {
 
 	final int PAGE_COUNT = 2;
 	private String tabTitles[] = new String[] { "CREAR", "EDITAR"};
 	
-	public TabsAdapterAdmMapa(FragmentManager fm) {
+	public TabsAdapterAdmEmpresa(FragmentManager fm) {
 		super(fm);
 	}
 
@@ -28,12 +28,12 @@ public class TabsAdapterAdmMapa extends FragmentPagerAdapter {
 
 		switch (position) {
 		case 0:
-			fragmentTab = FragmentAdmMapa.newInstance();
+			fragmentTab = FragmentAdmEmpresa.newInstance();
 
 			
 			break;
 		case 1:
-			fragmentTab = FragmentAdmMapaEditar.newInstance();
+			fragmentTab = FragmentAdmEmpresaEditar.newInstance();
 
 			
 			break;

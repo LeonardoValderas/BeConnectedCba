@@ -21,6 +21,8 @@ public class GeneralLogic {
     public static File IN_DIR = new File(external.getAbsolutePath()
             + "/data/com.beconnected/databases");
 
+    public static String URL_LOGO = "http://beconnected.esy.es/BeConnected/picture/";
+    
     public GeneralLogic() {
 
     }
