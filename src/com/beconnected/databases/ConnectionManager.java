@@ -235,10 +235,10 @@ public class ConnectionManager {
      }
 	
 	
+	//enviar/editar/eliminar
 	
 	
-	
-	public static String enviarPromo(Request p){
+	public static String gestionPromo(Request p){
 				
 		
 		String uri=null;
@@ -247,7 +247,7 @@ public class ConnectionManager {
 		}else if(p.getQuery().equals("EDITAR")){
 			uri =URL+"editarPromo.php";
 		}else if(p.getQuery().equals("ELIMINAR")){
-			uri =URL+"eliminarEmpresa.php";
+			uri =URL+"eliminarPromo.php";
 		}
 		
 	
@@ -306,7 +306,7 @@ public class ConnectionManager {
    }
 	
 	//subir/editar/eliminar una empresa
-	public static String enviarEmpresa(Request p){
+	public static String gestionEmpresa(Request p){
 		String uri=null;
 		
 		if(p.getQuery().equals("SUBIR")){
@@ -371,6 +371,74 @@ public class ConnectionManager {
 		}
    }
 	
+	
+	//subir/editar/eliminar una empresa
+	public static String gestionInfo(Request p){
+		String uri=null;
+		
+		uri =URL+"editarInfo.php";
+		
+//		if(p.getQuery().equals("SUBIR")){
+//			 uri =URL+"agregarEmpresa.php";
+//		}else if(p.getQuery().equals("EDITAR")){
+//			uri =URL+"editarEmpresa.php";
+//		}else if(p.getQuery().equals("ELIMINAR")){
+//			uri =URL+"eliminarEmpresa.php";
+//		}
+		 
+		BufferedReader reader = null;
+	//	String uri = p.getUri();
+	
+		
+		if(p.getMethod().equals("GET")){
+			uri += "?" + p.getEncodedParams();
+		}
+		
+		try {
+			URL url = new URL(uri);
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod(p.getMethod());
+			
+	//	JSONObject json =  new JSONObject(p.getParametros());
+	//	String parames = "paramentros=" + json.toString();
+	
+		if(p.getMethod().equals("POST")){	
+	
+			con.setDoOutput(true);
+		OutputStreamWriter write =  new OutputStreamWriter(con.getOutputStream());
+		
+	//	write.write(parames);
+		write.write(p.getEncodedParams());
+		write.flush();
+		
+		
+		}
+			StringBuilder sb = new StringBuilder();
+			reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			
+			String line;
+			while((line =reader.readLine())!=null){
+				
+				sb.append(line+ "\n");
+			}
+			return sb.toString();
+			
+		} catch (Exception e) {
+		e.printStackTrace();
+		return null;
+		
+		}finally{
+			if(reader!=null){
+				try {
+					reader.close();
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+		}
+   }
 
 	
 	

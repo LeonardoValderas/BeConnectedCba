@@ -9,6 +9,7 @@ import com.beconnected.TabsUsuario;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Info;
+import com.beconnected.databases.Request;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class TabsAdmInfo extends AppCompatActivity {
 //	private ImageView 
 	private int restarMap = 0;
 	TextView txtAbSubTitulo;
+	private SubirDatos subirDatos;
 	// private TextView txtAbSubTitulo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +85,24 @@ public class TabsAdmInfo extends AppCompatActivity {
 				
 				info = new Info(editTextSomos.getText().toString(), editTextContacto.getText().toString());
 				BL.getBl().actualizarInfo(info);
-				Toast.makeText(TabsAdmInfo.this,
-						getResources().getString(R.string.info_actualizada),
-						Toast.LENGTH_SHORT).show();
 				
+				
+				Request p = new Request();
+
+				p.setMethod("POST");
+				p.setParametrosDatos("somos", info.getSOMOS());
+				p.setParametrosDatos("contacto", info.getCONTACTO());
+				
+				
+			
+				subirDatos= new SubirDatos(TabsAdmInfo.this);
+				subirDatos.resquestDataInfo(p);
+				
+				
+//				Toast.makeText(TabsAdmInfo.this,
+//						getResources().getString(R.string.info_actualizada),
+//						Toast.LENGTH_SHORT).show();
+//				
 				
 				
 				

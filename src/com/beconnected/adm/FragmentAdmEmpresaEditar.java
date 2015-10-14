@@ -159,10 +159,10 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 										subirDatos= new SubirDatos(getActivity());
 										subirDatos.resquestDataEmpresa(p);
 										recyclerViewLoadEmpresa();
-										Toast.makeText(
-												getActivity(),
-												getActivity().getResources().getString(R.string.empresa_eliminada),
-												Toast.LENGTH_SHORT).show();
+//										Toast.makeText(
+//												getActivity(),
+//												getActivity().getResources().getString(R.string.empresa_eliminada),
+//												Toast.LENGTH_SHORT).show();
 
 										alertsMenu.alertDialog.dismiss();
 

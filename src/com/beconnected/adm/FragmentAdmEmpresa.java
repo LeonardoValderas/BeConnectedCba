@@ -221,11 +221,11 @@ public class FragmentAdmEmpresa extends Fragment {
 						//actualizamos el activity. ver este punto 
 						Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
 						startActivity(i);
-						Toast.makeText(
-								getActivity(),
-								getActivity().getResources().getString(
-										R.string.empresa_cargada),
-								Toast.LENGTH_SHORT).show();
+//						Toast.makeText(
+//								getActivity(),
+//								getActivity().getResources().getString(
+//										R.string.empresa_cargada),
+//								Toast.LENGTH_SHORT).show();
 						imageLogo.setImageResource(R.drawable.logo);
 						editTextEmpresa.setText("");
 						imagenLogo = null;
@@ -270,11 +270,11 @@ public class FragmentAdmEmpresa extends Fragment {
 						Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
 						startActivity(i);
 
-						Toast.makeText(
-								getActivity(),
-								getActivity().getResources().getString(
-										R.string.empresa_actualizada),
-								Toast.LENGTH_SHORT).show();
+//						Toast.makeText(
+//								getActivity(),
+//								getActivity().getResources().getString(
+//										R.string.empresa_actualizada),
+//								Toast.LENGTH_SHORT).show();
 						editTextEmpresa.setText("");
 						mapa.clear();
 						imageLogo.setImageResource(R.drawable.logo);

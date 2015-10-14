@@ -301,10 +301,10 @@ public class FragmentAdmPromo extends Fragment {
 						
 						
 						Intent i = new Intent(getActivity(), TabsAdmPromo.class);
-						startActivity(i);
-						Toast.makeText(getActivity(),
-								getActivity().getResources().getString(R.string.promo_cargada),
-								Toast.LENGTH_SHORT).show();
+//						startActivity(i);
+//						Toast.makeText(getActivity(),
+//								getActivity().getResources().getString(R.string.promo_cargada),
+//								Toast.LENGTH_SHORT).show();
 						editTextTitulo.setText("");
 						editTextDescripcion.setText("");
 						buttonDesde.setText("Desde");
@@ -358,9 +358,9 @@ public class FragmentAdmPromo extends Fragment {
                             Intent i = new Intent(getActivity(), TabsAdmPromo.class);
 							startActivity(i);
 							
-							Toast.makeText(getActivity(),
-									getActivity().getResources().getString(R.string.promo_actualizada),
-									Toast.LENGTH_SHORT).show();
+//							Toast.makeText(getActivity(),
+//									getActivity().getResources().getString(R.string.promo_actualizada),
+//									Toast.LENGTH_SHORT).show();
 							editTextTitulo.setText("");
 							editTextDescripcion.setText("");
 							buttonDesde.setText("Desde");
