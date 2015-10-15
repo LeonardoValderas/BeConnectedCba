@@ -81,11 +81,11 @@ public BL(){
 
 	}
 	
-	public boolean insertarEmpresaUsuarioUrl(Empresa empresa) {
-
-		return DL.getDl().getSqliteConnection().insertEmpresaUsuarioUrl(empresa);
-
-	}
+//	public boolean insertarEmpresaUsuarioUrl(Empresa empresa) {
+//
+//		return DL.getDl().getSqliteConnection().insertEmpresaUsuarioUrl(empresa);
+//
+//	}
 	public ArrayList<Empresa> selectListaEmpresa() {
 
 		return DL.getDl().getSqliteConnection().selectListaEmpresa();
@@ -97,11 +97,11 @@ public BL(){
 		return DL.getDl().getSqliteConnection().selectListaEmpresaUsuario();
 
 	}
-	public ArrayList<Empresa> selectListaUrl() {
-
-		return DL.getDl().getSqliteConnection().selectListaUrl();
-
-	}
+//	public ArrayList<Empresa> selectListaUrl() {
+//
+//		return DL.getDl().getSqliteConnection().selectListaUrl();
+//
+//	}
 	
 	
 	
@@ -173,9 +173,21 @@ public BL(){
 
 	}
 	
+	public ArrayList<Info> selectListaInfoUsuario() {
+
+		return DL.getDl().getSqliteConnection().selectListaInfoUsuario();
+
+	}
+	
 	public boolean actualizarInfo(Info info) {
 
 		return DL.getDl().getSqliteConnection().actualizarInfo(info);
+
+	}
+	
+	public boolean actualizarInfoUsuario(Info info) {
+
+		return DL.getDl().getSqliteConnection().actualizarInfoUsuario(info);
 
 	}
 	

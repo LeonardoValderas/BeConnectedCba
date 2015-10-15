@@ -39,7 +39,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Crea las tablas necesarias para el sistema
+	 * Crea las tablas del adm
 	 * 
 	 */
 	public void createTablesBDAdm() {
@@ -88,6 +88,10 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 	}
 
+	/**
+	 * crea las tablas del usuario
+	 */
+	
 	public void createTablesBDUsuario() {
 
 		String TABLA_EMPRESA_U = "CREATE TABLE IF NOT EXISTS EMPRESA_U (ID_EMPRESA INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -147,7 +151,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Metodo que elimina todas las tablas de la base de datos.
+	 * Metodo que elimina todas las tablas de la base de datos del usuario.
 	 * 
 	 */
 	public void dropTablasBDUsuario() {
@@ -185,6 +189,11 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	// ////////////////////////////////////////
 	// /////Metodos tablas///////
 
+	
+	/**
+	 * 
+	 * Metodo que inserta una empresa Adm.
+	 */
 	public boolean insertEmpresa(Empresa empresa) throws SQLiteException {
 		boolean ban = false;
 
@@ -201,8 +210,10 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return true;
 	}
 
-	//Usuario
-	
+	/**
+	 * 
+	 * Metodo que inserta una empresa Usuario.
+	 */
 	public boolean insertEmpresaUsuario(Empresa empresa) throws SQLiteException {
 		boolean ban = false;
 
@@ -219,26 +230,26 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return true;
 	}
 	
-	//Usuario
-	
-		public boolean insertEmpresaUsuarioUrl(Empresa empresa) throws SQLiteException {
-			boolean ban = false;
+//	//Usuario
+//	
+//		public boolean insertEmpresaUsuarioUrl(Empresa empresa) throws SQLiteException {
+//			boolean ban = false;
+//
+//			ContentValues cv = new ContentValues();
+//			
+//			cv.put("LOGO", empresa.getLOGO());
+//			
+//			
+//			SQLiteDatabase database = this.getWritableDatabase();
+//
+//			database.insert("EMPRESA_U","ID_EMPRESA="+empresa.getID_EMPRESA(), cv);
+//			return true;
+//		}
 
-			ContentValues cv = new ContentValues();
-			
-			cv.put("LOGO", empresa.getLOGO());
-			
-			
-			SQLiteDatabase database = this.getWritableDatabase();
-
-			database.insert("EMPRESA_U","ID_EMPRESA="+empresa.getID_EMPRESA(), cv);
-			return true;
-		}
-
-	/**
-	 * 
-	 * Metodo que obtiene lista de equipos adeful.
-	 */
+		/**
+		 * 
+		 * Metodo que trae lista una empresa adm.
+		 */
 	public ArrayList<Empresa> selectListaEmpresa() {
 
 		String sql = "SELECT * FROM EMPRESA";
@@ -302,7 +313,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 	/**
 	 * 
-	 * Metodo que obtiene lista de equipos adeful.
+	 * Metodo que trae lista una empresa usuario.
 	 */
 	public ArrayList<Empresa> selectListaEmpresaUsuario() {
 
@@ -366,57 +377,63 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	}
 
 	
-	
-	
-	public ArrayList<Empresa> selectListaUrl() {
-
-		String sql = "SELECT ID_EMPRESA,URL_LOGO FROM EMPRESA_U";
-		ArrayList<Empresa> arrayEmpresa = new ArrayList<Empresa>();
-		String url_logo=null;
-	
-		int id;
-		Cursor cursor = null;
-		// Integer isFueraFrecuencia;
-		SQLiteDatabase database = null;
-
-		database = getSqLiteDatabase("selectListaUrl");
-		if (database != null && database.isOpen()) {
-
-			try {
-				cursor = database.rawQuery(sql, null);
-				if (cursor != null && cursor.getCount() > 0) {
-
-					while (cursor.moveToNext()) {
-
-						Empresa empresa = null;
-						id = cursor.getInt(cursor.getColumnIndex("ID_EMPRESA"));
-											
-						url_logo = cursor.getString(cursor.getColumnIndex("URL_LOGO"));
-
-						empresa = new Empresa(id, null, null, null,
-								null,url_logo);
-
-						arrayEmpresa.add(empresa);
-
-					}
-				}
-
-			} catch (Exception e) {
-				Log.e("selectListaUrl", e.toString());
-			}
-		} else {
-
-			Log.e("selectListaUrl", "Error Conexión Base de Datos");
-		}
-
-		sql = null;
-
-		
-		cursor = null;
-		database = null;
-		return arrayEmpresa;
-	}
-	
+//	/**
+//	 * 
+//	 * Metodo que eliminar una empresa Amd.
+//	 */
+//	
+//	public ArrayList<Empresa> selectListaUrl() {
+//
+//		String sql = "SELECT ID_EMPRESA,URL_LOGO FROM EMPRESA_U";
+//		ArrayList<Empresa> arrayEmpresa = new ArrayList<Empresa>();
+//		String url_logo=null;
+//	
+//		int id;
+//		Cursor cursor = null;
+//		// Integer isFueraFrecuencia;
+//		SQLiteDatabase database = null;
+//
+//		database = getSqLiteDatabase("selectListaUrl");
+//		if (database != null && database.isOpen()) {
+//
+//			try {
+//				cursor = database.rawQuery(sql, null);
+//				if (cursor != null && cursor.getCount() > 0) {
+//
+//					while (cursor.moveToNext()) {
+//
+//						Empresa empresa = null;
+//						id = cursor.getInt(cursor.getColumnIndex("ID_EMPRESA"));
+//											
+//						url_logo = cursor.getString(cursor.getColumnIndex("URL_LOGO"));
+//
+//						empresa = new Empresa(id, null, null, null,
+//								null,url_logo);
+//
+//						arrayEmpresa.add(empresa);
+//
+//					}
+//				}
+//
+//			} catch (Exception e) {
+//				Log.e("selectListaUrl", e.toString());
+//			}
+//		} else {
+//
+//			Log.e("selectListaUrl", "Error Conexión Base de Datos");
+//		}
+//
+//		sql = null;
+//
+//		
+//		cursor = null;
+//		database = null;
+//		return arrayEmpresa;
+//	}
+	/**
+	 * 
+	 * Metodo que actualiza una empresa Amd.
+	 */
 	
 	public boolean actualizarEmpresa(Empresa empresa) throws SQLiteException {
 		boolean ban = false;
@@ -434,6 +451,12 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return true;
 	}
 
+	
+	/**
+	 * 
+	 * Metodo que eliminar una empresa Amd.
+	 */
+	
 	public boolean eliminarEmpresa(int id) {
 
 		boolean res = false;
@@ -466,6 +489,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 	/**
 	 * Se usa ContentVales para la utilización de byte[] blob
+	 * inseerta promo
 	 */
 
 	public boolean insertPromo(Promo promo) throws SQLiteException {
@@ -502,7 +526,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 	/**
 	 * 
-	 * Metodo que obtiene lista de equipos adeful.
+	 * Metodo que obtiene lista de promos Adm.
 	 */
 	public ArrayList<Promo> selectListaPromo() {
 
@@ -573,7 +597,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 	/**
 	 * 
-	 * Metodo que obtiene lista de equipos adeful.
+	 * Metodo que obtiene lista de promos usuario.
 	 */
 	public ArrayList<Promo> selectListaPromoUsuario() {
 
@@ -642,6 +666,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return arrayPromo;
 	}
 
+	
+	
 	public boolean actualizarPromo(Promo promo) {
 
 		boolean res = false;
@@ -677,6 +703,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return res;
 	}
 
+	
+	
 	public boolean eliminarPromo(int id) {
 
 		boolean res = false;
@@ -707,6 +735,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return res;
 	}
 
+	
+	
 	public boolean insertInfo() throws SQLiteException {
 		boolean ban = false;
 
@@ -735,7 +765,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 	/**
 	 * 
-	 * Metodo que obtiene lista de equipos adeful.
+	 * Metodo que obtiene lista de info admi.
 	 */
 	public ArrayList<Info> selectListaInfo() {
 
@@ -786,6 +816,62 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return arrayInfo;
 	}
 
+	
+	/**
+	 * 
+	 * Metodo que obtiene lista de info.
+	 */
+	public ArrayList<Info> selectListaInfoUsuario() {
+
+		String sql = "SELECT  * FROM INFO_U";
+		ArrayList<Info> arrayInfo = new ArrayList<Info>();
+		String somos = null, contacto = null;
+		Cursor cursor = null;
+		// Integer isFueraFrecuencia;
+		SQLiteDatabase database = null;
+
+		database = getSqLiteDatabase("selectListaInfoUsuario");
+		if (database != null && database.isOpen()) {
+
+			try {
+				cursor = database.rawQuery(sql, null);
+				if (cursor != null && cursor.getCount() > 0) {
+
+					while (cursor.moveToNext()) {
+
+						Info info = null;
+
+						somos = cursor
+								.getString(cursor.getColumnIndex("SOMOS"));
+
+						contacto = cursor.getString(cursor
+								.getColumnIndex("CONTACTO"));
+
+						info = new Info(somos, contacto);
+
+						arrayInfo.add(info);
+
+					}
+				}
+
+			} catch (Exception e) {
+				Log.e("selectListaInfoUsuario", e.toString());
+			}
+		} else {
+
+			Log.e("selectListaInfoUsuario", "Error Conexión Base de Datos");
+		}
+
+		sql = null;
+		somos = null;
+		contacto = null;
+		cursor = null;
+		database = null;
+		return arrayInfo;
+	}
+
+	
+	
 	public boolean actualizarInfo(Info info) {
 
 		boolean res = false;
@@ -817,230 +903,35 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return res;
 	}
 
-	// public boolean actualizarEquipoAdeful(Equipo equipo) throws
-	// SQLiteException {
-	// boolean ban = false;
-	//
-	// ContentValues cv = new ContentValues();
-	// cv.put("NOMBRE", equipo.getNOMBRE_EQUIPO());
-	// cv.put("ESCUDO", equipo.getESCUDO());
-	// cv.put("USUARIO_CREADOR", equipo.getNOMBRE_USUARIO());
-	// cv.put("FECHA_ACTUALIZACION", equipo.getFECHA_ACTUALIZACION());
-	// cv.put("ESTADO", equipo.getESTADO());
-	// cv.put("TABLA", equipo.getTABLA());
-	//
-	// SQLiteDatabase database = this.getWritableDatabase();
-	//
-	// database.update("EQUIPO_ADEFUL", cv,
-	// "ID_EQUIPO" + "=" + equipo.getID_EQUIPO(), null);
-	// return true;
-	// }
-	//
-	// public boolean eliminarEquipoAdeful(int id) {
-	//
-	// boolean res = false;
-	// SQLiteDatabase database = getSqLiteDatabase("eliminarDivision");
-	// String sql = "DELETE FROM EQUIPO_ADEFUL WHERE ID_EQUIPO = " + id;
-	//
-	// if (database != null && database.isOpen()) {
-	//
-	// try {
-	//
-	// database.execSQL(sql);
-	// res = true;
-	//
-	// } catch (Exception e) {
-	//
-	// res = false;
-	// Log.e("eliminarEquipoAdeful", e.toString());
-	// }
-	//
-	// } else {
-	//
-	// res = false;
-	// Log.e("eliminarEquipoAdeful", "Error Conexión Base de Datos");
-	// }
-	//
-	// database = null;
-	// sql = null;
-	// return res;
-	// }
-	//
-	// /**
-	// * Metodo que inserta los datos de una division en la base de datos.
-	// *
-	// */
-	//
-	// public boolean insertDivisionAdeful(Division division) {
-	// boolean ban = false;
-	//
-	// String sql =
-	// "INSERT INTO DIVISION_ADEFUL ( DESCRIPCION, USUARIO_CREADOR, FECHA_CREACION, FECHA_ACTUALIZACION, ESTADO, TABLA ) VALUES ('"
-	// + division.getDESCRIPCION()
-	// + "', '"
-	// + division.getNOMBRE_USUARIO()
-	// + "', '"
-	// + division.getFECHA_CREACION()
-	// + "', '"
-	// + division.getFECHA_ACTUALIZACION()
-	// + "', '"
-	// + division.getESTADO() + "', '" + division.getTABLA() + "')";
-	//
-	// SQLiteDatabase database = getSqLiteDatabase("insertDivision");
-	// if (database != null && database.isOpen()) {
-	// try {
-	//
-	// database.execSQL(sql);
-	// ban = true;
-	//
-	// } catch (Exception e) {
-	//
-	// Log.e("insertDivision", e.toString());
-	// ban = false;
-	// }
-	// } else {
-	// Log.e("insertDivision", "Error Conexión Base de Datos");
-	// ban = false;
-	// }
-	//
-	// sql = null;
-	// database = null;
-	// return ban;
-	// }
-	//
-	// /**
-	// *
-	// * Metodo que obtiene lista de division adeful.
-	// */
-	// public ArrayList<Division> selectListaDivisionAdeful() {
-	//
-	// String sql = "SELECT * FROM DIVISION_ADEFUL";
-	// ArrayList<Division> arrayDivision = new ArrayList<Division>();
-	// String descripcion = null, usuario = null, fechaCreacion = null,
-	// fechaActualizacion = null, estado = null, tabla = null;
-	// int id;
-	// Cursor cursor = null;
-	// SQLiteDatabase database = null;
-	//
-	// database = getSqLiteDatabase("selectListaDivisionAdeful");
-	// if (database != null && database.isOpen()) {
-	//
-	// try {
-	// cursor = database.rawQuery(sql, null);
-	// if (cursor != null && cursor.getCount() > 0) {
-	//
-	// while (cursor.moveToNext()) {
-	//
-	// Division division = null;
-	// id = cursor
-	// .getInt(cursor.getColumnIndex("ID_DIVISION"));
-	// descripcion = cursor.getString(cursor
-	// .getColumnIndex("DESCRIPCION"));
-	//
-	// usuario = cursor.getString(cursor
-	// .getColumnIndex("USUARIO_CREADOR"));
-	// fechaCreacion = cursor.getString(cursor
-	// .getColumnIndex("FECHA_CREACION"));
-	// fechaActualizacion = cursor.getString(cursor
-	// .getColumnIndex("FECHA_ACTUALIZACION"));
-	// estado = cursor.getString(cursor
-	// .getColumnIndex("ESTADO"));
-	// tabla = cursor
-	// .getString(cursor.getColumnIndex("TABLA"));
-	//
-	// division = new Division(id, descripcion, usuario,
-	// fechaCreacion, fechaActualizacion, estado,
-	// tabla);
-	//
-	// arrayDivision.add(division);
-	//
-	// }
-	// }
-	//
-	// } catch (Exception e) {
-	// Log.e("selectListaDivisionAdeful", e.toString());
-	// }
-	// } else {
-	//
-	// Log.e("selectListaDivisionAdeful", "Error Conexión Base de Datos");
-	// }
-	//
-	// sql = null;
-	// cursor = null;
-	// database = null;
-	// descripcion = null;
-	// usuario = null;
-	// fechaCreacion = null;
-	// fechaActualizacion = null;
-	// estado = null;
-	// tabla = null;
-	//
-	// return arrayDivision;
-	// }
-	//
-	// public boolean actualizarDivisionAdeful(Division division) {
-	//
-	// boolean res = false;
-	// SQLiteDatabase database = getSqLiteDatabase("actualizarDivision");
-	// String sql = "UPDATE DIVISION_ADEFUL SET DESCRIPCION='"
-	// + division.getDESCRIPCION() + "', USUARIO_CREADOR='"
-	// + division.getNOMBRE_USUARIO() + "', FECHA_ACTUALIZACION='"
-	// + division.getFECHA_ACTUALIZACION() + "', ESTADO='"
-	// + division.getESTADO() + "', TABLA = '" + division.getTABLA()
-	// + "' WHERE ID_DIVISION ='" + division.getID_DIVISION() + "'";
-	//
-	// if (database != null && database.isOpen()) {
-	//
-	// try {
-	//
-	// database.execSQL(sql);
-	// res = true;
-	//
-	// } catch (Exception e) {
-	//
-	// res = false;
-	// Log.e("actualizarDivision", e.toString());
-	// }
-	//
-	// } else {
-	//
-	// res = false;
-	// Log.e("actualizarDivision", "Error Conexión Base de Datos");
-	// }
-	//
-	// database = null;
-	// sql = null;
-	// return res;
-	// }
-	//
-	// public boolean eliminarDivisionAdeful(int id) {
-	//
-	// boolean res = false;
-	// SQLiteDatabase database = getSqLiteDatabase("eliminarDivision");
-	// String sql = "DELETE FROM DIVISION_ADEFUL WHERE ID_DIVISION = " + id;
-	//
-	// if (database != null && database.isOpen()) {
-	//
-	// try {
-	//
-	// database.execSQL(sql);
-	// res = true;
-	//
-	// } catch (Exception e) {
-	//
-	// res = false;
-	// Log.e("eliminarDivision", e.toString());
-	// }
-	//
-	// } else {
-	//
-	// res = false;
-	// Log.e("eliminarDivision", "Error Conexión Base de Datos");
-	// }
-	//
-	// database = null;
-	// sql = null;
-	// return res;
-	// }
+	public boolean actualizarInfoUsuario(Info info) {
+
+		boolean res = false;
+		SQLiteDatabase database = getSqLiteDatabase("actualizarInfoUsuario");
+		String sql = "UPDATE INFO_U SET SOMOS='" + info.getSOMOS()
+				+ "', CONTACTO='" + info.getCONTACTO() + "'";
+
+		if (database != null && database.isOpen()) {
+
+			try {
+
+				database.execSQL(sql);
+				res = true;
+
+			} catch (Exception e) {
+
+				res = false;
+				Log.e("actualizarInfoUsuario", e.toString());
+			}
+
+		} else {
+
+			res = false;
+			Log.e("actualizarInfoUsuario", "Error Conexión Base de Datos");
+		}
+
+		database = null;
+		sql = null;
+		return res;
+	}
 
 }

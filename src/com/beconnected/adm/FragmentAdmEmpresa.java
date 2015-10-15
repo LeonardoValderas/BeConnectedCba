@@ -192,7 +192,7 @@ public class FragmentAdmEmpresa extends Fragment {
 						empresa = new Empresa(0, editTextEmpresa.getText()
 								.toString(), String.valueOf(longitud), String
 								.valueOf(latitud), imagenLogo,GeneralLogic.URL_LOGO+editTextEmpresa.getText()
-								.toString()+".PGN");
+								.toString()+".PNG");
 
 						DL.getDl().getSqliteConnection().insertEmpresa(empresa);
 

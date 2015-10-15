@@ -115,7 +115,7 @@ public class ConnectionManager {
 	
 	
 	
-	
+	//trae promo splash
 	public static String traerPromo()
 	{
 		String uri = URL+"traerPromo.php";
@@ -154,87 +154,47 @@ public class ConnectionManager {
 	}
 	
 	
-	
-	
-	//verrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-	public void seleccionarUrlLogo() {
-	
-		LoadImage loadImage = new LoadImage();
-		loadImage.execute("");
+	//trae info splash
+	public static String traerInfo()
+	{
+		String uri = URL+"traerInfo.php";
 		
-
+		BufferedReader reader = null;
+		
+		try {
+			URL url = new URL(uri);
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			
+			StringBuilder sb = new StringBuilder();
+			reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			
+			String line;
+			while((line =reader.readLine())!=null){
+				
+				sb.append(line+ "\n");
+			}
+			return sb.toString();
+			
+		} catch (Exception e) {
+		e.printStackTrace();
+		return null;
+		
+		}finally{
+			if(reader!=null){
+				try {
+					reader.close();
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+		}
 	}
-//	private class LoadImage extends AsyncTask<String, String, Bitmap> {
-		private class LoadImage extends AsyncTask<String, String, String> {	
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-         //   pDialog = new ProgressDialog(MainActivity.this);
-          //  pDialog.setMessage("Loading Image ....");
-           // pDialog.show();
- 
-        }
-        Bitmap bitmap;
-        int id;
-        Empresa empresa;
-         protected String doInBackground(String... paramers) {
-           String resuldo= "ok";
-        	 try {
-            	 
-            		ArrayList<Empresa> empresaArray;
-            		empresaArray = BL.getBl().selectListaUrl();
-            		
-            	for (int i = 0; i < empresaArray.size(); i++) {
-            		
-            		 bitmap = BitmapFactory.decodeStream((InputStream)new URL("http://beconnected.esy.es/BeConnected/picture/jxnv.PGN").getContent());
-            		 id=empresaArray.get(i).getID_EMPRESA();
-            		 
-            		 bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
-                      
-                      ByteArrayOutputStream  baos = new ByteArrayOutputStream();
-                      bitmap.compress(CompressFormat.PNG, 0, baos);
-                     byte[]  imagenLogo = baos.toByteArray();
-                      empresa = new Empresa(id, null, null, null, imagenLogo, null);
-                    BL.getBl().insertarEmpresaUsuarioUrl(empresa);
-            	}
-            	 
-                
- 
-            } catch (Exception e) {
-                 e.printStackTrace();
-            }
-            return resuldo;
-         }
- 
-         protected void onPostExecute(boolean image) {
-// 
-        	 
-        	 image = true;
-//             if(image != null){
-//             //img.setImageBitmap(image);
-//        //     pDialog.dismiss();
-//             
-//             
-//             image = Bitmap.createScaledBitmap(image, 150, 150, true);
-//             
-//             ByteArrayOutputStream  baos = new ByteArrayOutputStream();
-//             image.compress(CompressFormat.PNG, 0, baos);
-//            byte[]  imagenLogo = baos.toByteArray();
-//             empresa = new Empresa(id, null, null, null, imagenLogo, null);
-//           BL.getBl().insertarEmpresaUsuarioUrl(empresa);
-//             
-//				//imagenLogo = baos.toByteArray();
-// 
-//             }else{
- 
-         //    pDialog.dismiss();
-         //   Toast.makeText(MainActivity.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
- 
-      //       }
-         }
-     }
 	
 	
+	
+		
 	//enviar/editar/eliminar
 	
 	
@@ -372,22 +332,13 @@ public class ConnectionManager {
    }
 	
 	
-	//subir/editar/eliminar una empresa
+	//editar una Info
 	public static String gestionInfo(Request p){
 		String uri=null;
 		
 		uri =URL+"editarInfo.php";
-		
-//		if(p.getQuery().equals("SUBIR")){
-//			 uri =URL+"agregarEmpresa.php";
-//		}else if(p.getQuery().equals("EDITAR")){
-//			uri =URL+"editarEmpresa.php";
-//		}else if(p.getQuery().equals("ELIMINAR")){
-//			uri =URL+"eliminarEmpresa.php";
-//		}
-		 
+
 		BufferedReader reader = null;
-	//	String uri = p.getUri();
 	
 		
 		if(p.getMethod().equals("GET")){

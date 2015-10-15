@@ -58,7 +58,7 @@ public class FragmentInfo extends Fragment {
 	private void init() {
 
 		
-		arrayInfo = BL.getBl().selectListaInfo();
+		arrayInfo = BL.getBl().selectListaInfoUsuario();
 		
 		editTextSomos =(TextView)getView().findViewById(R.id.editTextSomos);
 		editTextContacto=(TextView)getView().findViewById(R.id.editTextContacto);

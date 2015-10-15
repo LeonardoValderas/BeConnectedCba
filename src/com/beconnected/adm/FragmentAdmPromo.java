@@ -301,7 +301,7 @@ public class FragmentAdmPromo extends Fragment {
 						
 						
 						Intent i = new Intent(getActivity(), TabsAdmPromo.class);
-//						startActivity(i);
+						startActivity(i);
 //						Toast.makeText(getActivity(),
 //								getActivity().getResources().getString(R.string.promo_cargada),
 //								Toast.LENGTH_SHORT).show();
