@@ -179,7 +179,7 @@ public class TabsUsuario extends AppCompatActivity {
 			JSONObject obj = ar.getJSONObject(i);
 			Empresa empresa = new Empresa(0, obj.getString("EMPRESA"), obj.getString("LONGITUD"), obj.getString("LATITUD"), null,obj.getString("URL_LOGO"));
 			
-			BL.getBl().insertarEmpresa(empresa);
+			BL.getBl().insertarEmpresaUsuario(empresa);
 			
 			datasJson.add(empresa);
 			}

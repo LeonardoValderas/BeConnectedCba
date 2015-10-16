@@ -3,10 +3,14 @@ package com.beconnected.adm;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beconnected.AdaptadorPromos;
 import com.beconnected.DividerItemDecoration;
 import com.beconnected.R;
 import com.beconnected.FragmentPromos.ClickListener;
+import com.beconnected.adm.FragmentAdmEmpresa.TaskEmpresa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
@@ -15,6 +19,7 @@ import com.beconnected.databases.Request;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +30,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -64,7 +70,10 @@ public class FragmentAdmPromoEditar extends Fragment {
 	private int posicion;
 	private AlertsMenu alertsMenu;
 	private SubirDatos subirDatos;
-	
+	private static final String TAG_SUCCESS = "success";
+	private static final String TAG_MESSAGE = "message";
+	private ProgressDialog dialog;
+	private int idPromo;
 	
 	public static FragmentAdmPromoEditar newInstance() {
 		FragmentAdmPromoEditar fragment = new FragmentAdmPromoEditar();
@@ -141,32 +150,29 @@ public class FragmentAdmPromoEditar extends Fragment {
 									@Override
 									public void onClick(View v) {
 										// TODO Auto-generated method stub
-										BL.getBl().eliminarPromo(
-												datosPromo.get(position)
-														.getID_PROMO());
-										
+									
+										idPromo = datosPromo.get(position)
+												.getID_PROMO();
 										
 			                            Request p = new Request();
 //			    						p.setMethod("GET");
 			    						p.setMethod("POST");
 			    						p.setQuery("ELIMINAR");
 //			    						p.setUri(uri);
-			    						p.setParametrosDatos("id_promo", String.valueOf(datosPromo.get(position)
-												.getID_PROMO()));
+			    						p.setParametrosDatos("id_promo", String.valueOf(idPromo));
 			    						
 			    						
 			    					
-			    						subirDatos= new SubirDatos(getActivity());
-			    						subirDatos.resquestDataPromo(p);
-			    						
+			    						TaskPromo taskPromo = new TaskPromo();
+			    						taskPromo.execute(p);
 										
 										
 										recyclerViewLoadPromo();
 
-										Toast.makeText(
-												getActivity(),
-												getActivity().getResources().getString(R.string.promo_eliminada),
-												Toast.LENGTH_SHORT).show();
+//										Toast.makeText(
+//												getActivity(),
+//												getActivity().getResources().getString(R.string.promo_eliminada),
+//												Toast.LENGTH_SHORT).show();
 
 										alertsMenu.alertDialog.dismiss();
 
@@ -183,6 +189,73 @@ public class FragmentAdmPromoEditar extends Fragment {
 
 
                 	
+	
+	// enviar/editar  promo
+
+			public class TaskPromo extends AsyncTask<Request, String, String> {
+
+				@Override
+				protected void onPreExecute() {
+
+					dialog = new ProgressDialog(getActivity());
+					dialog.setMessage("Procesando...");
+					dialog.show();
+
+				}
+
+				@Override
+				protected String doInBackground(Request... params) {
+
+					int success;
+
+					try {
+
+						JSONObject json = BL.getBl().getConnManager()
+								.gestionPromo(params[0]);
+
+						success = json.getInt(TAG_SUCCESS);
+						if (success == 1) {
+							BL.getBl().eliminarPromo(
+									idPromo);
+							return json.getString(TAG_MESSAGE);
+						} else {
+							// Log.d("Registering Failure!",
+							// json.getString(TAG_MESSAGE));
+							return json.getString(TAG_MESSAGE);
+
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+					return null;
+
+					// String content = BL.getBl().getConnManager()
+					// .gestionEmpresa(params[0]);
+					// return content; // retorna string al metodo onPostExecute
+
+				}
+
+				@Override
+				protected void onPostExecute(String result) {
+					dialog.dismiss();
+
+					Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+
+					// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
+					// TaskPromo taskPromo = new TaskPromo();
+					// taskPromo.execute("");
+
+				}
+
+				@Override
+				protected void onProgressUpdate(String... values) {
+					// textViewDato.append(values[0]+"\n");
+				}
+			}
+
+		
+		
 
 	public void recyclerViewLoadPromo() {
 

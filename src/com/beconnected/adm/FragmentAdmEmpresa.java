@@ -4,7 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beconnected.R;
+import com.beconnected.adm.SubirDatos.TaskEmpresa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
@@ -20,12 +24,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -68,6 +74,10 @@ public class FragmentAdmEmpresa extends Fragment {
 	private boolean actualizar = false;
 	private ImageView imageLogo;
 	private SubirDatos subirDatos;
+	private static final String TAG_SUCCESS = "success";
+	private static final String TAG_MESSAGE = "message";
+	private ProgressDialog dialog;
+	private static final String TAG_ID = "id";
 
 	public static FragmentAdmEmpresa newInstance() {
 		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
@@ -175,12 +185,14 @@ public class FragmentAdmEmpresa extends Fragment {
 				// TODO Auto-generated method stub
 
 				if (editTextEmpresa.getText().toString().equals("")) {
-					Toast.makeText(getActivity(),
+					Toast.makeText(
+							getActivity(),
 							getActivity().getResources().getString(
 									R.string.empresa_nombre_vacio),
 							Toast.LENGTH_SHORT).show();
 				} else if (latitud == 0.0 || longitud == 0.0) {
-					Toast.makeText(getActivity(),
+					Toast.makeText(
+							getActivity(),
 							getActivity().getResources().getString(
 									R.string.empresa_mapa_vacio),
 							Toast.LENGTH_SHORT).show();
@@ -188,44 +200,46 @@ public class FragmentAdmEmpresa extends Fragment {
 
 					if (insertar) {
 
-					//	if(imagenLogo==null)
+						// if(imagenLogo==null)
 						empresa = new Empresa(0, editTextEmpresa.getText()
 								.toString(), String.valueOf(longitud), String
-								.valueOf(latitud), imagenLogo,GeneralLogic.URL_LOGO+editTextEmpresa.getText()
-								.toString()+".PNG");
+								.valueOf(latitud), imagenLogo,
+								GeneralLogic.URL_LOGO
+										+ editTextEmpresa.getText().toString()
+												.replace(" ", "") + ".PNG");
 
-						DL.getDl().getSqliteConnection().insertEmpresa(empresa);
+						//BL.getDl().getSqliteConnection().insertEmpresa(empresa);
 
-						
-						
-						//subimos los datos al server.
-												
-						String encodedImage = Base64.encodeToString(imagenLogo, Base64.DEFAULT);
-						
+						// subimos los datos al server.
+
+						String encodedImage = Base64.encodeToString(imagenLogo,
+								Base64.DEFAULT);
+
 						Request p = new Request();
-//						p.setMethod("GET");
+						// p.setMethod("GET");
 						p.setMethod("POST");
 						p.setQuery("SUBIR");
-//						p.setUri(uri);
+						// p.setUri(uri);
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
 						p.setParametrosDatos("logo", encodedImage);
 						p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
-						
-					
-						subirDatos= new SubirDatos(getActivity());
-						subirDatos.resquestDataEmpresa(p);
-						
-						
-						//actualizamos el activity. ver este punto 
-						Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
+
+						TaskEmpresa taskEmpresa = new TaskEmpresa();
+						taskEmpresa.execute(p);
+						// subirDatos= new SubirDatos(getActivity());
+						// subirDatos.resquestDataEmpresa(p);
+
+						// actualizamos el activity. ver este punto
+						Intent i = new Intent(getActivity(),
+								TabsAdmEmpresa.class);
 						startActivity(i);
-//						Toast.makeText(
-//								getActivity(),
-//								getActivity().getResources().getString(
-//										R.string.empresa_cargada),
-//								Toast.LENGTH_SHORT).show();
+						// Toast.makeText(
+						// getActivity(),
+						// getActivity().getResources().getString(
+						// R.string.empresa_cargada),
+						// Toast.LENGTH_SHORT).show();
 						imageLogo.setImageResource(R.drawable.logo);
 						editTextEmpresa.setText("");
 						imagenLogo = null;
@@ -236,29 +250,32 @@ public class FragmentAdmEmpresa extends Fragment {
 						empresa = new Empresa(empresaArray.get(posicion)
 								.getID_EMPRESA(), editTextEmpresa.getText()
 								.toString(), String.valueOf(longitud), String
-								.valueOf(latitud), imagenLogo,GeneralLogic.URL_LOGO+editTextEmpresa.getText()
-								.toString()+".PGN");
-						BL.getBl().actualizarEmpresa(empresa);
+								.valueOf(latitud), imagenLogo,
+								GeneralLogic.URL_LOGO
+										+ editTextEmpresa.getText().toString()
+										+ ".PGN");
 
-						String encodedImage = Base64.encodeToString(imagenLogo, Base64.DEFAULT);
+						String encodedImage = Base64.encodeToString(imagenLogo,
+								Base64.DEFAULT);
 						Request p = new Request();
-//						p.setMethod("GET");
+						// p.setMethod("GET");
 						p.setMethod("POST");
 						p.setQuery("EDITAR");
-//						p.setUri(uri);
-						p.setParametrosDatos("id_empresa", String.valueOf(empresa.getID_EMPRESA()));
+						// p.setUri(uri);
+						p.setParametrosDatos("id_empresa",
+								String.valueOf(empresa.getID_EMPRESA()));
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
 						p.setParametrosDatos("logo", encodedImage);
 						p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
-						
-					
-						subirDatos= new SubirDatos(getActivity());
-						subirDatos.resquestDataEmpresa(p);
-						
-						
-						
+
+						TaskEmpresa taskEmpresa = new TaskEmpresa();
+						taskEmpresa.execute(p);
+
+						// subirDatos= new SubirDatos(getActivity());
+						// subirDatos.resquestDataEmpresa(p);
+
 						mapa.clear();
 
 						if (imagenLogo != null) {
@@ -267,14 +284,15 @@ public class FragmentAdmEmpresa extends Fragment {
 						}
 						insertar = true;
 
-						Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
+						Intent i = new Intent(getActivity(),
+								TabsAdmEmpresa.class);
 						startActivity(i);
 
-//						Toast.makeText(
-//								getActivity(),
-//								getActivity().getResources().getString(
-//										R.string.empresa_actualizada),
-//								Toast.LENGTH_SHORT).show();
+						// Toast.makeText(
+						// getActivity(),
+						// getActivity().getResources().getString(
+						// R.string.empresa_actualizada),
+						// Toast.LENGTH_SHORT).show();
 						editTextEmpresa.setText("");
 						mapa.clear();
 						imageLogo.setImageResource(R.drawable.logo);
@@ -287,6 +305,75 @@ public class FragmentAdmEmpresa extends Fragment {
 
 		});
 
+	}
+
+	// enviar/editar/eliminar empresa
+
+	public class TaskEmpresa extends AsyncTask<Request, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+
+			dialog = new ProgressDialog(getActivity());
+			dialog.setMessage("Procesando...");
+			dialog.show();
+
+		}
+
+		@Override
+		protected String doInBackground(Request... params) {
+
+			int success;
+
+			try {
+
+				JSONObject json = BL.getBl().getConnManager()
+						.gestionEmpresa(params[0]);
+
+				success = json.getInt(TAG_SUCCESS);
+				if (success == 1) {
+					if (insertar) {
+						
+						int  id = json.getInt(TAG_ID);
+						BL.getBl().insertarEmpresa(id,empresa);
+					} else {
+						BL.getBl().actualizarEmpresa(empresa);
+					}
+					return json.getString(TAG_MESSAGE);
+				} else {
+					// Log.d("Registering Failure!",
+					// json.getString(TAG_MESSAGE));
+					return json.getString(TAG_MESSAGE);
+
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			return null;
+
+			// String content = BL.getBl().getConnManager()
+			// .gestionEmpresa(params[0]);
+			// return content; // retorna string al metodo onPostExecute
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			dialog.dismiss();
+
+			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+
+			// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
+			// TaskPromo taskPromo = new TaskPromo();
+			// taskPromo.execute("");
+
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// textViewDato.append(values[0]+"\n");
+		}
 	}
 
 	public void Image_Picker_Dialog() {
@@ -329,9 +416,8 @@ public class FragmentAdmEmpresa extends Fragment {
 		// }
 	}
 
-	
 	// ver para cambiar el icono del mapa
-	
+
 	public static Bitmap createDrawableFromView(View view) {
 
 		view.setDrawingCacheEnabled(true);
@@ -344,58 +430,56 @@ public class FragmentAdmEmpresa extends Fragment {
 
 		return bitmap;
 	}
-	
+
 	public void Image_Selecting_Task(Intent data) {
 		try {
 			Utility.uri = data.getData();
-			
-		  //   String[] column = { MediaStore.Images.Media.DATA }; 
+
+			// String[] column = { MediaStore.Images.Media.DATA };
 			// String sel = MediaStore.Images.Media._ID + "=?";
-			  
+
 			if (Utility.uri != null) {
-			 
-				
-				Cursor cursor = getActivity().getContentResolver().
-                        query(Utility.uri, null,null,null,null);
-				
+
+				Cursor cursor = getActivity().getContentResolver().query(
+						Utility.uri, null, null, null, null);
+
 				cursor.moveToFirst();
 				String document_id = cursor.getString(0);
-				   document_id = document_id.substring(document_id.lastIndexOf(":")+1);
-			
-				   
-				   cursor = getActivity().getContentResolver().query( 
-						   android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-						   null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-						   cursor.moveToFirst();
-						   String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-						   cursor.close();
-				   
-				   
-				   
-				   //int columnIndex = cursor.getColumnIndex(column[0]);
-				//int columnindex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA); 
-				//String filePath=null;
-				
-				
-			
-			
-			//	 filePath = cursor.getString(columnindex);
-				 
-				 
-				 
-//	            if (cursor.moveToFirst()) {
-//	             filePath = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//	            }   
-//	            cursor.close();
+				document_id = document_id.substring(document_id
+						.lastIndexOf(":") + 1);
+
+				cursor = getActivity()
+						.getContentResolver()
+						.query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+								null, MediaStore.Images.Media._ID + " = ? ",
+								new String[] { document_id }, null);
+				cursor.moveToFirst();
+				String path = cursor.getString(cursor
+						.getColumnIndex(MediaStore.Images.Media.DATA));
+				cursor.close();
+
+				// int columnIndex = cursor.getColumnIndex(column[0]);
+				// int columnindex =
+				// cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+				// String filePath=null;
+
+				// filePath = cursor.getString(columnindex);
+
+				// if (cursor.moveToFirst()) {
+				// filePath =
+				// cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+				// }
+				// cursor.close();
 				// User had pick an image.
-//				Cursor cursor = getActivity()
-//						.getContentResolver()
-//						.query(Utility.uri,
-//								new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
-//								null, null, null);
-//				cursor.moveToFirst();
-//				// Link to the image
-//				final String imageFilePath = cursor.getString(0);
+				// Cursor cursor = getActivity()
+				// .getContentResolver()
+				// .query(Utility.uri,
+				// new String[] {
+				// android.provider.MediaStore.Images.ImageColumns.DATA },
+				// null, null, null);
+				// cursor.moveToFirst();
+				// // Link to the image
+				// final String imageFilePath = cursor.getString(0);
 
 				// Assign string path to File
 				Utility.Default_DIR = new File(path);

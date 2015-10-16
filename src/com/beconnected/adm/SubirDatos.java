@@ -2,6 +2,11 @@ package com.beconnected.adm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.beconnected.R;
@@ -24,6 +30,8 @@ public class SubirDatos {
 	private ArrayList<Promo> promoArray;
 	public static final String UPLOAD_URL = "http://beconnected.esy.es/BeConnected/upload.php";
 	public static final String UPLOAD_KEY = "image";
+	private static final String TAG_SUCCESS = "success";
+	private static final String TAG_MESSAGE = "message";
 	Context context;
 
 	public SubirDatos(Context context) {
@@ -158,11 +166,42 @@ public class SubirDatos {
 
 		@Override
 		protected String doInBackground(Request... params) {
-			RequestHandler rh = new RequestHandler();
+			
+			
+			
+			  int success;
+	
+	            try {
 
-			String content = BL.getBl().getConnManager()
-					.gestionEmpresa(params[0]);
-			return content; // retorna string al metodo onPostExecute
+	 
+	               JSONObject json = BL.getBl().getConnManager()
+	   					.gestionEmpresa(params[0]);
+	 
+	               
+	                success = json.getInt(TAG_SUCCESS);
+	                if (success == 1) {
+	                 //Log.d("User Created!", json.toString());               
+	          //       finish();
+	                 return json.getString(TAG_MESSAGE);
+	                }else{
+	               //  Log.d("Registering Failure!", json.getString(TAG_MESSAGE));
+	                 return json.getString(TAG_MESSAGE);
+	                 
+	                }
+	            } catch (JSONException e) {
+	                e.printStackTrace();
+	            }
+	 
+	            return null;
+			
+			
+			
+			
+			
+
+//			String content = BL.getBl().getConnManager()
+//					.gestionEmpresa(params[0]);
+		//	return content; // retorna string al metodo onPostExecute
 
 		}
 
@@ -170,7 +209,7 @@ public class SubirDatos {
 		protected void onPostExecute(String result) {
 			dialog.dismiss();
 
-			Toast.makeText(context, "Datos Procesados.", Toast.LENGTH_SHORT)
+			Toast.makeText(context, result, Toast.LENGTH_SHORT)
 					.show();
 
 			// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
@@ -215,11 +254,11 @@ public class SubirDatos {
 		protected String doInBackground(Request... params) {
 			// / RequestHandler rh = new RequestHandler();
 
-			String content = BL.getBl().getConnManager()
-					.gestionPromo(params[0]);
+//			String content = BL.getBl().getConnManager()
+//					.gestionPromo(params[0]);
 
-			return content; // retorna string al metodo onPostExecute
-
+		//	return content; // retorna string al metodo onPostExecute
+			return null;
 		}
 
 		@Override

@@ -10,12 +10,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beconnected.adm.SubirDatos.TaskEmpresa;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 public class ConnectionManager {
@@ -26,8 +30,8 @@ public class ConnectionManager {
 	 * @return
 	 */
 	
-	
-	
+    static JSONObject jObj = null;
+    static String json = "";
 	public static String truncateTable()
 	{
 
@@ -198,7 +202,7 @@ public class ConnectionManager {
 	//enviar/editar/eliminar
 	
 	
-	public static String gestionPromo(Request p){
+	public static JSONObject gestionPromo(Request p){
 				
 		
 		String uri=null;
@@ -246,27 +250,27 @@ public class ConnectionManager {
 				
 				sb.append(line+ "\n");
 			}
-			return sb.toString();
+	             json= sb.toString();
 			
 		} catch (Exception e) {
 		e.printStackTrace();
 		return null;
 		
-		}finally{
-			if(reader!=null){
-				try {
-					reader.close();
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-					return null;
-				}
-			}
 		}
+		
+		try {
+            jObj = new JSONObject(json);
+        } catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        }
+ 
+        // return JSON String
+        return jObj;
+		
    }
 	
 	//subir/editar/eliminar una empresa
-	public static String gestionEmpresa(Request p){
+	public static JSONObject gestionEmpresa(Request p){
 		String uri=null;
 		
 		if(p.getQuery().equals("SUBIR")){
@@ -312,23 +316,39 @@ public class ConnectionManager {
 				
 				sb.append(line+ "\n");
 			}
-			return sb.toString();
+			json= sb.toString();
 			
 		} catch (Exception e) {
 		e.printStackTrace();
 		return null;
 		
-		}finally{
-			if(reader!=null){
-				try {
-					reader.close();
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-					return null;
-				}
-			}
 		}
+		
+		try {
+            jObj = new JSONObject(json);
+        } catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        }
+ 
+        // return JSON String
+        return jObj;
+		
+		
+		
+		
+		
+		
+//		finally{
+//			if(reader!=null){
+//				try {
+//					reader.close();
+//					
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//					return null;
+//				}
+	//		}
+	//	}
    }
 	
 	

@@ -44,13 +44,13 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	 */
 	public void createTablesBDAdm() {
 
-		String TABLA_EMPRESA = "CREATE TABLE IF NOT EXISTS EMPRESA (ID_EMPRESA INTEGER PRIMARY KEY AUTOINCREMENT,"
+		String TABLA_EMPRESA = "CREATE TABLE IF NOT EXISTS EMPRESA (ID_EMPRESA INTEGER,"
 				+ " EMPRESA VARCHAR(100),"
 				+ " LONGITUD VARCHAR(100),"
 				+ " LATITUD VARCHAR(100)," 
 				+ " URL_LOGO VARCHAR(200)," + " LOGO BLOB);";
 
-		String TABLA_PROMO = "CREATE TABLE IF NOT EXISTS PROMO (ID_PROMO INTEGER PRIMARY KEY AUTOINCREMENT,"
+		String TABLA_PROMO = "CREATE TABLE IF NOT EXISTS PROMO (ID_PROMO INTEGER,"
 				+ " TITULO VARCHAR(100),"
 				+ " DESCRIPCION VARCHAR(100),"
 				+ " ID_EMPRESA INTEGER,"
@@ -194,10 +194,11 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	 * 
 	 * Metodo que inserta una empresa Adm.
 	 */
-	public boolean insertEmpresa(Empresa empresa) throws SQLiteException {
+	public boolean insertEmpresa(int id,Empresa empresa) throws SQLiteException {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
+		cv.put("ID_EMPRESA", id);
 		cv.put("EMPRESA", empresa.getEMPRESA());
 		cv.put("LONGITUD", empresa.getLONGITUD());
 		cv.put("LATITUD", empresa.getLATIDUD());
@@ -461,7 +462,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 		boolean res = false;
 		SQLiteDatabase database = getSqLiteDatabase("eliminarEmpresa");
-		String sql = "DELETE FROM EMPRESA WHERE ID_EMPRESA = " + id;
+		String sql = "DELETE FROM EMPRESA WHERE ID_EMPRESA = " +id;
 
 		if (database != null && database.isOpen()) {
 
@@ -492,10 +493,11 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	 * inseerta promo
 	 */
 
-	public boolean insertPromo(Promo promo) throws SQLiteException {
+	public boolean insertPromo(int id,Promo promo) throws SQLiteException {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
+		cv.put("ID_PROMO", id);
 		cv.put("TITULO", promo.getTITULO());
 		cv.put("DESCRIPCION", promo.getDESCRIPCION());
 		cv.put("ID_EMPRESA", promo.getID_EMPRESA());

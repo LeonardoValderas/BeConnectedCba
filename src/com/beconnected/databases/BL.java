@@ -69,9 +69,9 @@ public BL(){
 	
 
 	
-	public boolean insertarEmpresa(Empresa empresa) {
+	public boolean insertarEmpresa(int id,Empresa empresa) {
 
-		return DL.getDl().getSqliteConnection().insertEmpresa(empresa);
+		return DL.getDl().getSqliteConnection().insertEmpresa(id,empresa);
 
 	}
 	
@@ -120,9 +120,9 @@ public BL(){
 	
 	
 	
-	public boolean insertarPromo(Promo promo) {
+	public boolean insertarPromo(int id,Promo promo) {
 
-		return DL.getDl().getSqliteConnection().insertPromo(promo);
+		return DL.getDl().getSqliteConnection().insertPromo(id,promo);
 
 	}
 	public boolean insertarPromoUsuario(Promo promo) {

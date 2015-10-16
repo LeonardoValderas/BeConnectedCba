@@ -6,18 +6,25 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beconnected.R;
+import com.beconnected.adm.SubirDatos.TaskPromo;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.Promo;
 import com.beconnected.databases.Request;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -70,6 +77,12 @@ public class FragmentAdmPromo extends Fragment {
 	private	String desdeExtra;
 	private	String hastaExtra;
 	private SubirDatos subirDatos;
+	
+	private static final String TAG_SUCCESS = "success";
+	private static final String TAG_MESSAGE = "message";
+	private ProgressDialog dialog;
+	private static final String TAG_ID = "id";
+
 	public static FragmentAdmPromo newInstance() {
 		FragmentAdmPromo fragment = new FragmentAdmPromo();
 		return fragment;
@@ -269,7 +282,7 @@ public class FragmentAdmPromo extends Fragment {
 							promo = new Promo(0, editTextTitulo.getText()
 									.toString(), editTextDescripcion.getText()
 									.toString(),empresa.getID_EMPRESA(),null,buttonDesde.getText().toString(),getActivity().getResources().getString(R.string.agotar_stock));
-							BL.getBl().insertarPromo(promo);
+						//	BL.getBl().insertarPromo(promo);
 
 						}else{
 						
@@ -278,7 +291,7 @@ public class FragmentAdmPromo extends Fragment {
 								.toString(), editTextDescripcion.getText()
 								.toString(),empresa.getID_EMPRESA(),null,buttonDesde.getText().toString(),buttonHasta.getText().toString());
 
-						BL.getBl().insertarPromo(promo);
+					//	BL.getBl().insertarPromo(promo);
 						}
 						
 						Request p = new Request();
@@ -293,11 +306,12 @@ public class FragmentAdmPromo extends Fragment {
 						p.setParametrosDatos("fecha_fin",promo.getFECHA_FIN());
 						
 					
-						subirDatos= new SubirDatos(getActivity());
-						subirDatos.resquestDataPromo(p);
+//						subirDatos= new SubirDatos(getActivity());
+//						subirDatos.resquestDataPromo(p);
+//						
 						
-						
-						
+						TaskPromo taskPromo = new TaskPromo();
+						taskPromo.execute(p);
 						
 						
 						Intent i = new Intent(getActivity(), TabsAdmPromo.class);
@@ -320,7 +334,7 @@ public class FragmentAdmPromo extends Fragment {
 									.getID_PROMO(), editTextTitulo.getText()
 									.toString(), editTextDescripcion.getText()
 									.toString(),promoArray.get(posicion).getID_EMPRESA(),null,buttonDesde.getText().toString(),"Hasta Agotar Stock");
-							BL.getBl().actualizarPromo(promo);
+						//	BL.getBl().actualizarPromo(promo);
 
 							
 						}else{
@@ -331,7 +345,7 @@ public class FragmentAdmPromo extends Fragment {
 									.toString(), editTextDescripcion.getText()
 									.toString(),promoArray.get(posicion).getID_EMPRESA(),null,buttonDesde.getText().toString(),buttonHasta.getText().toString());
                          
-							BL.getBl().actualizarPromo(promo);
+						//	BL.getBl().actualizarPromo(promo);
 						}
                             
                             
@@ -349,10 +363,9 @@ public class FragmentAdmPromo extends Fragment {
     						p.setParametrosDatos("fecha_fin",promo.getFECHA_FIN());
     						
     					
-    						subirDatos= new SubirDatos(getActivity());
-    						subirDatos.resquestDataPromo(p);
+    						TaskPromo taskPromo = new TaskPromo();
+    						taskPromo.execute(p);
     						
-                            
                             
                             
                             Intent i = new Intent(getActivity(), TabsAdmPromo.class);
@@ -378,6 +391,78 @@ public class FragmentAdmPromo extends Fragment {
 		});
 
 	}
+	
+	// enviar/editar  promo
+
+		public class TaskPromo extends AsyncTask<Request, String, String> {
+
+			@Override
+			protected void onPreExecute() {
+
+				dialog = new ProgressDialog(getActivity());
+				dialog.setMessage("Procesando...");
+				dialog.show();
+
+			}
+
+			@Override
+			protected String doInBackground(Request... params) {
+
+				int success;
+
+				try {
+
+					JSONObject json = BL.getBl().getConnManager()
+							.gestionPromo(params[0]);
+
+					success = json.getInt(TAG_SUCCESS);
+					if (success == 1) {
+						if (insertar) {
+							int id = json.getInt(TAG_ID);
+							BL.getBl().insertarPromo(id, promo);
+						} else {
+							BL.getBl().actualizarPromo(promo);
+						}
+						return json.getString(TAG_MESSAGE);
+					} else {
+						// Log.d("Registering Failure!",
+						// json.getString(TAG_MESSAGE));
+						return json.getString(TAG_MESSAGE);
+
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				return null;
+
+				// String content = BL.getBl().getConnManager()
+				// .gestionEmpresa(params[0]);
+				// return content; // retorna string al metodo onPostExecute
+
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				dialog.dismiss();
+
+				Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+
+				// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
+				// TaskPromo taskPromo = new TaskPromo();
+				// taskPromo.execute("");
+
+			}
+
+			@Override
+			protected void onProgressUpdate(String... values) {
+				// textViewDato.append(values[0]+"\n");
+			}
+		}
+
+	
+	
+	
 	public void updatedateh() {
 
 		buttonHasta.setText(formate.format(calendar.getTime()));
