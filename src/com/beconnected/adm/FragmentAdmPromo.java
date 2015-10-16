@@ -314,8 +314,7 @@ public class FragmentAdmPromo extends Fragment {
 						taskPromo.execute(p);
 						
 						
-						Intent i = new Intent(getActivity(), TabsAdmPromo.class);
-						startActivity(i);
+					
 //						Toast.makeText(getActivity(),
 //								getActivity().getResources().getString(R.string.promo_cargada),
 //								Toast.LENGTH_SHORT).show();
@@ -368,8 +367,8 @@ public class FragmentAdmPromo extends Fragment {
     						
                             
                             
-                            Intent i = new Intent(getActivity(), TabsAdmPromo.class);
-							startActivity(i);
+//                            Intent i = new Intent(getActivity(), TabsAdmPromo.class);
+//							startActivity(i);
 							
 //							Toast.makeText(getActivity(),
 //									getActivity().getResources().getString(R.string.promo_actualizada),
@@ -447,10 +446,9 @@ public class FragmentAdmPromo extends Fragment {
 				dialog.dismiss();
 
 				Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-
-				// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
-				// TaskPromo taskPromo = new TaskPromo();
-				// taskPromo.execute("");
+				Intent i = new Intent(getActivity(), TabsAdmPromo.class);
+				startActivity(i);
+			
 
 			}
 

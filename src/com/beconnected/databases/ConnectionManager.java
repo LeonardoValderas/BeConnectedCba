@@ -353,7 +353,7 @@ public class ConnectionManager {
 	
 	
 	//editar una Info
-	public static String gestionInfo(Request p){
+	public static JSONObject gestionInfo(Request p){
 		String uri=null;
 		
 		uri =URL+"editarInfo.php";
@@ -392,23 +392,23 @@ public class ConnectionManager {
 				
 				sb.append(line+ "\n");
 			}
-			return sb.toString();
+			json= sb.toString();
 			
 		} catch (Exception e) {
-		e.printStackTrace();
-		return null;
-		
-		}finally{
-			if(reader!=null){
-				try {
-					reader.close();
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-					return null;
-				}
+			e.printStackTrace();
+			return null;
+			
 			}
-		}
+			
+			try {
+	            jObj = new JSONObject(json);
+	        } catch (JSONException e) {
+	            Log.e("JSON Parser", "Error parsing data " + e.toString());
+	        }
+	 
+	        // return JSON String
+	        return jObj;
+			
    }
 
 	

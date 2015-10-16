@@ -4,6 +4,9 @@ package com.beconnected.adm;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beconnected.R;
 import com.beconnected.TabsUsuario;
 import com.beconnected.databases.BL;
@@ -11,7 +14,9 @@ import com.beconnected.databases.DL;
 import com.beconnected.databases.Info;
 import com.beconnected.databases.Request;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -44,7 +49,9 @@ public class TabsAdmInfo extends AppCompatActivity {
 	private int restarMap = 0;
 	TextView txtAbSubTitulo;
 	private SubirDatos subirDatos;
-	// private TextView txtAbSubTitulo;
+	private static final String TAG_SUCCESS = "success";
+	private static final String TAG_MESSAGE = "message";
+	private ProgressDialog dialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,7 +91,7 @@ public class TabsAdmInfo extends AppCompatActivity {
 				// TODO Auto-generated method stub
 				
 				info = new Info(editTextSomos.getText().toString(), editTextContacto.getText().toString());
-				BL.getBl().actualizarInfo(info);
+				
 				
 				
 				Request p = new Request();
@@ -94,10 +101,8 @@ public class TabsAdmInfo extends AppCompatActivity {
 				p.setParametrosDatos("contacto", info.getCONTACTO());
 				
 				
-			
-				subirDatos= new SubirDatos(TabsAdmInfo.this);
-				subirDatos.resquestDataInfo(p);
-				
+				TaskInfo TaskInfo = new TaskInfo();
+				TaskInfo.execute(p);
 				
 //				Toast.makeText(TabsAdmInfo.this,
 //						getResources().getString(R.string.info_actualizada),
@@ -105,13 +110,82 @@ public class TabsAdmInfo extends AppCompatActivity {
 //				
 				
 				
-				
-				
 			}
 		});
 
 	}
 
+	
+	
+	// editar  info
+
+	public class TaskInfo extends AsyncTask<Request, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+
+			dialog = new ProgressDialog(TabsAdmInfo.this);
+			dialog.setMessage("Procesando...");
+			dialog.show();
+
+		}
+
+		@Override
+		protected String doInBackground(Request... params) {
+
+			int success;
+
+			try {
+
+				JSONObject json = BL.getBl().getConnManager().gestionInfo(params[0]);
+
+				success = json.getInt(TAG_SUCCESS);
+				if (success == 1) {
+				
+						
+					BL.getBl().actualizarInfo(info);
+					
+					return json.getString(TAG_MESSAGE);
+				} else {
+					// Log.d("Registering Failure!",
+					// json.getString(TAG_MESSAGE));
+					return json.getString(TAG_MESSAGE);
+
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			return null;
+
+		
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			dialog.dismiss();
+
+			Toast.makeText((TabsAdmInfo.this), result, Toast.LENGTH_SHORT).show();
+
+			// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
+			// TaskPromo taskPromo = new TaskPromo();
+			// taskPromo.execute("");
+
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// textViewDato.append(values[0]+"\n");
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -123,13 +197,6 @@ public class TabsAdmInfo extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-	//	return true;
-		// if (drawerToggle.onOptionsItemSelected(item)) {
-		// return true;
-		// }
 
 		int id = item.getItemId();
 		// noinspection SimplifiableIfStatement
@@ -141,8 +208,20 @@ public class TabsAdmInfo extends AppCompatActivity {
 
 			return true;
 		}
+		if (id == R.id.action_empresa) {
+			Intent promo = new Intent(TabsAdmInfo.this, TabsAdmPromo.class);
+			startActivity(promo);
 
-		if (id == R.id.action_subir) {
+			return true;
+		}
+		if (id == R.id.action_promo) {
+			Intent promo = new Intent(TabsAdmInfo.this, TabsAdmPromo.class);
+			startActivity(promo);
+
+			return true;
+		}
+
+		if (id == R.id.action_sincro) {
 			
 			
 			return true;
@@ -152,48 +231,7 @@ public class TabsAdmInfo extends AppCompatActivity {
 
 			return true;
 		}
-//
-//		if (id == R.id.action_subir) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_eliminar) {
-//
-//			return true;
-//		}
-//		if (id == R.id.action_adeful) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_lifuba) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_puesto) {
-//
-//			return true;
-//
-//		}
-//		if (id == R.id.action_posicion) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_cargo) {
-//
-//			return true;
-//		}
-//
-//		if (id == android.R.id.home) {
-//
-//			NavUtils.navigateUpFromSameTask(this);
-//
-//			return true;
-//		}
+
 		return super.onOptionsItemSelected(item);
-//	}
 	}
 }

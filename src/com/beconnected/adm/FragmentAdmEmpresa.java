@@ -208,8 +208,6 @@ public class FragmentAdmEmpresa extends Fragment {
 										+ editTextEmpresa.getText().toString()
 												.replace(" ", "") + ".PNG");
 
-						//BL.getDl().getSqliteConnection().insertEmpresa(empresa);
-
 						// subimos los datos al server.
 
 						String encodedImage = Base64.encodeToString(imagenLogo,
@@ -228,13 +226,9 @@ public class FragmentAdmEmpresa extends Fragment {
 
 						TaskEmpresa taskEmpresa = new TaskEmpresa();
 						taskEmpresa.execute(p);
-						// subirDatos= new SubirDatos(getActivity());
-						// subirDatos.resquestDataEmpresa(p);
-
+					
 						// actualizamos el activity. ver este punto
-						Intent i = new Intent(getActivity(),
-								TabsAdmEmpresa.class);
-						startActivity(i);
+						
 						// Toast.makeText(
 						// getActivity(),
 						// getActivity().getResources().getString(
@@ -284,9 +278,9 @@ public class FragmentAdmEmpresa extends Fragment {
 						}
 						insertar = true;
 
-						Intent i = new Intent(getActivity(),
-								TabsAdmEmpresa.class);
-						startActivity(i);
+//						Intent i = new Intent(getActivity(),
+//								TabsAdmEmpresa.class);
+//						startActivity(i);
 
 						// Toast.makeText(
 						// getActivity(),
@@ -352,10 +346,7 @@ public class FragmentAdmEmpresa extends Fragment {
 
 			return null;
 
-			// String content = BL.getBl().getConnManager()
-			// .gestionEmpresa(params[0]);
-			// return content; // retorna string al metodo onPostExecute
-
+			
 		}
 
 		@Override
@@ -363,18 +354,21 @@ public class FragmentAdmEmpresa extends Fragment {
 			dialog.dismiss();
 
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-
-			// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
-			// TaskPromo taskPromo = new TaskPromo();
-			// taskPromo.execute("");
-
-		}
+			Intent i = new Intent(getActivity(),
+					TabsAdmEmpresa.class);
+			startActivity(i);
+			
+			
+			
+			}
 
 		@Override
 		protected void onProgressUpdate(String... values) {
 			// textViewDato.append(values[0]+"\n");
 		}
 	}
+	
+	
 
 	public void Image_Picker_Dialog() {
 

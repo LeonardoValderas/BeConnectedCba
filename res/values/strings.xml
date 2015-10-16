@@ -5,9 +5,10 @@
 
     <!-- Menu Adm -->
     <string name="action_usuario">USUARIO</string>
-    <string name="action_subir">SUBIR CAMBIOS</string>
+    <string name="action_sincro">SINCRONIZAR</string>
     <string name="action_cerrar">CERRAR</string>
     <string name="action_promo">PROMO</string>
+    <string name="action_empresa">EMPRESA</string>
     <string name="action_info">INFO</string>
 
     <!-- Menu Usuario -->

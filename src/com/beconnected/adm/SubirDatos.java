@@ -309,9 +309,9 @@ public class SubirDatos {
 		protected String doInBackground(Request... params) {
 			// / RequestHandler rh = new RequestHandler();
 
-			String content = BL.getBl().getConnManager().gestionInfo(params[0]);
+		//	String content = BL.getBl().getConnManager().gestionInfo(params[0]);
 
-			return content; // retorna string al metodo onPostExecute
+			return null; // retorna string al metodo onPostExecute
 
 		}
 

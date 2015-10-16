@@ -65,6 +65,7 @@ public class SplashActivity extends AppCompatActivity {
 		BL.getBl().dropTablasBDUsuario();
 		BL.getBl().crearTablasBDUsuario();
 		BL.getBl().creaDirectorios();
+		BL.getBl().insertarInfoUsuario();
 	//	registrarCel();
 		new TaskEmpresa().execute("");
 		new TaskPromo().execute("");
@@ -306,7 +307,7 @@ public String getRegistrationId(Context context) {
 
 		@Override
 		protected void onPreExecute() {
-			//splashProgress.setVisibility(View.VISIBLE);
+		splashProgress.setVisibility(View.VISIBLE);
 
 		}
 
@@ -383,7 +384,7 @@ public String getRegistrationId(Context context) {
 
 		@Override
 		protected void onPreExecute() {
-			//splashProgress.setVisibility(View.VISIBLE);
+			splashProgress.setVisibility(View.VISIBLE);
 
 		}
 
@@ -432,7 +433,7 @@ public String getRegistrationId(Context context) {
 
 				JSONObject obj = ar.getJSONObject(i);
 				Info info = new Info(obj.getString("SOMOS"),
-						obj.getString("CONTACTO"));
+						obj.getString("CONTACTOS"));
 
 				BL.getBl().actualizarInfoUsuario(info);
 

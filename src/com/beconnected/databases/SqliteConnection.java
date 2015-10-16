@@ -94,13 +94,13 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	
 	public void createTablesBDUsuario() {
 
-		String TABLA_EMPRESA_U = "CREATE TABLE IF NOT EXISTS EMPRESA_U (ID_EMPRESA INTEGER PRIMARY KEY AUTOINCREMENT,"
+		String TABLA_EMPRESA_U = "CREATE TABLE IF NOT EXISTS EMPRESA_U (ID_EMPRESA INTEGER,"
 				+ " EMPRESA VARCHAR(100),"
 				+ " LONGITUD VARCHAR(100),"
 				+ " LATITUD VARCHAR(100),"
 				+ " URL_LOGO VARCHAR(200)," + " LOGO BLOB);";
 
-		String TABLA_PROMO_U = "CREATE TABLE IF NOT EXISTS PROMO_U (ID_PROMO INTEGER PRIMARY KEY AUTOINCREMENT,"
+		String TABLA_PROMO_U = "CREATE TABLE IF NOT EXISTS PROMO_U (ID_PROMO INTEGER,"
 				+ " TITULO VARCHAR(100),"
 				+ " DESCRIPCION VARCHAR(100),"
 				+ " ID_EMPRESA INTEGER,"
@@ -219,6 +219,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
+		cv.put("ID_EMPRESA", empresa.getID_EMPRESA());
 		cv.put("EMPRESA", empresa.getEMPRESA());
 		cv.put("LONGITUD", empresa.getLONGITUD());
 		cv.put("LATITUD", empresa.getLATIDUD());
@@ -514,6 +515,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
+		cv.put("ID_PROMO",promo.getID_PROMO());
 		cv.put("TITULO", promo.getTITULO());
 		cv.put("DESCRIPCION", promo.getDESCRIPCION());
 		cv.put("ID_EMPRESA", promo.getID_EMPRESA());

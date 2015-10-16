@@ -110,13 +110,6 @@ public class TabsAdmPromo extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-	//	return true;
-		// if (drawerToggle.onOptionsItemSelected(item)) {
-		// return true;
-		// }
 
 		int id = item.getItemId();
 		// noinspection SimplifiableIfStatement
@@ -128,8 +121,21 @@ public class TabsAdmPromo extends AppCompatActivity {
 
 			return true;
 		}
+		
+		if (id == R.id.action_empresa) {
+			Intent promo = new Intent(TabsAdmPromo.this, TabsAdmPromo.class);
+			startActivity(promo);
 
-		if (id == R.id.action_subir) {
+			return true;
+		}
+		if (id == R.id.action_info) {
+			Intent info = new Intent(TabsAdmPromo.this, TabsAdmInfo.class);
+			startActivity(info);
+
+			return true;
+		}
+
+		if (id == R.id.action_sincro) {
 			
 			
 			return true;
@@ -139,48 +145,8 @@ public class TabsAdmPromo extends AppCompatActivity {
 
 			return true;
 		}
-//
-//		if (id == R.id.action_subir) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_eliminar) {
-//
-//			return true;
-//		}
-//		if (id == R.id.action_adeful) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_lifuba) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_puesto) {
-//
-//			return true;
-//
-//		}
-//		if (id == R.id.action_posicion) {
-//
-//			return true;
-//		}
-//
-//		if (id == R.id.action_cargo) {
-//
-//			return true;
-//		}
-//
-//		if (id == android.R.id.home) {
-//
-//			NavUtils.navigateUpFromSameTask(this);
-//
-//			return true;
-//		}
+		
+
 		return super.onOptionsItemSelected(item);
-//	}
 	}
 }
