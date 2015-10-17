@@ -69,7 +69,6 @@ public class FragmentAdmPromoEditar extends Fragment {
 	private boolean insertar = true;
 	private int posicion;
 	private AlertsMenu alertsMenu;
-	private SubirDatos subirDatos;
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
@@ -167,8 +166,7 @@ public class FragmentAdmPromoEditar extends Fragment {
 			    						taskPromo.execute(p);
 										
 										
-										recyclerViewLoadPromo();
-
+									
 //										Toast.makeText(
 //												getActivity(),
 //												getActivity().getResources().getString(R.string.promo_eliminada),
@@ -241,11 +239,9 @@ public class FragmentAdmPromoEditar extends Fragment {
 					dialog.dismiss();
 
 					Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+					recyclerViewLoadPromo();
 
-					// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
-					// TaskPromo taskPromo = new TaskPromo();
-					// taskPromo.execute("");
-
+		
 				}
 
 				@Override

@@ -110,6 +110,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		String TABLA_INFO_U = "CREATE TABLE IF NOT EXISTS INFO_U (SOMOS VARCHAR(200),"
 				+ " CONTACTO VARCHAR(200));";
 
+		String TABLA_ID = "CREATE TABLE IF NOT EXISTS ID (ID INTEGER);";
+		
 		SQLiteDatabase database = getSqLiteDatabase("createTablesBDUsuario");
 		if (database != null && database.isOpen()) {
 
@@ -118,7 +120,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 				database.execSQL(TABLA_PROMO_U);
 				database.execSQL(TABLA_EMPRESA_U);
 				database.execSQL(TABLA_INFO_U);
-
+				database.execSQL(TABLA_ID);
 			} catch (Exception e) {
 				Log.e("createTablesBDUsuario", e.toString());
 
@@ -133,7 +135,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		TABLA_PROMO_U = null;
 		TABLA_EMPRESA_U = null;
 		TABLA_INFO_U = null;
-
+		TABLA_ID = null;
 	}
 
 	/**
@@ -741,6 +743,38 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 	
 	
+	public boolean eliminarPromoEmpresa(int id) {
+
+		boolean res = false;
+		SQLiteDatabase database = getSqLiteDatabase("eliminarPromoEmpresa");
+		String sql = "DELETE FROM PROMO WHERE ID_EMPRESA = " + id;
+
+		if (database != null && database.isOpen()) {
+
+			try {
+
+				database.execSQL(sql);
+				res = true;
+
+			} catch (Exception e) {
+
+				res = false;
+				Log.e("eliminarPromoEmpresa", e.toString());
+			}
+
+		} else {
+
+			res = false;
+			Log.e("eliminarPromoEmpresa", "Error Conexión Base de Datos");
+		}
+
+		database = null;
+		sql = null;
+		return res;
+	}
+	
+	
+	
 	public boolean insertInfo() throws SQLiteException {
 		boolean ban = false;
 
@@ -937,5 +971,62 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		sql = null;
 		return res;
 	}
+	
+	
+	public boolean insertIdUsuario(int id) throws SQLiteException {
+		boolean ban = false;
 
+		ContentValues cv = new ContentValues();
+		cv.put("ID",id);
+		SQLiteDatabase database = this.getWritableDatabase();
+
+		database.insert("ID", null, cv);
+		return true;
+	}
+
+	
+
+	public int selectIdUsuario() {
+
+		String sql = "SELECT  * FROM ID";
+		int id = 0;
+	
+		Cursor cursor = null;
+		// Integer isFueraFrecuencia;
+		SQLiteDatabase database = null;
+
+		database = getSqLiteDatabase("selectIdUsuario");
+		if (database != null && database.isOpen()) {
+
+			try {
+				cursor = database.rawQuery(sql, null);
+				if (cursor != null && cursor.getCount() > 0) {
+
+					while (cursor.moveToNext()) {
+
+						Info info = null;
+
+						id = cursor
+								.getInt(cursor.getColumnIndex("ID"));
+
+				
+
+					}
+				}
+
+			} catch (Exception e) {
+				Log.e("selectIdUsuario", e.toString());
+			}
+		} else {
+
+			Log.e("selectIdUsuario", "Error Conexión Base de Datos");
+		}
+
+		cursor = null;
+		database = null;
+		return id;
+	}
+
+	
+	
 }

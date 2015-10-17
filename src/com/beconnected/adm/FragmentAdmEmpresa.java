@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.beconnected.R;
-import com.beconnected.adm.SubirDatos.TaskEmpresa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
@@ -58,13 +57,14 @@ public class FragmentAdmEmpresa extends Fragment {
 	private GoogleMap mapa;
 	public static double latCba = -31.400000000000000;
 	public static double longCba = -64.183300000000000;
-	public static double latitud;
-	public static double longitud;
+	public static double latitud=0.0;
+	public static double longitud=0.0;
 	private ArrayList<Empresa> empresaArray;
 	private EditText editTextEmpresa;
 	private ImageButton imageButtonLogo;
 	private Button buttonGuardar;
 	private boolean insertar = true;
+	private int id;
 	private int posicion;
 	private byte[] imagenLogo = null;
 	private Bitmap myImage;
@@ -73,12 +73,12 @@ public class FragmentAdmEmpresa extends Fragment {
 	private String empresaExtra;
 	private boolean actualizar = false;
 	private ImageView imageLogo;
-	private SubirDatos subirDatos;
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
 	private static final String TAG_ID = "id";
-
+   private String encodedImage=null;
+	
 	public static FragmentAdmEmpresa newInstance() {
 		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
 		return fragment;
@@ -143,6 +143,7 @@ public class FragmentAdmEmpresa extends Fragment {
 			latitud = Double.valueOf(getActivity().getIntent().getStringExtra(
 					"latitud"));
 
+		//	id = getActivity().getIntent().getIntExtra("id", 0);
 			posicion = getActivity().getIntent().getIntExtra("posicion", 0);
 			empresaExtra = getActivity().getIntent().getStringExtra("empresa");
 			editTextEmpresa.setText(empresaExtra);
@@ -200,7 +201,8 @@ public class FragmentAdmEmpresa extends Fragment {
 
 					if (insertar) {
 
-						// if(imagenLogo==null)
+						Request p = new Request();
+						
 						empresa = new Empresa(0, editTextEmpresa.getText()
 								.toString(), String.valueOf(longitud), String
 								.valueOf(latitud), imagenLogo,
@@ -210,10 +212,15 @@ public class FragmentAdmEmpresa extends Fragment {
 
 						// subimos los datos al server.
 
-						String encodedImage = Base64.encodeToString(imagenLogo,
-								Base64.DEFAULT);
-
-						Request p = new Request();
+						 if(imagenLogo!=null){
+								
+								
+							 encodedImage = Base64.encodeToString(imagenLogo,
+										Base64.DEFAULT);
+								p.setParametrosDatos("logo", encodedImage);
+								p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
+						 }
+					//	Request p = new Request();
 						// p.setMethod("GET");
 						p.setMethod("POST");
 						p.setQuery("SUBIR");
@@ -221,8 +228,8 @@ public class FragmentAdmEmpresa extends Fragment {
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
-						p.setParametrosDatos("logo", encodedImage);
-						p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
+						//p.setParametrosDatos("logo", encodedImage);
+						//p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
 
 						TaskEmpresa taskEmpresa = new TaskEmpresa();
 						taskEmpresa.execute(p);
@@ -236,10 +243,12 @@ public class FragmentAdmEmpresa extends Fragment {
 						// Toast.LENGTH_SHORT).show();
 						imageLogo.setImageResource(R.drawable.logo);
 						editTextEmpresa.setText("");
+						latitud=0.0;
+						longitud=0.0;
 						imagenLogo = null;
-
+						 
 					} else {
-
+						Request p = new Request();
 						empresaArray = BL.getBl().selectListaEmpresa();
 						empresa = new Empresa(empresaArray.get(posicion)
 								.getID_EMPRESA(), editTextEmpresa.getText()
@@ -247,11 +256,17 @@ public class FragmentAdmEmpresa extends Fragment {
 								.valueOf(latitud), imagenLogo,
 								GeneralLogic.URL_LOGO
 										+ editTextEmpresa.getText().toString()
-										+ ".PGN");
+										+ ".PNG");
 
-						String encodedImage = Base64.encodeToString(imagenLogo,
-								Base64.DEFAULT);
-						Request p = new Request();
+						 if(imagenLogo!=null){
+								
+								
+							 encodedImage = Base64.encodeToString(imagenLogo,
+										Base64.DEFAULT);
+								p.setParametrosDatos("logo", encodedImage);
+								p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
+						 }
+					
 						// p.setMethod("GET");
 						p.setMethod("POST");
 						p.setQuery("EDITAR");
@@ -261,8 +276,8 @@ public class FragmentAdmEmpresa extends Fragment {
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
-						p.setParametrosDatos("logo", encodedImage);
-						p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
+						//p.setParametrosDatos("logo", encodedImage);
+						//p.setParametrosDatos("url_logo", empresa.getURL_LOGO());
 
 						TaskEmpresa taskEmpresa = new TaskEmpresa();
 						taskEmpresa.execute(p);
@@ -276,7 +291,7 @@ public class FragmentAdmEmpresa extends Fragment {
 
 							imagenLogo = null;
 						}
-						insertar = true;
+						//insertar = true;
 
 //						Intent i = new Intent(getActivity(),
 //								TabsAdmEmpresa.class);
@@ -288,9 +303,11 @@ public class FragmentAdmEmpresa extends Fragment {
 						// R.string.empresa_actualizada),
 						// Toast.LENGTH_SHORT).show();
 						editTextEmpresa.setText("");
-						mapa.clear();
+						//mapa.clear();
 						imageLogo.setImageResource(R.drawable.logo);
-						imagenLogo = null;
+						//imagenLogo = null;
+						latitud=0.0;
+						longitud=0.0;
 
 					}
 				}
@@ -327,9 +344,10 @@ public class FragmentAdmEmpresa extends Fragment {
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
 					if (insertar) {
-						
+						String a = json.getString(TAG_ID);
 						int  id = json.getInt(TAG_ID);
 						BL.getBl().insertarEmpresa(id,empresa);
+						
 					} else {
 						BL.getBl().actualizarEmpresa(empresa);
 					}
@@ -357,7 +375,7 @@ public class FragmentAdmEmpresa extends Fragment {
 			Intent i = new Intent(getActivity(),
 					TabsAdmEmpresa.class);
 			startActivity(i);
-			
+			insertar = true;
 			
 			
 			}

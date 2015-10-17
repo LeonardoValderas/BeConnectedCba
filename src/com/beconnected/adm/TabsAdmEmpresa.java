@@ -39,8 +39,7 @@ public class TabsAdmEmpresa extends AppCompatActivity {
 	private int restarMap = 0;
 	TextView txtAbSubTitulo;
 	private ArrayList<Empresa> empresaArray;
-	private SubirDatos subirDatos;
-
+	
 	// private TextView txtAbSubTitulo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +143,14 @@ public class TabsAdmEmpresa extends AppCompatActivity {
 
 		if (id == R.id.action_cerrar) {
 
+	
+			   	  Intent intent = new Intent(Intent.ACTION_MAIN);
+			   	  intent.addCategory(Intent.CATEGORY_HOME);
+			   	  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			   	  startActivity(intent);
+			
+			
+			
 			return true;
 		}
 

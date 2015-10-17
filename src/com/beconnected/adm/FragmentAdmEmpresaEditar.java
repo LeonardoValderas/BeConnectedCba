@@ -67,8 +67,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	private boolean insertar = true;
 	private int posicion;
 	private AlertsMenu alertsMenu;
-	private SubirDatos subirDatos;
-	
+
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
@@ -134,6 +133,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 								datosEmpresa.get(position).getLONGITUD());
 						empresaEdit.putExtra("latitud",
 								datosEmpresa.get(position).getLATIDUD());
+						//empresaEdit.putExtra("id", datosEmpresa.get(position).getID_EMPRESA());
 						empresaEdit.putExtra("posicion", position);
 
 						startActivity(empresaEdit);
@@ -166,7 +166,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 										
 										TaskEmpresa taskEmpresa = new TaskEmpresa();
 										taskEmpresa.execute(p);
-										recyclerViewLoadEmpresa();
+									
 //										Toast.makeText(
 //												getActivity(),
 //												getActivity().getResources().getString(R.string.empresa_eliminada),
@@ -211,6 +211,8 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 					if (success == 1) {
 						BL.getBl().eliminarEmpresa(
 								idEmpresa);
+						BL.getBl().eliminarPromoEmpresa(
+								idEmpresa);
 						return json.getString(TAG_MESSAGE);
 					} else {
 						// Log.d("Registering Failure!",
@@ -235,7 +237,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 				dialog.dismiss();
 
 				Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-
+				recyclerViewLoadEmpresa();
 				// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
 				// TaskPromo taskPromo = new TaskPromo();
 				// taskPromo.execute("");

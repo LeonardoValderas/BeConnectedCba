@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Be Connected</string>
+    <string name="app_name">BeConnected</string>
 
     <!-- Menu Adm -->
     <string name="action_usuario">USUARIO</string>

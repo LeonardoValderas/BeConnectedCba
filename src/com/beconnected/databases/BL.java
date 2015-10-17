@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import android.content.Intent;
+
 
 /**
  * Created by Administrador on 18/09/2015.
@@ -97,11 +99,6 @@ public BL(){
 		return DL.getDl().getSqliteConnection().selectListaEmpresaUsuario();
 
 	}
-//	public ArrayList<Empresa> selectListaUrl() {
-//
-//		return DL.getDl().getSqliteConnection().selectListaUrl();
-//
-//	}
 	
 	
 	
@@ -154,6 +151,11 @@ public BL(){
 		return DL.getDl().getSqliteConnection().eliminarPromo(id);
 
 	}
+	public boolean eliminarPromoEmpresa(int id) {
+
+		return DL.getDl().getSqliteConnection().eliminarPromoEmpresa(id);
+
+	}
 	
 	public boolean insertarInfo() {
 
@@ -188,6 +190,19 @@ public BL(){
 	public boolean actualizarInfoUsuario(Info info) {
 
 		return DL.getDl().getSqliteConnection().actualizarInfoUsuario(info);
+
+	}
+	
+	
+	public boolean insertarIdUsuario(int id) {
+
+		return DL.getDl().getSqliteConnection().insertIdUsuario(id);
+
+	}
+	
+	public int selectIdUsuario() {
+
+		return DL.getDl().getSqliteConnection().selectIdUsuario();
 
 	}
 	

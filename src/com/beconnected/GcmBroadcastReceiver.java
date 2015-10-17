@@ -1,4 +1,4 @@
-package com.beconnected.pushnotification;
+package com.beconnected;
 
 import android.app.Activity;
 import android.content.ComponentName;

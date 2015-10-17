@@ -7,13 +7,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.beconnected.adm.SubirDatos.TaskEmpresa;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +31,8 @@ import android.widget.Toast;
 public class ConnectionManager {
 
 	public static String URL = "http://beconnected.esy.es/BeConnected/";
+	public static String URLNOTI = "http://beconnected.esy.es/BeConnected/Notification/";
+	 
 	/**
 	 * metodo que trae datos
 	 * @return
@@ -410,8 +418,135 @@ public class ConnectionManager {
 	        return jObj;
 			
    }
+	//subir/editar/eliminar una empresa
+		public static JSONObject gestionGMC(Request p){
+			String uri=null;
+			
+		//	if(p.getQuery().equals("SUBIR")){
+				 uri =URLNOTI+"register.php";
+		//	}else if(p.getQuery().equals("EDITAR")){
+		//		uri =URL+"editarEmpresa.php";
+		//	}else if(p.getQuery().equals("ELIMINAR")){
+		//		uri =URL+"eliminarEmpresa.php";
+		////	}
+			 
+			BufferedReader reader = null;
+		//	String uri = p.getUri();
+		
+			
+			if(p.getMethod().equals("GET")){
+				uri += "?" + p.getEncodedParams();
+			}
+			
+			try {
+				URL url = new URL(uri);
+				HttpURLConnection con = (HttpURLConnection)url.openConnection();
+				con.setRequestMethod(p.getMethod());
+				
+		//	JSONObject json =  new JSONObject(p.getParametros());
+		//	String parames = "paramentros=" + json.toString();
+		
+			if(p.getMethod().equals("POST")){	
+		
+				con.setDoOutput(true);
+			OutputStreamWriter write =  new OutputStreamWriter(con.getOutputStream());
+			
+		//	write.write(parames);
+			write.write(p.getEncodedParams());
+			write.flush();
+			
+			
+			}
+				StringBuilder sb = new StringBuilder();
+				reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				
+				String line;
+				while((line =reader.readLine())!=null){
+					
+					sb.append(line+ "\n");
+				}
+				json= sb.toString();
+				
+			} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+			
+			}
+			
+			try {
+	            jObj = new JSONObject(json);
+	        } catch (JSONException e) {
+	            Log.e("JSON Parser", "Error parsing data " + e.toString());
+	        }
+	 
+	        // return JSON String
+	        return jObj;
+			
+		}
 
-	
-	
-	
+		
+		public void push(){
+			String uri=null;
+			
+			//	if(p.getQuery().equals("SUBIR")){
+		 uri =URLNOTI+"register.php";
+			//	}else if(p.getQuery().equals("EDITAR")){
+			//		uri =URL+"editarEmpresa.php";
+			//	}else if(p.getQuery().equals("ELIMINAR")){
+			//		uri =URL+"eliminarEmpresa.php";
+			////	}
+				 
+				BufferedReader reader = null;
+			//	String uri = p.getUri();
+			
+				
+				if(p.getMethod().equals("GET")){
+					uri += "?" + p.getEncodedParams();
+				}
+				
+				try {
+					URL url = new URL(uri);
+					HttpURLConnection con = (HttpURLConnection)url.openConnection();
+					con.setRequestMethod(p.getMethod());
+					
+			//	JSONObject json =  new JSONObject(p.getParametros());
+			//	String parames = "paramentros=" + json.toString();
+			
+				if(p.getMethod().equals("POST")){	
+			
+					con.setDoOutput(true);
+				OutputStreamWriter write =  new OutputStreamWriter(con.getOutputStream());
+				
+			//	write.write(parames);
+				write.write(p.getEncodedParams());
+				write.flush();
+				
+				
+				}
+					StringBuilder sb = new StringBuilder();
+					reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					
+					String line;
+					while((line =reader.readLine())!=null){
+						
+						sb.append(line+ "\n");
+					}
+					json= sb.toString();
+					
+				} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+				
+				}
+				
+				try {
+		            jObj = new JSONObject(json);
+		        } catch (JSONException e) {
+		            Log.e("JSON Parser", "Error parsing data " + e.toString());
+		        }
+		 
+		        // return JSON String
+		        return jObj;
+				
+		
 }

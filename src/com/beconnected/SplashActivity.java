@@ -66,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
 		BL.getBl().crearTablasBDUsuario();
 		BL.getBl().creaDirectorios();
 		BL.getBl().insertarInfoUsuario();
-	//	registrarCel();
+		registrarCel();
 		new TaskEmpresa().execute("");
 		new TaskPromo().execute("");
 		new TaskInfo().execute("");
@@ -75,23 +75,22 @@ public class SplashActivity extends AppCompatActivity {
 	
 public void registrarCel() {
 		
-		
 		if (checkPlayServices()) {
 	        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
 	              regid = getRegistrationId(getApplicationContext());
 	               
 		              
-	              if (regid.isEmpty()) {
-	                new com.beconnected.pushnotification.RegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
-	              }else{
-	             
-	            	  SharedPreferences preferenciasId = getSharedPreferences(
-	  						"id_cel", Context.MODE_PRIVATE);
-	  				Editor editorEvento = preferenciasId.edit();
-	  				editorEvento.putString("id_cel", regid);
-	  				editorEvento.commit();
-	            	  
-	              }
+	          //    if (regid.isEmpty()) {
+	                new com.beconnected.RegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
+//	              }else{
+//	             
+//	            	  SharedPreferences preferenciasId = getSharedPreferences(
+//	  						"id_cel", Context.MODE_PRIVATE);
+//	  				Editor editorEvento = preferenciasId.edit();
+//	  				editorEvento.putString("id_cel", regid);
+//	  				editorEvento.commit();
+//	            	  
+//	              }
 	       } else {
 	              
 	       }
@@ -229,7 +228,7 @@ public String getRegistrationId(Context context) {
 				
 				Bitmap b = getBitmap(a);
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				b.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				b.compress(Bitmap.CompressFormat.PNG, 0, stream);
 				byte[] byteArray = stream.toByteArray();
 
 				Empresa empresa = new Empresa(obj.getInt("ID_EMPRESA"),

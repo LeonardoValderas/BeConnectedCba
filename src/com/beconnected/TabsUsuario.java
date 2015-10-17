@@ -23,6 +23,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -194,7 +195,23 @@ public class TabsUsuario extends AppCompatActivity {
 	}
 	
 	
-	
+	@Override
+	public boolean onKeyDown (int keyCode, KeyEvent event) {
+		
+		if(keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			
+			//close();
+			return false;
+			
+			
+		}
+		return false;
+		
+		
+		
+		
+	}
 	
 	
 	
@@ -222,6 +239,10 @@ public class TabsUsuario extends AppCompatActivity {
 		if (id == R.id.action_cerrar) {
 
 		
+			  Intent intent = new Intent(Intent.ACTION_MAIN);
+			  intent.addCategory(Intent.CATEGORY_HOME);
+			  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			  startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

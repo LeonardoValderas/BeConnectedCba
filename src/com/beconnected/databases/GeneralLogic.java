@@ -2,6 +2,7 @@ package com.beconnected.databases;
 
 import java.io.File;
 
+import android.content.Intent;
 import android.os.Environment;
 
 public class GeneralLogic {
@@ -22,6 +23,9 @@ public class GeneralLogic {
             + "/data/com.beconnected/databases");
 
     public static String URL_LOGO = "http://beconnected.esy.es/BeConnected/picture/";
+    
+    
+   
     
     public GeneralLogic() {
 

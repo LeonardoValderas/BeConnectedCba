@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.beconnected.R;
-import com.beconnected.adm.SubirDatos.TaskPromo;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
@@ -76,8 +75,6 @@ public class FragmentAdmPromo extends Fragment {
 	private	String descripcionExtra;
 	private	String desdeExtra;
 	private	String hastaExtra;
-	private SubirDatos subirDatos;
-	
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
@@ -380,7 +377,7 @@ public class FragmentAdmPromo extends Fragment {
 							radioButtonStock.setChecked(false);
 						
 
-						insertar = true;
+//						insertar = true;
 
 					}
 				}
@@ -448,7 +445,7 @@ public class FragmentAdmPromo extends Fragment {
 				Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(getActivity(), TabsAdmPromo.class);
 				startActivity(i);
-			
+				insertar = true;
 
 			}
 

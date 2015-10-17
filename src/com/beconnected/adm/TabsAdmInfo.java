@@ -48,7 +48,6 @@ public class TabsAdmInfo extends AppCompatActivity {
 //	private ImageView 
 	private int restarMap = 0;
 	TextView txtAbSubTitulo;
-	private SubirDatos subirDatos;
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
@@ -229,6 +228,13 @@ public class TabsAdmInfo extends AppCompatActivity {
 
 		if (id == R.id.action_cerrar) {
 
+			 //public void close(){
+			   	  Intent intent = new Intent(Intent.ACTION_MAIN);
+			   	  intent.addCategory(Intent.CATEGORY_HOME);
+			   	  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			   	  startActivity(intent);
+			   //	    }  
+			
 			return true;
 		}
 
