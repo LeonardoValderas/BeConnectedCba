@@ -485,11 +485,13 @@ public class ConnectionManager {
 		}
 
 		
-		public void push(){
+		public void push(String mensaje){
 			String uri=null;
-			
+			Request p = new Request();
+			p.setParametrosDatos("mensaje",mensaje);
+			p.setMethod("POST");
 			//	if(p.getQuery().equals("SUBIR")){
-		 uri =URLNOTI+"register.php";
+		 uri =URLNOTI+"pushEnviar.php";
 			//	}else if(p.getQuery().equals("EDITAR")){
 			//		uri =URL+"editarEmpresa.php";
 			//	}else if(p.getQuery().equals("ELIMINAR")){
@@ -499,11 +501,8 @@ public class ConnectionManager {
 				BufferedReader reader = null;
 			//	String uri = p.getUri();
 			
-				
-				if(p.getMethod().equals("GET")){
-					uri += "?" + p.getEncodedParams();
-				}
-				
+			
+		
 				try {
 					URL url = new URL(uri);
 					HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -512,17 +511,16 @@ public class ConnectionManager {
 			//	JSONObject json =  new JSONObject(p.getParametros());
 			//	String parames = "paramentros=" + json.toString();
 			
-				if(p.getMethod().equals("POST")){	
 			
-					con.setDoOutput(true);
+			
+				con.setDoOutput(true);
 				OutputStreamWriter write =  new OutputStreamWriter(con.getOutputStream());
 				
 			//	write.write(parames);
 				write.write(p.getEncodedParams());
 				write.flush();
 				
-				
-				}
+			
 					StringBuilder sb = new StringBuilder();
 					reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 					
@@ -535,7 +533,7 @@ public class ConnectionManager {
 					
 				} catch (Exception e) {
 				e.printStackTrace();
-				return null;
+			//	return null;
 				
 				}
 				
@@ -546,7 +544,7 @@ public class ConnectionManager {
 		        }
 		 
 		        // return JSON String
-		        return jObj;
+		     //   return jObj;
 				
-		
+		}
 }

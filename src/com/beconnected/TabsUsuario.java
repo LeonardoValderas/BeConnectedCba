@@ -38,6 +38,7 @@ public class TabsUsuario extends AppCompatActivity {
 	private int restarMap = 0;
 	private TextView txtAbSubTitulo;
 	private ProgressDialog dialog;
+	private boolean Promo=false; 
 	// private TextView txtAbSubTitulo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,14 @@ public class TabsUsuario extends AppCompatActivity {
 //		restarMap = getIntent().getIntExtra("restart", 0);
 		init();
 		// new MyTask().execute("");
+		
+		
 	}
 
 	public void init() {
 
+		Promo = getIntent().getBooleanExtra("PROMO",
+				false);
 		// Toolbar
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -79,7 +84,9 @@ public class TabsUsuario extends AppCompatActivity {
 		tabLayout.setTabMode(TabLayout.MODE_FIXED);
 		tabLayout.setupWithViewPager(viewPager);
 		
-		
+		if (Promo) {
+			viewPager.setCurrentItem(1);
+		}
 
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override

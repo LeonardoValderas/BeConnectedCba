@@ -347,6 +347,7 @@ public class FragmentAdmEmpresa extends Fragment {
 						String a = json.getString(TAG_ID);
 						int  id = json.getInt(TAG_ID);
 						BL.getBl().insertarEmpresa(id,empresa);
+						BL.getBl().getConnManager().push("E");
 						
 					} else {
 						BL.getBl().actualizarEmpresa(empresa);

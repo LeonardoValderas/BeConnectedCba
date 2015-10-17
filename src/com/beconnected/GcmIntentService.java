@@ -11,6 +11,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap.Config;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -88,13 +90,26 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(String msg) {
       
 
+    	boolean Promo= false;
+    	
+    	
     	mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
     
+    	Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        
+    	if(msg.contains("promo")){
+    		Promo = true;
+    	}
+    	
+    	Intent notificationIntent = new Intent(getApplicationContext(), SplashActivity.class);
+    	notificationIntent.putExtra("PROMO", Promo);
+    
+    	  PendingIntent contentIntent = PendingIntent.getActivity(this, 0,notificationIntent,0);
+//                new Intent(this, TabsUsuario.class), 0);
 
-         
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, TabsUsuario.class), 0);
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+//                new Intent(this, TabsUsuario.class), 0);
  
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -104,7 +119,9 @@ public class GcmIntentService extends IntentService {
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
         .setAutoCancel(true)
+        .setSound(soundUri)
         .setContentText(msg);
+        
         
  
         mBuilder.setContentIntent(contentIntent);

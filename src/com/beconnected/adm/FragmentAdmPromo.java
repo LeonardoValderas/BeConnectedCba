@@ -416,6 +416,7 @@ public class FragmentAdmPromo extends Fragment {
 						if (insertar) {
 							int id = json.getInt(TAG_ID);
 							BL.getBl().insertarPromo(id, promo);
+							BL.getBl().getConnManager().push("P");
 						} else {
 							BL.getBl().actualizarPromo(promo);
 						}

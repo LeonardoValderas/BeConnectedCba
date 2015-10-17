@@ -536,7 +536,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	 */
 	public ArrayList<Promo> selectListaPromo() {
 
-		String sql = "SELECT  PROMO.ID_PROMO, PROMO.TITULO, PROMO.DESCRIPCION, PROMO.ID_EMPRESA, EMPRESA.LOGO, PROMO.FECHA_INICIO, PROMO.FECHA_FIN FROM PROMO, EMPRESA WHERE PROMO.ID_EMPRESA=EMPRESA.ID_EMPRESA";
+		String sql = "SELECT  PROMO.ID_PROMO, PROMO.TITULO, PROMO.DESCRIPCION, PROMO.ID_EMPRESA, EMPRESA.LOGO, PROMO.FECHA_INICIO, PROMO.FECHA_FIN FROM PROMO, EMPRESA WHERE PROMO.ID_EMPRESA=EMPRESA.ID_EMPRESA ORDER BY PROMO.ID_PROMO DESC";
 		ArrayList<Promo> arrayPromo = new ArrayList<Promo>();
 		String titulo = null, descripcion = null, fechainicio = null, fechafin = null, usuario = null, fechacreador = null;
 		byte[] logo = null;
@@ -607,7 +607,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	 */
 	public ArrayList<Promo> selectListaPromoUsuario() {
 
-		String sql = "SELECT  PROMO_U.ID_PROMO, PROMO_U.TITULO, PROMO_U.DESCRIPCION, PROMO_U.ID_EMPRESA, EMPRESA_U.LOGO, PROMO_U.FECHA_INICIO, PROMO_U.FECHA_FIN FROM PROMO_U, EMPRESA_U WHERE PROMO_U.ID_EMPRESA=EMPRESA_U.ID_EMPRESA";
+		String sql = "SELECT  PROMO_U.ID_PROMO, PROMO_U.TITULO, PROMO_U.DESCRIPCION, PROMO_U.ID_EMPRESA, EMPRESA_U.LOGO, PROMO_U.FECHA_INICIO, PROMO_U.FECHA_FIN FROM PROMO_U, EMPRESA_U WHERE PROMO_U.ID_EMPRESA=EMPRESA_U.ID_EMPRESA ORDER BY PROMO_U.ID_PROMO DESC";
 		ArrayList<Promo> arrayPromo = new ArrayList<Promo>();
 		String titulo = null, descripcion = null, fechainicio = null, fechafin = null, usuario = null, fechacreador = null;
 		byte[] logo = null;

@@ -50,6 +50,7 @@ public class SplashActivity extends AppCompatActivity {
 	private static final String TAG = "GCMRelated";
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
+	private boolean Promo=false; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,6 +71,8 @@ public class SplashActivity extends AppCompatActivity {
 		new TaskEmpresa().execute("");
 		new TaskPromo().execute("");
 		new TaskInfo().execute("");
+		
+		Promo = getIntent().getBooleanExtra("PROMO",false);
 	}
 
 	
@@ -354,7 +357,7 @@ public String getRegistrationId(Context context) {
 			for (int i = 0; i < ar.length(); i++) {
 
 				JSONObject obj = ar.getJSONObject(i);
-				Promo promo = new Promo(0, obj.getString("TITULO"),
+				Promo promo = new Promo(obj.getInt("ID_PROMO"), obj.getString("TITULO"),
 						obj.getString("DESCRIPCION"), obj.getInt("ID_EMPRESA"),
 						null, obj.getString("FECHA_INICIO"),
 						obj.getString("FECHA_FIN"));
@@ -404,6 +407,7 @@ public String getRegistrationId(Context context) {
 			splashProgress.setVisibility(View.INVISIBLE);
 
 			Intent usuario = new Intent(SplashActivity.this, TabsUsuario.class);
+			usuario.putExtra("PROMO", Promo);
 			startActivity(usuario);
 
 		}
