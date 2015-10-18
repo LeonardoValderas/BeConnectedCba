@@ -49,6 +49,8 @@ public class GPSTracker extends Service implements LocationListener{
 			
 			if(!isGPSEnabled && !isNetworkEnabled) {
 				
+				
+				
 			} else {
 				this.canGetLocation = true;
 				
@@ -129,11 +131,11 @@ public class GPSTracker extends Service implements LocationListener{
 		
 		alertDialog.setTitle("Activar GPS");
 		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	//	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			alertDialog.setMessage("Su GPS no esta activo. Desea activarlo?");
-		   } else {
-			   alertDialog.setMessage(getResources().getString(R.string.gps_no_activo));
-		}
+		//   } else {
+	//		   alertDialog.setMessage("Su GPS no esta activo. Desea activarlo?");
+		//}
 		
 		//alertDialog.setMessage(ResourcesCompat..getString(R.string.gps_no_activo));
 		

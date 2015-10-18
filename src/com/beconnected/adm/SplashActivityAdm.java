@@ -1,4 +1,4 @@
-package com.beconnected;
+package com.beconnected.adm;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -15,10 +15,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.beconnected.R;
 import com.beconnected.adm.AlertsMenu;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
+import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Info;
 import com.beconnected.databases.Promo;
 import com.beconnected.databases.Request;
@@ -58,7 +60,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivityAdm extends AppCompatActivity {
 	private ProgressBar splashProgress;
 	private GoogleCloudMessaging gcm;
 	private String regid;
@@ -87,36 +89,12 @@ public class SplashActivity extends AppCompatActivity {
 
 		splashProgress = (ProgressBar) findViewById(R.id.splashProgress);
 
-		/**
-		 * Activa el servicio que buscar el nivel de bateria cada 30 min
-		 */
-		bateria = new Intent(getApplicationContext(), Baterry.class);
 
-		hand = new Handler();
-		hand1 = new Handler();
-		timerActualizacion = new Timer();
-		TimerTask taskActualizacion = new TimerTask() {
-
-			@Override
-			public void run() {
-				hand.post(new Runnable() {
-					@Override
-					public void run() {
-
-						startService(bateria);
-
-					}
-				});
-			}
-		};
-		timerActualizacion.scheduleAtFixedRate(taskActualizacion, 0,
-				TIEMPO_SERVICIO);
-
-		if (conexionInternet(SplashActivity.this)) {
+		if (GeneralLogic.conexionInternet(SplashActivityAdm.this)) {
 			init();
 		} else {
 
-			alertsMenu = new AlertsMenu(SplashActivity.this, "ATENCIÓN!!!", "Por favor verifique su conexión de Internet",  "Aceptar", null);
+			alertsMenu = new AlertsMenu(SplashActivityAdm.this, "ATENCIÓN!!!", "Por favor verifique su conexión de Internet",  "Aceptar", null);
 			alertsMenu.btnAceptar.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
@@ -124,7 +102,9 @@ public class SplashActivity extends AppCompatActivity {
 					// TODO Auto-generated method stub
 					
 					alertsMenu.alertDialog.dismiss();
-					close();
+					
+					
+					GeneralLogic.close(SplashActivityAdm.this);
 					
 				}
 			});
@@ -138,17 +118,20 @@ public class SplashActivity extends AppCompatActivity {
 	public void init() {
 
 		DL.getDl().setSqliteConnection(this);
-		BL.getBl().dropTablasBDUsuario();
-		BL.getBl().crearTablasBDUsuario();
 		BL.getBl().creaDirectorios();
-		BL.getBl().insertarInfoUsuario();
+		BL.getBl().dropTablasBDAdm();
+		BL.getBl().dropTablasBDUsuario();
+		BL.getBl().crearTablasBDAmd();
+		BL.getBl().crearTablasBDUsuario();
+	//	BL.getBl().insertarInfoUsuario();
+		
 		registrarCel();
 
 		new TaskEmpresa().execute("");
 		new TaskPromo().execute("");
 		new TaskInfo().execute("");
 
-		Promo = getIntent().getBooleanExtra("PROMO", false);
+		//Promo = getIntent().getBooleanExtra("PROMO", false);
 
 	}
 
@@ -159,7 +142,7 @@ public class SplashActivity extends AppCompatActivity {
 			regid = getRegistrationId(getApplicationContext());
 
 			// if (regid.isEmpty()) {
-			new com.beconnected.RegisterApp(getApplicationContext(), gcm,
+			new com.beconnected.adm.RegisterAppAdm(getApplicationContext(), gcm,
 					getAppVersion(getApplicationContext())).execute();
 			// }else{
 			//
@@ -223,7 +206,7 @@ public class SplashActivity extends AppCompatActivity {
 		// This sample app persists the registration ID in shared preferences,
 		// but
 		// how you store the regID in your app is up to you.
-		return getSharedPreferences(SplashActivity.class.getSimpleName(),
+		return getSharedPreferences(SplashActivityAdm.class.getSimpleName(),
 				Context.MODE_PRIVATE);
 	}
 
@@ -306,6 +289,8 @@ public class SplashActivity extends AppCompatActivity {
 						obj.getString("LATITUD"), byteArray,
 						obj.getString("URL_LOGO"));
 
+				
+				BL.getBl().insertarEmpresaAdm(empresa);
 				BL.getBl().insertarEmpresaUsuario(empresa);
 
 				datasJson.add(empresa);
@@ -430,7 +415,8 @@ public class SplashActivity extends AppCompatActivity {
 						obj.getInt("ID_EMPRESA"), null,
 						obj.getString("FECHA_INICIO"),
 						obj.getString("FECHA_FIN"));
-
+				
+				BL.getBl().insertarPromoAdm(promo);
 				BL.getBl().insertarPromoUsuario(promo);
 
 				datasJson.add(promo);
@@ -474,8 +460,8 @@ public class SplashActivity extends AppCompatActivity {
 
 			splashProgress.setVisibility(View.INVISIBLE);
 
-			Intent usuario = new Intent(SplashActivity.this, TabsUsuario.class);
-			usuario.putExtra("PROMO", Promo);
+			Intent usuario = new Intent(SplashActivityAdm.this, TabsAdmEmpresa.class);
+		//	usuario.putExtra("PROMO", Promo);
 			startActivity(usuario);
 
 		}
@@ -505,7 +491,7 @@ public class SplashActivity extends AppCompatActivity {
 				JSONObject obj = ar.getJSONObject(i);
 				Info info = new Info(obj.getString("SOMOS"),
 						obj.getString("CONTACTOS"));
-				
+
 				BL.getBl().actualizarInfo(info);
 				BL.getBl().actualizarInfoUsuario(info);
 
@@ -519,41 +505,5 @@ public class SplashActivity extends AppCompatActivity {
 		}
 
 	}
-
-	
-	
-	
-	public boolean conexionInternet(Context context) {
-
-		ConnectivityManager connectMgr = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connectMgr != null) {
-			NetworkInfo[] netInfo = connectMgr.getAllNetworkInfo();
-			if (netInfo != null) {
-				for (NetworkInfo net : netInfo) {
-					if (net.getState() == NetworkInfo.State.CONNECTED) {
-					//	if (net.getType() == ConnectivityManager.TYPE_MOBILE||net.getType() == ConnectivityManager.TYPE_WIFI) {
-							
-
-						return true;
-					
-				}
-			}
-		}
-		
-			return false;
-	}
-			return false;
-	
-}
-	
-	public void close()
-    {
-		System.exit(0);
-  Intent intent = new Intent(Intent.ACTION_MAIN);
-  intent.addCategory(Intent.CATEGORY_HOME);
-  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-  startActivity(intent);
-    }  
 	
 }

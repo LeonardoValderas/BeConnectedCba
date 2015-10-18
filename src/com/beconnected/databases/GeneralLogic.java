@@ -2,7 +2,10 @@ package com.beconnected.databases;
 
 import java.io.File;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 
 public class GeneralLogic {
@@ -24,9 +27,43 @@ public class GeneralLogic {
 
     public static String URL_LOGO = "http://beconnected.esy.es/BeConnected/picture/";
     
-    
+	public static void close(Context context)
+    {
+		
+  Intent intent = new Intent(Intent.ACTION_MAIN);
+  intent.addCategory(Intent.CATEGORY_HOME);
+  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+  context.startActivity(intent);
+  System.exit(0);
+    }  
    
     
+	public static boolean conexionInternet(Context context) {
+
+		ConnectivityManager connectMgr = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectMgr != null) {
+			NetworkInfo[] netInfo = connectMgr.getAllNetworkInfo();
+			if (netInfo != null) {
+				for (NetworkInfo net : netInfo) {
+					if (net.getState() == NetworkInfo.State.CONNECTED) {
+					//	if (net.getType() == ConnectivityManager.TYPE_MOBILE||net.getType() == ConnectivityManager.TYPE_WIFI) {
+							
+
+						return true;
+					
+				}
+			}
+		}
+		
+			return false;
+	}
+			return false;
+	
+}
+	
+	
+	
     public GeneralLogic() {
 
     }

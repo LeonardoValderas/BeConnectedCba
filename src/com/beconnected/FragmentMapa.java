@@ -67,12 +67,6 @@ public class FragmentMapa extends Fragment {
 		// Required empty public constructor
 	}
 
-	@Override
-	public void onAttach (Activity activity) {
-		super.onAttach(activity);
-		Log.i("leo", "onAttach");
-	}
-
 	
 	@Override
 	public void onActivityCreated(Bundle state) {
@@ -95,21 +89,7 @@ public class FragmentMapa extends Fragment {
 	}
 	
 	
-	@Override
-	public void onStart () {
-		
-		Log.i("leo", "onStart");
-		super.onStart();
-	
-	}
-	
-	@Override
-	public void onResume () {
-		Log.i("leo", "onResume");
-		super.onResume();
-		
-	}
-	
+
 	@Override
 	public void onPause() {
 		
@@ -125,34 +105,6 @@ public class FragmentMapa extends Fragment {
 	}
 	
 	
-	@Override
-	public void onStop () {
-		Log.i("leo", "onStop");
-		super.onStop();
-		
-	}
-
-	@Override
-	public void onDestroyView () {
-		Log.i("leo", "onDestroyView");
-		super.onDestroyView();
-	
-	}
-
-	@Override
-	public void onDestroy () {
-		Log.i("leo", "onDestroy");
-		super.onDestroy();
-	
-	}
-
-	@Override
-	public void onDetach () {
-		Log.i("leo", "onDetach");
-		super.onDetach();
-	
-	}
-
 	private void init() {
 
 		gps = new GPSTracker(getActivity());
@@ -171,10 +123,6 @@ public class FragmentMapa extends Fragment {
 		mapa = ((SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
 
-		// tvAddress = (TextView) findViewById(R.id.tvAddress);
-
-		// LatLng a = new LatLng(latCba,longCba);
-
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
 				longCba), 14.0f));
 		// zoom long y lat de bariloche
@@ -187,14 +135,7 @@ public class FragmentMapa extends Fragment {
 					.title("Mi Posicion")
 					.icon(BitmapDescriptorFactory
 							.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-		 
-		// // click en el mapa crea marker y muestra nombre de la calle
-		// mapa.setOnMapClickListener(new OnMapClickListener() {
-		// public void onMapClick(LatLng point) {
-		// Projection proj = mapa.getProjection();
-		// Point coord = proj.toScreenLocation(point);
-
-		// mapa.clear();
+	
 
 		for (int i = 0; i < empresaArray.size(); i++) {
 
@@ -206,262 +147,8 @@ public class FragmentMapa extends Fragment {
 
 		}
 
-		// mapa.addMarker(new MarkerOptions().position(new
-		// LatLng(point.latitude, point.longitude))
-		// .title("Dirección: \n" + tvAddress.getText().toString()));
-
-		// LocationAddress locationAddress = new LocationAddress();
-		// locationAddress.getAddressFromLocation(point.latitude,
-		// point.longitude, getApplicationContext(),
-		// new GeocoderHandler());
-		//
-		// }
-		// });
-
-		// mapa.setOnMapLongClickListener(new OnMapLongClickListener() {
-		//
-		// @Override
-		// public void onMapLongClick(LatLng latLng) {
-		//
-		// // mapa.clear();
-		//
-		// }
-		// });
-		// }
-		// mapa.setOnCameraChangeListener(new OnCameraChangeListener() {
-		// public void onCameraChange(CameraPosition position) {
-		//
-		//
-		// Toast.makeText(
-		// MainActivity.this,
-		// "Cambio Cámara\n" +
-		// "Lat: " + position.target.latitude + "\n" +
-		// "Lng: " + position.target.longitude + "\n" +
-		// "Zoom: " + position.zoom + "\n" +
-		// "Orientación: " + position.bearing + "\n" +
-		// "Ángulo: " + position.tilt,
-		// Toast.LENGTH_LONG).show();
-		// }
-		// });
-
-		// /***
-		// * imageButton que busca imagen que activa el mapa
-		// */
-		// imageButtonCancha = (ImageButton) getView().findViewById(
-		// R.id.imageButtonEquipo_Cancha);
-		// imageButtonCancha.setBackground(ResourcesCompat.getDrawable(
-		// getResources(), R.drawable.ic_mapa_icono, null));
-		// imageButtonCancha.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// //
-		// Intent mapa = new Intent(getActivity(), MapaCancha.class);
-		// startActivity(mapa);
-		//
-		// }
-		// });
-		//
-		// botonFloating = (FloatingActionButton) getView().findViewById(
-		// R.id.botonFloating);
-		//
-		// botonFloating.setVisibility(View.INVISIBLE);
-		//
-		// editTextNombre = (EditText) getView().findViewById(
-		// R.id.editTextDescripcion);
-		// editTextNombre.setVisibility(View.GONE);
-		//
-		// recycleViewCancha = (RecyclerView) getView().findViewById(
-		// R.id.recycleViewGeneral);
-		//
-		// recyclerViewLoadCancha();
-		//
-		// recycleViewCancha.addOnItemTouchListener(new RecyclerTouchListener(
-		// getActivity(), recycleViewCancha, new ClickListener() {
-		//
-		// @Override
-		// public void onLongClick(View view, final int position) {
-		//
-		// alertMenu = new AlertsMenu(getActivity(), "ALERTA",
-		// "Desea eliminar la cancha?", null, null);
-		// alertMenu.btnAceptar.setText("Aceptar");
-		// alertMenu.btnCancelar.setText("Cancelar");
-		//
-		// alertMenu.btnAceptar
-		// .setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// BL.getBl().eliminarCanchaAdeful(
-		// canchaAdefulArray.get(position)
-		// .getID_CANCHA());
-		// recyclerViewLoadCancha();
-		//
-		// Toast.makeText(
-		// getActivity(),
-		// "Cancha Eliminada Correctamente",
-		// Toast.LENGTH_SHORT).show();
-		//
-		// alertMenu.alertDialog.dismiss();
-		//
-		// }
-		// });
-		// alertMenu.btnCancelar
-		// .setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// alertMenu.alertDialog.dismiss();
-		// }
-		// });
-		//
-		// }
-		//
-		// @Override
-		// public void onClick(View view, int position) {
-		// // TODO Auto-generated method stub
-		//
-		// Intent mapa = new Intent(getActivity(),
-		// MapaCancha.class);
-		// mapa.putExtra("actualizar", true);
-		// mapa.putExtra("nombre", canchaAdefulArray.get(position)
-		// .getNOMBRE());
-		// mapa.putExtra("longitud",
-		// canchaAdefulArray.get(position).getLONGITUD());
-		// mapa.putExtra("latitud", canchaAdefulArray
-		// .get(position).getLATITUD());
-		// mapa.putExtra("direccion",
-		// canchaAdefulArray.get(position).getDIRECCION());
-		// mapa.putExtra("posicion", position);
-		//
-		// startActivity(mapa);
-		//
-		// }
-		// }));
-		//
-		// }
-		//
-		// public void recyclerViewLoadCancha() {
-		// recycleViewCancha.setLayoutManager(new LinearLayoutManager(
-		// getActivity(), LinearLayoutManager.VERTICAL, false));
-		// recycleViewCancha.addItemDecoration(new DividerItemDecoration(
-		// getActivity(), DividerItemDecoration.VERTICAL_LIST));
-		// recycleViewCancha.setItemAnimator(new DefaultItemAnimator());
-		// canchaAdefulArray = BL.getBl().selectListaCanchaAdeful();
-		// adaptadorCancha = new AdaptadorCancha(canchaAdefulArray);
-		// adaptadorCancha.notifyDataSetChanged();
-		// recycleViewCancha.setAdapter(adaptadorCancha);
-		//
-		// }
-		//
-		// /**
-		// * Metodo click item recycler
-		// *
-		// * @author LEO
-		// *
-		// */
-		//
-		// public static interface ClickListener {
-		//
-		// public void onClick(View view, int position);
-		//
-		// public void onLongClick(View view, int position);
-		//
-		// }
-		//
-		// static class RecyclerTouchListener implements
-		// RecyclerView.OnItemTouchListener {
-		//
-		// private GestureDetector detector;
-		// private ClickListener clickListener;
-		//
-		// public RecyclerTouchListener(Context context,
-		// final RecyclerView recyclerView,
-		// final ClickListener clickListener) {
-		// this.clickListener = clickListener;
-		// detector = new GestureDetector(context,
-		// new GestureDetector.SimpleOnGestureListener() {
-		//
-		// @Override
-		// public boolean onSingleTapUp(MotionEvent e) {
-		// return true;
-		// }
-		//
-		// @Override
-		// public void onLongPress(MotionEvent e) {
-		// View child = recyclerView.findChildViewUnder(
-		// e.getX(), e.getY());
-		// if (child != null && clickListener != null) {
-		// clickListener.onLongClick(child,
-		// recyclerView.getChildPosition(child));
-		// }
-		// }
-		// });
-		//
-		// }
-		//
-		// @Override
-		// public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e)
-		// {
-		// // TODO Auto-generated method stub
-		// View child = rv.findChildViewUnder(e.getX(), e.getY());
-		// if (child != null && clickListener != null
-		// && detector.onTouchEvent(e)) {
-		// clickListener.onClick(child, rv.getChildPosition(child));
-		// }
-		// return false;
-		// }
-		//
-		// @Override
-		// public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-		//
-		// }
-		//
-		// @Override
-		// public void onRequestDisallowInterceptTouchEvent(boolean arg0) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		//
-		// }
+		
 	}
 
-	public boolean isGpsActivo() {
-
-		boolean gps = true;
-
-		// LocationManager locationManager = (LocationManager)
-		// .getSystemService( getActivity().LOCATION_SERVICE);
-		//
-		// if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-		// ||
-		// !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-		// {
-		//
-		// gps = false;
-		// }
-		//
-		return gps;
-
-	}
-
-	// private class GeocoderHandler extends Handler {
-	// @Override
-	// public void handleMessage(Message message) {
-	// String locationAddress;
-	// switch (message.what) {
-	// case 1:
-	// Bundle bundle = message.getData();
-	// locationAddress = bundle.getString("address");
-	// break;
-	// default:
-	// locationAddress = null;
-	// }
-	// tvAddress.setText(locationAddress);
-	// }
-	// }
 
 }

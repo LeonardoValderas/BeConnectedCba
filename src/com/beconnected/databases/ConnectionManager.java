@@ -422,10 +422,11 @@ public class ConnectionManager {
 		public static JSONObject gestionGMC(Request p){
 			String uri=null;
 			
-		//	if(p.getQuery().equals("SUBIR")){
+			if(p.getQuery().equals("USUARIO")){
 				 uri =URLNOTI+"register.php";
-		//	}else if(p.getQuery().equals("EDITAR")){
-		//		uri =URL+"editarEmpresa.php";
+			}else if(p.getQuery().equals("ADM")){
+				uri =URLNOTI+"registerAdm.php";
+			}
 		//	}else if(p.getQuery().equals("ELIMINAR")){
 		//		uri =URL+"eliminarEmpresa.php";
 		////	}

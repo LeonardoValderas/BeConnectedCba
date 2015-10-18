@@ -8,6 +8,7 @@ import com.beconnected.TabsUsuario;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
+import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Request;
 
 import android.app.ProgressDialog;
@@ -45,10 +46,10 @@ public class TabsAdmEmpresa extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
-
-		DL.getDl().setSqliteConnection(this);
-		BL.getBl().crearTablasBDAmd();
-		BL.getBl().creaDirectorios();
+//
+//		DL.getDl().setSqliteConnection(this);
+//		BL.getBl().crearTablasBDAmd();
+//		BL.getBl().creaDirectorios();
 
 		// restarMap = getIntent().getIntExtra("restart", 0);
 		init();
@@ -136,19 +137,20 @@ public class TabsAdmEmpresa extends AppCompatActivity {
 			return true;
 		}
 		if (id == R.id.action_sincro) {
-
+			Intent sincro = new Intent(TabsAdmEmpresa.this, SplashActivityAdm.class);
+			startActivity(sincro);
 		
 			return true;
 		}
 
 		if (id == R.id.action_cerrar) {
-
+			GeneralLogic.close(TabsAdmEmpresa.this);
 	
-			   	  Intent intent = new Intent(Intent.ACTION_MAIN);
-			   	  intent.addCategory(Intent.CATEGORY_HOME);
-			   	  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			   	  startActivity(intent);
-			
+//			   	  Intent intent = new Intent(Intent.ACTION_MAIN);
+//			   	  intent.addCategory(Intent.CATEGORY_HOME);
+//			   	  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//			   	  startActivity(intent);
+//			
 			
 			
 			return true;

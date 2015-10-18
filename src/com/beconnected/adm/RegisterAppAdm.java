@@ -1,4 +1,4 @@
-package com.beconnected;
+package com.beconnected.adm;
 
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
  
  
-public class RegisterApp extends AsyncTask<Void, Void, String> {
+public class RegisterAppAdm extends AsyncTask<Void, Void, String> {
  
  private static final String TAG = "GCMRelated";
  Context ctx;
@@ -45,7 +45,7 @@ public class RegisterApp extends AsyncTask<Void, Void, String> {
 	private static final String TAG_ID = "id";
  
  
- public RegisterApp(Context ctx, GoogleCloudMessaging gcm, int appVersion){
+ public RegisterAppAdm(Context ctx, GoogleCloudMessaging gcm, int appVersion){
   this.ctx = ctx;
   this.gcm = gcm;
   this.appVersion = appVersion;
@@ -111,9 +111,9 @@ public class RegisterApp extends AsyncTask<Void, Void, String> {
  private void requestGMC(){
 	Request p = new Request();
 	
-	id_base= BL.getBl().selectIdUsuario();
+	id_base= BL.getBl().selectIdAdm();
 	p.setMethod("POST");
-	p.setQuery("USUARIO");
+	p.setQuery("ADM");
 	
 	p.setParametrosDatos("regId",regid);
 	p.setParametrosDatos("idBase",String.valueOf(id_base));
@@ -149,7 +149,7 @@ public class RegisterApp extends AsyncTask<Void, Void, String> {
 				
 					//	String a = json.getString(TAG_ID);
 						id_base	= json.getInt(TAG_ID);
-				        BL.getBl().insertarIdUsuario(id_base);
+				        BL.getBl().insertarIdAdm(id_base);
 					
 						
 				

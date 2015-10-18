@@ -47,8 +47,9 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		String TABLA_EMPRESA = "CREATE TABLE IF NOT EXISTS EMPRESA (ID_EMPRESA INTEGER,"
 				+ " EMPRESA VARCHAR(100),"
 				+ " LONGITUD VARCHAR(100),"
-				+ " LATITUD VARCHAR(100)," 
-				+ " URL_LOGO VARCHAR(200)," + " LOGO BLOB);";
+				+ " LATITUD VARCHAR(100),"
+				+ " URL_LOGO VARCHAR(200),"
+				+ " LOGO BLOB);";
 
 		String TABLA_PROMO = "CREATE TABLE IF NOT EXISTS PROMO (ID_PROMO INTEGER,"
 				+ " TITULO VARCHAR(100),"
@@ -60,6 +61,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		String TABLA_INFO = "CREATE TABLE IF NOT EXISTS INFO (SOMOS VARCHAR(200),"
 				+ " CONTACTO VARCHAR(200));";
 
+		String TABLA_ID = "CREATE TABLE IF NOT EXISTS ID_ADM (ID INTEGER);";
+
 		SQLiteDatabase database = getSqLiteDatabase("createTables");
 		if (database != null && database.isOpen()) {
 
@@ -68,6 +71,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 				database.execSQL(TABLA_PROMO);
 				database.execSQL(TABLA_EMPRESA);
 				database.execSQL(TABLA_INFO);
+				database.execSQL(TABLA_ID);
 
 			} catch (Exception e) {
 				// e.getMessage();
@@ -85,20 +89,21 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		TABLA_PROMO = null;
 		TABLA_EMPRESA = null;
 		TABLA_INFO = null;
-
+		TABLA_ID = null;
 	}
 
 	/**
 	 * crea las tablas del usuario
 	 */
-	
+
 	public void createTablesBDUsuario() {
 
 		String TABLA_EMPRESA_U = "CREATE TABLE IF NOT EXISTS EMPRESA_U (ID_EMPRESA INTEGER,"
 				+ " EMPRESA VARCHAR(100),"
 				+ " LONGITUD VARCHAR(100),"
 				+ " LATITUD VARCHAR(100),"
-				+ " URL_LOGO VARCHAR(200)," + " LOGO BLOB);";
+				+ " URL_LOGO VARCHAR(200),"
+				+ " LOGO BLOB);";
 
 		String TABLA_PROMO_U = "CREATE TABLE IF NOT EXISTS PROMO_U (ID_PROMO INTEGER,"
 				+ " TITULO VARCHAR(100),"
@@ -111,7 +116,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 				+ " CONTACTO VARCHAR(200));";
 
 		String TABLA_ID = "CREATE TABLE IF NOT EXISTS ID (ID INTEGER);";
-		
+
 		SQLiteDatabase database = getSqLiteDatabase("createTablesBDUsuario");
 		if (database != null && database.isOpen()) {
 
@@ -162,7 +167,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		String sql1 = "DROP TABLE EMPRESA_U";
 		String sql2 = "DROP TABLE PROMO_U";
 		String sql3 = "DROP TABLE INFO_U";
-	
+
 		database = getSqLiteDatabase("dropTablasBDUsuario()");
 		if (database != null && database.isOpen()) {
 
@@ -171,10 +176,45 @@ public class SqliteConnection extends SQLiteOpenHelper {
 				database.execSQL(sql1);
 				database.execSQL(sql2);
 				database.execSQL(sql3);
-	
+
 			} catch (Exception e) {
 
 				Log.e("dropTablasBDUsuario", e.toString());
+			}
+		} else {
+
+			Log.e("dropTablasBDUsuario", "Error Conexión Base de Datos");
+		}
+
+		sql1 = null;
+		sql2 = null;
+		sql3 = null;
+		database = null;
+	}
+
+	/**
+	 * Metodo que elimina todas las tablas de la base de datos del usuario.
+	 * 
+	 */
+	public void dropTablasBDAdm() {
+
+		SQLiteDatabase database = null;
+		String sql1 = "DROP TABLE EMPRESA";
+		String sql2 = "DROP TABLE PROMO";
+		String sql3 = "DROP TABLE INFO";
+
+		database = getSqLiteDatabase("dropTablasBDAdm()");
+		if (database != null && database.isOpen()) {
+
+			try {
+
+				database.execSQL(sql1);
+				database.execSQL(sql2);
+				database.execSQL(sql3);
+
+			} catch (Exception e) {
+
+				Log.e("dropTablasBDAdm", e.toString());
 			}
 		} else {
 
@@ -191,12 +231,12 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	// ////////////////////////////////////////
 	// /////Metodos tablas///////
 
-	
 	/**
 	 * 
 	 * Metodo que inserta una empresa Adm.
 	 */
-	public boolean insertEmpresa(int id,Empresa empresa) throws SQLiteException {
+	public boolean insertEmpresa(int id, Empresa empresa)
+			throws SQLiteException {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
@@ -213,6 +253,28 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return true;
 	}
 
+	
+	/**
+	 * 
+	 * Metodo que inserta una empresa Usuario.
+	 */
+	public boolean insertEmpresaAdm(Empresa empresa) throws SQLiteException {
+		boolean ban = false;
+
+		ContentValues cv = new ContentValues();
+		cv.put("ID_EMPRESA", empresa.getID_EMPRESA());
+		cv.put("EMPRESA", empresa.getEMPRESA());
+		cv.put("LONGITUD", empresa.getLONGITUD());
+		cv.put("LATITUD", empresa.getLATIDUD());
+		cv.put("LOGO", empresa.getLOGO());
+		cv.put("URL_LOGO", empresa.getURL_LOGO());
+
+		SQLiteDatabase database = this.getWritableDatabase();
+
+		database.insert("EMPRESA", null, cv);
+		return true;
+	}
+	
 	/**
 	 * 
 	 * Metodo que inserta una empresa Usuario.
@@ -227,38 +289,22 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		cv.put("LATITUD", empresa.getLATIDUD());
 		cv.put("LOGO", empresa.getLOGO());
 		cv.put("URL_LOGO", empresa.getURL_LOGO());
-		
+
 		SQLiteDatabase database = this.getWritableDatabase();
 
 		database.insert("EMPRESA_U", null, cv);
 		return true;
 	}
-	
-//	//Usuario
-//	
-//		public boolean insertEmpresaUsuarioUrl(Empresa empresa) throws SQLiteException {
-//			boolean ban = false;
-//
-//			ContentValues cv = new ContentValues();
-//			
-//			cv.put("LOGO", empresa.getLOGO());
-//			
-//			
-//			SQLiteDatabase database = this.getWritableDatabase();
-//
-//			database.insert("EMPRESA_U","ID_EMPRESA="+empresa.getID_EMPRESA(), cv);
-//			return true;
-//		}
 
-		/**
-		 * 
-		 * Metodo que trae lista una empresa adm.
-		 */
+	/**
+	 * 
+	 * Metodo que trae lista una empresa adm.
+	 */
 	public ArrayList<Empresa> selectListaEmpresa() {
 
 		String sql = "SELECT * FROM EMPRESA";
 		ArrayList<Empresa> arrayEmpresa = new ArrayList<Empresa>();
-		String empresaa = null, longitud = null, latitud = null, url_logo=null;
+		String empresaa = null, longitud = null, latitud = null, url_logo = null;
 		byte[] logo = null;
 		int id;
 		Cursor cursor = null;
@@ -286,11 +332,12 @@ public class SqliteConnection extends SQLiteOpenHelper {
 								.getColumnIndex("LATITUD"));
 
 						logo = cursor.getBlob(cursor.getColumnIndex("LOGO"));
-						
-						url_logo = cursor.getString(cursor.getColumnIndex("URL_LOGO"));
+
+						url_logo = cursor.getString(cursor
+								.getColumnIndex("URL_LOGO"));
 
 						empresa = new Empresa(id, empresaa, longitud, latitud,
-								logo,url_logo);
+								logo, url_logo);
 
 						arrayEmpresa.add(empresa);
 
@@ -323,7 +370,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 		String sql = "SELECT * FROM EMPRESA_U";
 		ArrayList<Empresa> arrayEmpresa = new ArrayList<Empresa>();
-		String empresaa = null, longitud = null, latitud = null,url_logo=null;
+		String empresaa = null, longitud = null, latitud = null, url_logo = null;
 		byte[] logo = null;
 		int id;
 		Cursor cursor = null;
@@ -351,11 +398,12 @@ public class SqliteConnection extends SQLiteOpenHelper {
 								.getColumnIndex("LATITUD"));
 
 						logo = cursor.getBlob(cursor.getColumnIndex("LOGO"));
-						
-						url_logo = cursor.getString(cursor.getColumnIndex("URL_LOGO"));
+
+						url_logo = cursor.getString(cursor
+								.getColumnIndex("URL_LOGO"));
 
 						empresa = new Empresa(id, empresaa, longitud, latitud,
-								logo,url_logo);
+								logo, url_logo);
 
 						arrayEmpresa.add(empresa);
 
@@ -380,65 +428,12 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return arrayEmpresa;
 	}
 
-	
-//	/**
-//	 * 
-//	 * Metodo que eliminar una empresa Amd.
-//	 */
-//	
-//	public ArrayList<Empresa> selectListaUrl() {
-//
-//		String sql = "SELECT ID_EMPRESA,URL_LOGO FROM EMPRESA_U";
-//		ArrayList<Empresa> arrayEmpresa = new ArrayList<Empresa>();
-//		String url_logo=null;
-//	
-//		int id;
-//		Cursor cursor = null;
-//		// Integer isFueraFrecuencia;
-//		SQLiteDatabase database = null;
-//
-//		database = getSqLiteDatabase("selectListaUrl");
-//		if (database != null && database.isOpen()) {
-//
-//			try {
-//				cursor = database.rawQuery(sql, null);
-//				if (cursor != null && cursor.getCount() > 0) {
-//
-//					while (cursor.moveToNext()) {
-//
-//						Empresa empresa = null;
-//						id = cursor.getInt(cursor.getColumnIndex("ID_EMPRESA"));
-//											
-//						url_logo = cursor.getString(cursor.getColumnIndex("URL_LOGO"));
-//
-//						empresa = new Empresa(id, null, null, null,
-//								null,url_logo);
-//
-//						arrayEmpresa.add(empresa);
-//
-//					}
-//				}
-//
-//			} catch (Exception e) {
-//				Log.e("selectListaUrl", e.toString());
-//			}
-//		} else {
-//
-//			Log.e("selectListaUrl", "Error Conexión Base de Datos");
-//		}
-//
-//		sql = null;
-//
-//		
-//		cursor = null;
-//		database = null;
-//		return arrayEmpresa;
-//	}
+
 	/**
 	 * 
 	 * Metodo que actualiza una empresa Amd.
 	 */
-	
+
 	public boolean actualizarEmpresa(Empresa empresa) throws SQLiteException {
 		boolean ban = false;
 
@@ -455,17 +450,16 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return true;
 	}
 
-	
 	/**
 	 * 
 	 * Metodo que eliminar una empresa Amd.
 	 */
-	
+
 	public boolean eliminarEmpresa(int id) {
 
 		boolean res = false;
 		SQLiteDatabase database = getSqLiteDatabase("eliminarEmpresa");
-		String sql = "DELETE FROM EMPRESA WHERE ID_EMPRESA = " +id;
+		String sql = "DELETE FROM EMPRESA WHERE ID_EMPRESA = " + id;
 
 		if (database != null && database.isOpen()) {
 
@@ -492,11 +486,10 @@ public class SqliteConnection extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Se usa ContentVales para la utilización de byte[] blob
-	 * inseerta promo
+	 * Se usa ContentVales para la utilización de byte[] blob inseerta promo
 	 */
 
-	public boolean insertPromo(int id,Promo promo) throws SQLiteException {
+	public boolean insertPromo(int id, Promo promo) throws SQLiteException {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
@@ -512,12 +505,30 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database.insert("PROMO", null, cv);
 		return true;
 	}
+	
+	public boolean insertPromoAdm(Promo promo) throws SQLiteException {
+		boolean ban = false;
+
+		ContentValues cv = new ContentValues();
+		cv.put("ID_PROMO", promo.getID_PROMO());
+		cv.put("TITULO", promo.getTITULO());
+		cv.put("DESCRIPCION", promo.getDESCRIPCION());
+		cv.put("ID_EMPRESA", promo.getID_EMPRESA());
+		cv.put("FECHA_INICIO", promo.getFECHA_INICIO());
+		cv.put("FECHA_FIN", promo.getFECHA_FIN());
+
+		SQLiteDatabase database = this.getWritableDatabase();
+
+		database.insert("PROMO", null, cv);
+		return true;
+	}
+
 
 	public boolean insertPromoUsuario(Promo promo) throws SQLiteException {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
-		cv.put("ID_PROMO",promo.getID_PROMO());
+		cv.put("ID_PROMO", promo.getID_PROMO());
 		cv.put("TITULO", promo.getTITULO());
 		cv.put("DESCRIPCION", promo.getDESCRIPCION());
 		cv.put("ID_EMPRESA", promo.getID_EMPRESA());
@@ -672,8 +683,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return arrayPromo;
 	}
 
-	
-	
 	public boolean actualizarPromo(Promo promo) {
 
 		boolean res = false;
@@ -709,8 +718,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return res;
 	}
 
-	
-	
 	public boolean eliminarPromo(int id) {
 
 		boolean res = false;
@@ -741,8 +748,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return res;
 	}
 
-	
-	
 	public boolean eliminarPromoEmpresa(int id) {
 
 		boolean res = false;
@@ -772,9 +777,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		sql = null;
 		return res;
 	}
-	
-	
-	
+
 	public boolean insertInfo() throws SQLiteException {
 		boolean ban = false;
 
@@ -854,7 +857,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return arrayInfo;
 	}
 
-	
 	/**
 	 * 
 	 * Metodo que obtiene lista de info.
@@ -908,8 +910,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return arrayInfo;
 	}
 
-	
-	
 	public boolean actualizarInfo(Info info) {
 
 		boolean res = false;
@@ -971,26 +971,78 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		sql = null;
 		return res;
 	}
+
 	
+/**
+ * Toma id de GMC para poder actualizar el regID del dispositivo.
+ */
+	
+	public boolean insertIdAdm(int id) throws SQLiteException {
+		boolean ban = false;
+
+		ContentValues cv = new ContentValues();
+		cv.put("ID", id);
+		SQLiteDatabase database = this.getWritableDatabase();
+
+		database.insert("ID_ADM", null, cv);
+		return true;
+	}
 	
 	public boolean insertIdUsuario(int id) throws SQLiteException {
 		boolean ban = false;
 
 		ContentValues cv = new ContentValues();
-		cv.put("ID",id);
+		cv.put("ID", id);
 		SQLiteDatabase database = this.getWritableDatabase();
 
 		database.insert("ID", null, cv);
 		return true;
 	}
 
-	
+	public int selectIdAdm() {
 
+		String sql = "SELECT  * FROM ID_ADM";
+		int id = 0;
+
+		Cursor cursor = null;
+		// Integer isFueraFrecuencia;
+		SQLiteDatabase database = null;
+
+		database = getSqLiteDatabase("selectIdAdm");
+		if (database != null && database.isOpen()) {
+
+			try {
+				cursor = database.rawQuery(sql, null);
+				if (cursor != null && cursor.getCount() > 0) {
+
+					while (cursor.moveToNext()) {
+
+						Info info = null;
+
+						id = cursor.getInt(cursor.getColumnIndex("ID"));
+
+					}
+				}
+
+			} catch (Exception e) {
+				Log.e("selectIdAdm", e.toString());
+			}
+		} else {
+
+			Log.e("selectIdAdm", "Error Conexión Base de Datos");
+		}
+
+		cursor = null;
+		database = null;
+		return id;
+	}
+	
+	
 	public int selectIdUsuario() {
 
 		String sql = "SELECT  * FROM ID";
 		int id = 0;
-	
+
 		Cursor cursor = null;
 		// Integer isFueraFrecuencia;
 		SQLiteDatabase database = null;
@@ -1006,10 +1058,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 
 						Info info = null;
 
-						id = cursor
-								.getInt(cursor.getColumnIndex("ID"));
-
-				
+						id = cursor.getInt(cursor.getColumnIndex("ID"));
 
 					}
 				}
@@ -1027,6 +1076,4 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return id;
 	}
 
-	
-	
 }

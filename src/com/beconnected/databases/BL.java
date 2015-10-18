@@ -41,7 +41,10 @@ public BL(){
 
         DL.getDl().getSqliteConnection().dropTablasBDUsuario();
     }
-    
+    public void dropTablasBDAdm() {
+
+        DL.getDl().getSqliteConnection().dropTablasBDAdm();
+    }
     
 	public void creaDirectorios() {
 
@@ -77,17 +80,19 @@ public BL(){
 
 	}
 	
+	
+	public boolean insertarEmpresaAdm(Empresa empresa) {
+
+		return DL.getDl().getSqliteConnection().insertEmpresaAdm(empresa);
+
+	}
 	public boolean insertarEmpresaUsuario(Empresa empresa) {
 
 		return DL.getDl().getSqliteConnection().insertEmpresaUsuario(empresa);
 
 	}
 	
-//	public boolean insertarEmpresaUsuarioUrl(Empresa empresa) {
-//
-//		return DL.getDl().getSqliteConnection().insertEmpresaUsuarioUrl(empresa);
-//
-//	}
+
 	public ArrayList<Empresa> selectListaEmpresa() {
 
 		return DL.getDl().getSqliteConnection().selectListaEmpresa();
@@ -120,6 +125,12 @@ public BL(){
 	public boolean insertarPromo(int id,Promo promo) {
 
 		return DL.getDl().getSqliteConnection().insertPromo(id,promo);
+
+	}
+	
+	public boolean insertarPromoAdm(Promo promo) {
+
+		return DL.getDl().getSqliteConnection().insertPromoAdm(promo);
 
 	}
 	public boolean insertarPromoUsuario(Promo promo) {
@@ -193,6 +204,18 @@ public BL(){
 
 	}
 	
+	public boolean insertarIdAdm(int id) {
+
+		return DL.getDl().getSqliteConnection().insertIdAdm(id);
+
+	}
+	
+	public int selectIdAdm() {
+
+		return DL.getDl().getSqliteConnection().selectIdAdm();
+
+	}
+	
 	
 	public boolean insertarIdUsuario(int id) {
 
@@ -206,121 +229,7 @@ public BL(){
 
 	}
 	
-//	public boolean actualizarEquipoAdeful(Equipo equipo) {
-//
-//		return DL.getDl().getSqLiteDBConnection().actualizarEquipoAdeful(equipo);
-//
-//	}
-//	
-//	public boolean eliminarEquipoAdeful(int id) {
-//
-//		return DL.getDl().getSqLiteDBConnection().eliminarEquipoAdeful(id);
-//
-//	}
-//	
-//	
-//	public boolean insertarDivisionAdeful(Division division) {
-//
-//		return DL.getDl().getSqLiteDBConnection().insertDivisionAdeful(division);
-//
-//	}
-//	
-//	public ArrayList<Division> selectListaDivisionAdeful() {
-//
-//		return DL.getDl().getSqLiteDBConnection().selectListaDivisionAdeful();
-//
-//	}
-//	
-//	public boolean actualizarDivisionAdeful(Division division) {
-//
-//		return DL.getDl().getSqLiteDBConnection().actualizarDivisionAdeful(division);
-//
-//	}
-//	public boolean eliminarDivisionAdeful(int id) {
-//
-//		return DL.getDl().getSqLiteDBConnection().eliminarDivisionAdeful(id);
-//
-//	}
-//	
-//	public boolean insertarTorneoAdeful(Torneo torneo) {
-//
-//		return DL.getDl().getSqLiteDBConnection().insertTorneoAdeful(torneo);
-//
-//	}
-//	
-//	public ArrayList<Torneo> selectListaTorneoAdeful() {
-//
-//		return DL.getDl().getSqLiteDBConnection().selectListaTorneoAdeful();
-//
-//	}
-//	
-//	public boolean actualizarTorneoAdeful(Torneo torneo) {
-//
-//		return DL.getDl().getSqLiteDBConnection().actualizarTorneoAdeful(torneo);
-//
-//	}
-//	public boolean eliminarTorneoAdeful(int id) {
-//
-//		return DL.getDl().getSqLiteDBConnection().eliminarTorneoAdeful(id);
-//
-//	}
-//	
-//	public boolean insertarCanchaAdeful(Cancha cancha) {
-//
-//		return DL.getDl().getSqLiteDBConnection().insertCanchaAdeful(cancha);
-//
-//	}
-//	
-//	
-//	public ArrayList<Cancha> selectListaCanchaAdeful() {
-//
-//		return DL.getDl().getSqLiteDBConnection().selectListaCanchaAdeful();
-//
-//	}
-//	
-//	public boolean actualizarCanchaAdeful(Cancha cancha) {
-//
-//		return DL.getDl().getSqLiteDBConnection().actualizarCanchaAdeful(cancha);
-//
-//	}
-//	public boolean eliminarCanchaAdeful(int id) {
-//
-//		return DL.getDl().getSqLiteDBConnection().eliminarCanchaAdeful(id);
-//
-//	}
-//	
-	/**
-	 * Metodos get set base de datos Mi EQUIPO
-	 * @return
-	 */
-//	public boolean insertarFecha(Fecha fecha) {
-//
-//		return DL.getDl().getSqLiteDBConnection().insertFecha(fecha);
-//
-//	}
-//	public ArrayList<Fecha> selectListaFecha() {
-//
-//		return DL.getDl().getSqLiteDBConnection().selectListaFecha();
-//
-//	}
-//	public boolean insertarAnio(Anio anio) {
-//
-//		return DL.getDl().getSqLiteDBConnection().insertAnio(anio);
-//
-//	}
-//	public ArrayList<Anio> selectListaAnio() {
-//
-//		return DL.getDl().getSqLiteDBConnection().selectListaAnio();
-//
-//	}
-//	
-//	
-//	public boolean insertarFixtureAdeful(Fixture fixture) {
-//
-//		return DL.getDl().getSqLiteDBConnection().insertFixtureAdeful(fixture);
-//
-//	}
-	
+
 	
 
 	public ConnectionManager getConnManager() {
