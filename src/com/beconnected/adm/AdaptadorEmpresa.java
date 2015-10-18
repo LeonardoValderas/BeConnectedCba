@@ -4,13 +4,9 @@ import java.util.ArrayList;
 
 import com.beconnected.R;
 import com.beconnected.databases.Empresa;
-import com.beconnected.databases.Promo;
-
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

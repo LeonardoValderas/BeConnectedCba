@@ -1,6 +1,5 @@
 package com.beconnected;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,50 +9,32 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.beconnected.adm.AlertsMenu;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
+import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Info;
 import com.beconnected.databases.Promo;
-import com.beconnected.databases.Request;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Bitmap.CompressFormat;
-import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -112,25 +93,28 @@ public class SplashActivity extends AppCompatActivity {
 		timerActualizacion.scheduleAtFixedRate(taskActualizacion, 0,
 				TIEMPO_SERVICIO);
 
-		if (conexionInternet(SplashActivity.this)) {
+		if (GeneralLogic.conexionInternet(SplashActivity.this)) {
 			init();
 		} else {
 
-			alertsMenu = new AlertsMenu(SplashActivity.this, "ATENCIÓN!!!", "Por favor verifique su conexión de Internet",  "Aceptar", null);
-			alertsMenu.btnAceptar.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
-					alertsMenu.alertDialog.dismiss();
-					close();
-					
-				}
-			});
-			
+			alertsMenu = new AlertsMenu(SplashActivity.this, "ATENCIÓN!!!",
+					"Por favor verifique su conexión de Internet", "Aceptar",
+					null);
+			alertsMenu.btnAceptar
+					.setOnClickListener(new View.OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+
+							alertsMenu.alertDialog.dismiss();
+							GeneralLogic.close(SplashActivity.this);
+
+						}
+					});
+
 			alertsMenu.btnCancelar.setVisibility(View.GONE);
-			
+
 		}
 
 	}
@@ -293,8 +277,6 @@ public class SplashActivity extends AppCompatActivity {
 
 				JSONObject obj = ar.getJSONObject(i);
 				String a = obj.getString("URL_LOGO").toString();
-				// String a =
-				// "http://beconnected.esy.es/BeConnected/picture/mv.PGN";
 
 				Bitmap b = getBitmap(a);
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -393,12 +375,6 @@ public class SplashActivity extends AppCompatActivity {
 
 			// para listView
 			parseFeedPromo(result);
-
-			// splashProgress.setVisibility(View.INVISIBLE);
-			//
-			// Intent usuario = new Intent(SplashActivity.this,
-			// TabsUsuario.class);
-			// startActivity(usuario);
 
 		}
 
@@ -505,7 +481,7 @@ public class SplashActivity extends AppCompatActivity {
 				JSONObject obj = ar.getJSONObject(i);
 				Info info = new Info(obj.getString("SOMOS"),
 						obj.getString("CONTACTOS"));
-				
+
 				BL.getBl().actualizarInfo(info);
 				BL.getBl().actualizarInfoUsuario(info);
 
@@ -520,40 +496,4 @@ public class SplashActivity extends AppCompatActivity {
 
 	}
 
-	
-	
-	
-	public boolean conexionInternet(Context context) {
-
-		ConnectivityManager connectMgr = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connectMgr != null) {
-			NetworkInfo[] netInfo = connectMgr.getAllNetworkInfo();
-			if (netInfo != null) {
-				for (NetworkInfo net : netInfo) {
-					if (net.getState() == NetworkInfo.State.CONNECTED) {
-					//	if (net.getType() == ConnectivityManager.TYPE_MOBILE||net.getType() == ConnectivityManager.TYPE_WIFI) {
-							
-
-						return true;
-					
-				}
-			}
-		}
-		
-			return false;
-	}
-			return false;
-	
-}
-	
-	public void close()
-    {
-		System.exit(0);
-  Intent intent = new Intent(Intent.ACTION_MAIN);
-  intent.addCategory(Intent.CATEGORY_HOME);
-  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-  startActivity(intent);
-    }  
-	
 }

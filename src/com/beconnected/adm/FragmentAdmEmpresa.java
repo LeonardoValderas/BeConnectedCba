@@ -3,27 +3,20 @@ package com.beconnected.adm;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.beconnected.GPSTracker;
 import com.beconnected.R;
 import com.beconnected.databases.BL;
-import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Request;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-
 import com.google.android.gms.maps.SupportMapFragment;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,7 +26,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -60,6 +52,8 @@ public class FragmentAdmEmpresa extends Fragment {
 	public static double longCba = -64.183300000000000;
 	public static double latitud = 0.0;
 	public static double longitud = 0.0;
+	private double mi_latitude;
+	private double mi_longitude;
 	private ArrayList<Empresa> empresaArray;
 	private EditText editTextEmpresa;
 	private ImageButton imageButtonLogo;
@@ -80,6 +74,7 @@ public class FragmentAdmEmpresa extends Fragment {
 	private static final String TAG_ID = "id";
 	private String encodedImage = null;
 	private GPSTracker gps;
+	private AlertsMenu alertsMenu;
 
 	public static FragmentAdmEmpresa newInstance() {
 		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
@@ -232,33 +227,44 @@ public class FragmentAdmEmpresa extends Fragment {
 							p.setParametrosDatos("url_logo",
 									empresa.getURL_LOGO());
 						}
-						// Request p = new Request();
-						// p.setMethod("GET");
+
 						p.setMethod("POST");
 						p.setQuery("SUBIR");
-						// p.setUri(uri);
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
-						// p.setParametrosDatos("logo", encodedImage);
-						// p.setParametrosDatos("url_logo",
-						// empresa.getURL_LOGO());
 
-						TaskEmpresa taskEmpresa = new TaskEmpresa();
-						taskEmpresa.execute(p);
+						if (GeneralLogic.conexionInternet(getActivity())) {
+							TaskEmpresa taskEmpresa = new TaskEmpresa();
+							taskEmpresa.execute(p);
+							imageLogo.setImageResource(R.drawable.logo);
+							editTextEmpresa.setText("");
+							latitud = 0.0;
+							longitud = 0.0;
+							imagenLogo = null;
+						} else {
 
-						// actualizamos el activity. ver este punto
+							alertsMenu = new AlertsMenu(
+									getActivity(),
+									"ATENCIÓN!!!",
+									"Por favor verifique su conexión de Internet",
+									"Aceptar", null);
+							alertsMenu.btnAceptar
+									.setOnClickListener(new View.OnClickListener() {
 
-						// Toast.makeText(
-						// getActivity(),
-						// getActivity().getResources().getString(
-						// R.string.empresa_cargada),
-						// Toast.LENGTH_SHORT).show();
-						imageLogo.setImageResource(R.drawable.logo);
-						editTextEmpresa.setText("");
-						latitud = 0.0;
-						longitud = 0.0;
-						imagenLogo = null;
+										@Override
+										public void onClick(View v) {
+											// TODO Auto-generated method stub
+
+											alertsMenu.alertDialog.dismiss();
+											// close();
+
+										}
+									});
+
+							alertsMenu.btnCancelar.setVisibility(View.GONE);
+
+						}
 
 					} else {
 						Request p = new Request();
@@ -280,56 +286,57 @@ public class FragmentAdmEmpresa extends Fragment {
 									empresa.getURL_LOGO());
 						}
 
-						// p.setMethod("GET");
 						p.setMethod("POST");
 						p.setQuery("EDITAR");
-						// p.setUri(uri);
 						p.setParametrosDatos("id_empresa",
 								String.valueOf(empresa.getID_EMPRESA()));
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
-						// p.setParametrosDatos("logo", encodedImage);
-						// p.setParametrosDatos("url_logo",
-						// empresa.getURL_LOGO());
 
-						TaskEmpresa taskEmpresa = new TaskEmpresa();
-						taskEmpresa.execute(p);
+						if (GeneralLogic.conexionInternet(getActivity())) {
+							TaskEmpresa taskEmpresa = new TaskEmpresa();
+							taskEmpresa.execute(p);
+							mapa.clear();
 
-						// subirDatos= new SubirDatos(getActivity());
-						// subirDatos.resquestDataEmpresa(p);
+							if (imagenLogo != null) {
 
-						mapa.clear();
+								imagenLogo = null;
+							}
 
-						if (imagenLogo != null) {
+							editTextEmpresa.setText("");
 
-							imagenLogo = null;
+							imageLogo.setImageResource(R.drawable.logo);
+
+							latitud = 0.0;
+							longitud = 0.0;
+						} else {
+
+							alertsMenu = new AlertsMenu(
+									getActivity(),
+									"ATENCIÓN!!!",
+									"Por favor verifique su conexión de Internet",
+									"Aceptar", null);
+							alertsMenu.btnAceptar
+									.setOnClickListener(new View.OnClickListener() {
+
+										@Override
+										public void onClick(View v) {
+											// TODO Auto-generated method stub
+
+											alertsMenu.alertDialog.dismiss();
+											// close();
+
+										}
+									});
+
+							alertsMenu.btnCancelar.setVisibility(View.GONE);
+
 						}
-						// insertar = true;
-
-						// Intent i = new Intent(getActivity(),
-						// TabsAdmEmpresa.class);
-						// startActivity(i);
-
-						// Toast.makeText(
-						// getActivity(),
-						// getActivity().getResources().getString(
-						// R.string.empresa_actualizada),
-						// Toast.LENGTH_SHORT).show();
-						editTextEmpresa.setText("");
-						// mapa.clear();
-						imageLogo.setImageResource(R.drawable.logo);
-						// imagenLogo = null;
-						latitud = 0.0;
-						longitud = 0.0;
-
 					}
 				}
-
 			}
-
 		});
-
 	}
 
 	// enviar/editar/eliminar empresa
@@ -431,11 +438,7 @@ public class FragmentAdmEmpresa extends Fragment {
 			// Do some task
 			Image_Selecting_Task(data);
 		}
-		// } else if (requestCode == Utility.CAMERA_PICTURE)
-		// {
-		// // Do some task
-		// Image_Selecting_Task(data);
-		// }
+
 	}
 
 	// ver para cambiar el icono del mapa

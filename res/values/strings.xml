@@ -39,7 +39,7 @@
     <string name="agotar_stock">Agotar Stock.</string>
 
     <!-- alert -->
-    <string name="alert_empresa">Desea eliminar la Empresa?...</string>
-    <string name="alert_promo">Desea eliminar la Promo?...</string>
+    <string name="alert_empresa">Desea eliminar la Empresa?</string>
+    <string name="alert_promo">Desea eliminar la Promo?</string>
 
 </resources>

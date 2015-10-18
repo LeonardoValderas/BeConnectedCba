@@ -2,42 +2,26 @@ package com.beconnected;
 
 import java.util.ArrayList;
 
-import com.beconnected.adm.TabsAdmEmpresa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.internal.Point;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass. Use the
@@ -48,15 +32,10 @@ public class FragmentMapa extends Fragment {
 	private GoogleMap mapa;
 	public static double latCba = -31.400000000000000;
 	public static double longCba = -64.183300000000000;
-	private double mi_latitude ;
-	private double mi_longitude ;
-	private RecyclerView recycleViewCancha;
-	private EditText editTextNombre;
-	private ImageButton imageButtonCancha;
-	private FloatingActionButton botonFloating;
+	private double mi_latitude;
+	private double mi_longitude;
 	private ArrayList<Empresa> empresaArray;
 	private GPSTracker gps;
-
 
 	public static FragmentMapa newInstance() {
 		FragmentMapa fragment = new FragmentMapa();
@@ -67,7 +46,6 @@ public class FragmentMapa extends Fragment {
 		// Required empty public constructor
 	}
 
-	
 	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
@@ -83,42 +61,36 @@ public class FragmentMapa extends Fragment {
 	}
 
 	@Override
-	public void onViewStateRestored (Bundle savedInstanceState) {
+	public void onViewStateRestored(Bundle savedInstanceState) {
 		super.onViewStateRestored(savedInstanceState);
 		Log.i("leo", "onViewStateRestored");
 	}
-	
-	
 
 	@Override
 	public void onPause() {
-		
-		
+
 		Fragment fragment = (getChildFragmentManager()
 				.findFragmentById(R.id.map));
 		FragmentTransaction ft = getActivity().getSupportFragmentManager()
 				.beginTransaction();
 		ft.remove(fragment);
 		ft.commit();
-		
+
 		super.onPause();
 	}
-	
-	
+
 	private void init() {
 
 		gps = new GPSTracker(getActivity());
-		
-		if(gps.canGetLocation()) {
-			 mi_latitude = gps.getLatitude();
-			 mi_longitude = gps.getLongitude();
-			
-			
+
+		if (gps.canGetLocation()) {
+			mi_latitude = gps.getLatitude();
+			mi_longitude = gps.getLongitude();
+
 		} else {
 			gps.showSettingsAlert();
 		}
-		
-		
+
 		empresaArray = BL.getBl().selectListaEmpresaUsuario();
 		mapa = ((SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
@@ -126,29 +98,26 @@ public class FragmentMapa extends Fragment {
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
 				longCba), 14.0f));
 		// zoom long y lat de bariloche
-		 CameraPosition cameraPosition = new
-		 CameraPosition.Builder().target(new LatLng(mi_latitude, mi_longitude)).zoom(15)
-		 .build();
-		 mapa.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+		CameraPosition cameraPosition = new CameraPosition.Builder()
+				.target(new LatLng(mi_latitude, mi_longitude)).zoom(15).build();
+		mapa.animateCamera(CameraUpdateFactory
+				.newCameraPosition(cameraPosition));
 
-		 mapa.addMarker(new MarkerOptions().position(new LatLng(mi_latitude, mi_longitude))
-					.title("Mi Posicion")
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-	
+		mapa.addMarker(new MarkerOptions()
+				.position(new LatLng(mi_latitude, mi_longitude))
+				.title("Mi Posicion")
+				.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
 		for (int i = 0; i < empresaArray.size(); i++) {
 
-			mapa.addMarker(new MarkerOptions().position(new LatLng(Double
-					.valueOf(empresaArray.get(i).getLATIDUD()), Double
-					.valueOf(empresaArray.get(i).getLONGITUD())))
+			mapa.addMarker(new MarkerOptions().position(
+					new LatLng(
+							Double.valueOf(empresaArray.get(i).getLATIDUD()),
+							Double.valueOf(empresaArray.get(i).getLONGITUD())))
 					.title(empresaArray.get(i).getEMPRESA()));
-			
-
 		}
 
-		
 	}
-
 
 }

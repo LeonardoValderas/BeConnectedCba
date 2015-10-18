@@ -2,51 +2,30 @@ package com.beconnected.databases;
 
 public class Info {
 
+	private String SOMOS = null;
+	private String CONTACTO = null;
 
-private String SOMOS=null;
-private String CONTACTO=null;
+	public Info(String somos, String contacto) {
 
+		SOMOS = somos;
+		CONTACTO = contacto;
 
+	}
 
+	public String getSOMOS() {
+		return SOMOS;
+	}
 
-public Info(String somos,String contacto){
-	
-	
+	public void setSOMOS(String sOMOS) {
+		SOMOS = sOMOS;
+	}
 
-	SOMOS=somos;
-	CONTACTO=contacto;
+	public String getCONTACTO() {
+		return CONTACTO;
+	}
 
-
-}
-
-
-
-
-public String getSOMOS() {
-	return SOMOS;
-}
-
-
-
-
-public void setSOMOS(String sOMOS) {
-	SOMOS = sOMOS;
-}
-
-
-
-
-public String getCONTACTO() {
-	return CONTACTO;
-}
-
-
-
-
-public void setCONTACTO(String cONTACTO) {
-	CONTACTO = cONTACTO;
-}
-
-
+	public void setCONTACTO(String cONTACTO) {
+		CONTACTO = cONTACTO;
+	}
 
 }

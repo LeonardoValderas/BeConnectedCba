@@ -1,65 +1,47 @@
 package com.beconnected;
 
-
-
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.beconnected.adm.TabsAdmEmpresa;
 import com.beconnected.databases.BL;
-import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
-
+import com.beconnected.databases.GeneralLogic;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class TabsUsuario extends AppCompatActivity {
 
 	private Toolbar toolbar;
-	private ActionBarDrawerToggle drawerToggle;
 	private ViewPager viewPager;
 	private TabLayout tabLayout;
-	private int restarMap = 0;
-	private TextView txtAbSubTitulo;
 	private ProgressDialog dialog;
-	private boolean Promo=false; 
-	// private TextView txtAbSubTitulo;
+	private boolean Promo = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
 
-//		DL.getDl().setSqliteConnection(this);
-//		BL.getBl().crearTablasBD();
-//		BL.getBl().creaDirectorios();
-
-//		restarMap = getIntent().getIntExtra("restart", 0);
 		init();
-		// new MyTask().execute("");
-		
-		
+
 	}
 
 	public void init() {
 
-		Promo = getIntent().getBooleanExtra("PROMO",
-				false);
+		Promo = getIntent().getBooleanExtra("PROMO", false);
 		// Toolbar
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -69,21 +51,15 @@ public class TabsUsuario extends AppCompatActivity {
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-//		 txtAbSubTitulo = (TextView)
-//		 toolbar.findViewById(R.id.txtAbSubTitulo);
-//		 txtAbSubTitulo.setText("Bienvenido");
-
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPager
 				.setAdapter(new TabsAdapterUsuario(getSupportFragmentManager()));
-	
-		
-		 
+
 		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
 		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 		tabLayout.setTabMode(TabLayout.MODE_FIXED);
 		tabLayout.setupWithViewPager(viewPager);
-		
+
 		if (Promo) {
 			viewPager.setCurrentItem(1);
 		}
@@ -108,8 +84,6 @@ public class TabsUsuario extends AppCompatActivity {
 
 	}
 
-	
-	
 	public class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -122,74 +96,45 @@ public class TabsUsuario extends AppCompatActivity {
 		@Override
 		protected String doInBackground(String... params) {
 
-			//inicia el metodo que trae los datos según su url
-			//retorna string sb.toestring()
-			
-			  String content =  BL.getBl().getConnManager().traerEmpresa();
-			  return content;  //retorna string al metodo onPostExecute
+			// inicia el metodo que trae los datos según su url
+			// retorna string sb.toestring()
+
+			String content = BL.getBl().getConnManager().traerEmpresa();
+			return content; // retorna string al metodo onPostExecute
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			
-			
-			
-			//para listView
+
 			parseFeed(result);
-		
-			Toast.makeText(TabsUsuario.this, result, Toast.LENGTH_SHORT)
-			.show();
+
+			Toast.makeText(TabsUsuario.this, result, Toast.LENGTH_SHORT).show();
 			dialog.dismiss();
-		//	textViewDato.setText(result);
-			
-			
-			
-			
-			//
-			// upDateDisplay();
-			// task.remove(this);
-			// if(task.size()==0)
-			// {
-			// progressBar1.setVisibility(View.INVISIBLE);
-			// }
-			//
-			// if (result==null) {
-			// // Toast.makeText(this, "Sin datos", Toast.LENGTH_LONG).show();
-			// return;
-			// }else{
-			//
-			// datasJson = ListaJson.parseFeed(result);
-			// }
-			//
-			//
-			//
-			// }
+
 		}
 
 		@Override
 		protected void onProgressUpdate(String... values) {
-			//textViewDato.append(values[0]+"\n");
+			// textViewDato.append(values[0]+"\n");
 		}
 	}
-	
-	
-	
-	
-	
-	public static ArrayList<Empresa> parseFeed(String content)	{
-		
+
+	public static ArrayList<Empresa> parseFeed(String content) {
+
 		try {
 			JSONArray ar = new JSONArray(content);
 			ArrayList<Empresa> datasJson = new ArrayList<>();
-			
+
 			for (int i = 0; i < ar.length(); i++) {
-				
-			JSONObject obj = ar.getJSONObject(i);
-			Empresa empresa = new Empresa(0, obj.getString("EMPRESA"), obj.getString("LONGITUD"), obj.getString("LATITUD"), null,obj.getString("URL_LOGO"));
-			
-			BL.getBl().insertarEmpresaUsuario(empresa);
-			
-			datasJson.add(empresa);
+
+				JSONObject obj = ar.getJSONObject(i);
+				Empresa empresa = new Empresa(0, obj.getString("EMPRESA"),
+						obj.getString("LONGITUD"), obj.getString("LATITUD"),
+						null, obj.getString("URL_LOGO"));
+
+				BL.getBl().insertarEmpresaUsuario(empresa);
+
+				datasJson.add(empresa);
 			}
 			return datasJson;
 		} catch (JSONException e) {
@@ -197,33 +142,20 @@ public class TabsUsuario extends AppCompatActivity {
 			e.printStackTrace();
 			return null;
 		}
-		
-			
+
 	}
-	
-	
+
 	@Override
-	public boolean onKeyDown (int keyCode, KeyEvent event) {
-		
-		if(keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			
-			//close();
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			return false;
-			
-			
+
 		}
 		return false;
-		
-		
-		
-		
+
 	}
-	
-	
-	
-	
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -245,14 +177,9 @@ public class TabsUsuario extends AppCompatActivity {
 		}
 		if (id == R.id.action_cerrar) {
 
-		
-			  Intent intent = new Intent(Intent.ACTION_MAIN);
-			  intent.addCategory(Intent.CATEGORY_HOME);
-			  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			  startActivity(intent);
+			GeneralLogic.close(TabsUsuario.this);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-//	}
 	}
 }

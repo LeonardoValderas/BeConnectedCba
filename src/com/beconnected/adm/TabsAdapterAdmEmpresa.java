@@ -10,8 +10,8 @@ import android.text.Spanned;
 public class TabsAdapterAdmEmpresa extends FragmentPagerAdapter {
 
 	final int PAGE_COUNT = 2;
-	private String tabTitles[] = new String[] { "CREAR", "EDITAR"};
-	
+	private String tabTitles[] = new String[] { "CREAR", "EDITAR" };
+
 	public TabsAdapterAdmEmpresa(FragmentManager fm) {
 		super(fm);
 	}
@@ -30,15 +30,11 @@ public class TabsAdapterAdmEmpresa extends FragmentPagerAdapter {
 		case 0:
 			fragmentTab = FragmentAdmEmpresa.newInstance();
 
-			
 			break;
 		case 1:
 			fragmentTab = FragmentAdmEmpresaEditar.newInstance();
 
-			
 			break;
-
-		
 
 		}
 
@@ -47,10 +43,7 @@ public class TabsAdapterAdmEmpresa extends FragmentPagerAdapter {
 
 	@Override
 	public CharSequence getPageTitle(int position) {
-		// Generate title based on item position
-////		tabTitles[position];
-//		SpannableString spannableString = new SpannableString("");
-//		spannableString.setSpan(tabTitles[position], 0, tabTitles[position].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 		return tabTitles[position];
 	}
 }

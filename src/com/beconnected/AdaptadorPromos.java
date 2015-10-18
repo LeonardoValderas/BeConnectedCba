@@ -7,8 +7,6 @@ import com.beconnected.databases.Promo;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +17,6 @@ import android.widget.TextView;
 public class AdaptadorPromos extends
 		RecyclerView.Adapter<AdaptadorPromos.PromosViewHolder> implements
 		View.OnClickListener {
-
-	// private final static Context context;
 
 	private View.OnClickListener listener;
 	private ArrayList<Promo> datosPromo;
@@ -41,19 +37,18 @@ public class AdaptadorPromos extends
 					.findViewById(R.id.descripcionRecyclerView);
 			vigenciaRecyclerView = (TextView) itemView
 					.findViewById(R.id.vigenciaRecyclerView);
-			
+
 			imageViewLogo = (ImageView) itemView
 					.findViewById(R.id.imageViewLogo);
 		}
 
 		@SuppressLint("NewApi")
 		public void bindTitular(Promo promo) {
-		
-					
-			  tituloRecyclerView.setText(promo.getTITULO());
-			  descripcionRecyclerView.setText(promo.getDESCRIPCION());
-			  vigenciaRecyclerView.setText(promo.getFECHA_INICIO()+"-"+promo.getFECHA_FIN());
-		
+
+			tituloRecyclerView.setText(promo.getTITULO());
+			descripcionRecyclerView.setText(promo.getDESCRIPCION());
+			vigenciaRecyclerView.setText(promo.getFECHA_INICIO() + "-"
+					+ promo.getFECHA_FIN());
 
 			byte[] image = promo.getLOGO();
 			if (image == null) {
@@ -61,12 +56,9 @@ public class AdaptadorPromos extends
 				imageViewLogo.setImageResource(R.drawable.logo);
 			} else {
 				Bitmap theImage = BitmapFactory.decodeByteArray(
-						promo.getLOGO(), 0,
-						promo.getLOGO().length);
-				
+						promo.getLOGO(), 0, promo.getLOGO().length);
+
 				imageViewLogo.setImageBitmap(theImage);
-//				Drawable escudo = new BitmapDrawable(theImage);
-//				imageViewEscudo.setImageDrawable(escudo);
 
 			}
 		}
@@ -74,12 +66,11 @@ public class AdaptadorPromos extends
 
 	public AdaptadorPromos(ArrayList<Promo> datosPromo) {
 		this.datosPromo = datosPromo;
-		// notifyItemInserted(datosEquipoArray);
+
 	}
 
 	@Override
-	public PromosViewHolder onCreateViewHolder(ViewGroup viewGroup,
-			int viewType) {
+	public PromosViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 		View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(
 				R.layout.recyclerview_item, viewGroup, false);
 
@@ -104,11 +95,6 @@ public class AdaptadorPromos extends
 	public int getItemCount() {
 		return datosPromo.size();
 	}
-
-	// public void add(EquipoAdeful item, int position) {
-	// datosEquipoArray.add(position, item);
-	// notifyItemInserted(position);
-	// }
 
 	public void setOnClickListener(View.OnClickListener listener) {
 		this.listener = listener;

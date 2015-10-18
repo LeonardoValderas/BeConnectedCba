@@ -1,40 +1,34 @@
 package com.beconnected.databases;
 
-
-
 import android.content.Context;
-
 
 public class DL {
 
-    private SqliteConnection sqliteConnection;
-    private static DL dl;
+	private SqliteConnection sqliteConnection;
+	private static DL dl;
 
-    public DL(){
+	public DL() {
 
-    }
+	}
 
-    public static DL getDl() {
-        if (dl == null) {
-            dl = new DL();
+	public static DL getDl() {
+		if (dl == null) {
+			dl = new DL();
 
-        }
+		}
 
-        return dl;
+		return dl;
 
-    }
+	}
 
-    public void setSqliteConnection(Context context){
+	public void setSqliteConnection(Context context) {
 
-    	sqliteConnection = new SqliteConnection(context);
-    }
+		sqliteConnection = new SqliteConnection(context);
+	}
 
-    public SqliteConnection getSqliteConnection(){
+	public SqliteConnection getSqliteConnection() {
 
-        return sqliteConnection;
-    }
-
-
-
+		return sqliteConnection;
+	}
 
 }

@@ -5,98 +5,89 @@
     android:layout_height="match_parent"
     tools:context="com.estrelladelsur.fragments.fragmentresultado" >
 
-    
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
 
-        <Spinner
-            android:id="@+id/spinnerEmpresa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:spinnerMode="dialog" />
-
-        <EditText
-            android:id="@+id/editTextTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:ems="10"
-            android:gravity="center"
-            android:textSize="30dp"
-            android:hint="Ingrese un Titulo" >
-
-            <requestFocus />
-        </EditText>
-
-        <EditText
-            android:id="@+id/editTextDescripcion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-             android:layout_marginTop="25dp"
-             android:gravity="center"
-            android:textSize="25dp"
-            android:hint="Ingrese una Descripción" >
-        </EditText>
-
-        
-        
-        
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal" >
-        <Button
-            android:id="@+id/buttonDesde"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Desde" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/buttonHasta"
-            style="?android:attr/buttonStyleSmall"
-                   android:layout_marginLeft="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hasta" />
+            <Spinner
+                android:id="@+id/spinnerEmpresa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:spinnerMode="dialog" />
 
-        <RadioButton
-            android:id="@+id/radioButtonStock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-             android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:text="Agotar Stock" />
+            <EditText
+                android:id="@+id/editTextTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Ingrese un Titulo"
+                android:textSize="30dp" >
 
-</LinearLayout>
-        
-        
-        
-        
-        
-        <Button
-            android:id="@+id/buttonGuardar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="60dp"
-            android:gravity="center"
-             android:textColor="#ffffff" 
-            android:background="@drawable/button_estilo_group"
-            android:text="Guardar"
-             />
+                <requestFocus />
+            </EditText>
 
-    </LinearLayout>
-  </ScrollView>
+            <EditText
+                android:id="@+id/editTextDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Ingrese una Descripción"
+                android:textSize="25dp" >
+            </EditText>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/buttonDesde"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Desde" />
+
+                <Button
+                    android:id="@+id/buttonHasta"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="Hasta" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonStock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:text="Agotar Stock" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
+                android:background="@drawable/button_estilo_group"
+                android:gravity="center"
+                android:text="Guardar"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </ScrollView>
+
 </FrameLayout>

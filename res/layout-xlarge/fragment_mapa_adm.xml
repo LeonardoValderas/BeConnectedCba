@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.beconnected" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="700dp"
+            class="com.google.android.gms.maps.SupportMapFragment" />
+
+        <EditText
+            android:id="@+id/editTextEmpresa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Ingrese la Empresa"
+            android:textSize="55dp"
+            android:textStyle="bold" >
+
+            <requestFocus />
+        </EditText>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/imageButtonLogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/ic_image_button" />
+
+            <ImageView
+                android:id="@+id/imageLogo"
+                android:layout_width="140dp"
+                android:layout_weight="1"
+                android:layout_height="140dp"
+                android:layout_marginLeft="70dp" />
+
+            <Button
+                android:id="@+id/buttonGuardar"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button_estilo_group"
+                android:text="Guardar"
+                android:textColor="#ffffff"
+                android:textSize="25dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,46 +1,30 @@
 package com.beconnected.adm;
 
-
-
 import com.beconnected.R;
 import com.beconnected.TabsUsuario;
-import com.beconnected.databases.BL;
-import com.beconnected.databases.DL;
-
+import com.beconnected.databases.GeneralLogic;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 
 public class TabsAdmPromo extends AppCompatActivity {
 
 	private Toolbar toolbar;
-	private ActionBarDrawerToggle drawerToggle;
 	private ViewPager viewPager;
 	private TabLayout tabLayout;
-//	private ImageView 
-	private int restarMap = 0;
-	TextView txtAbSubTitulo;
-	// private TextView txtAbSubTitulo;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
 
-//		DL.getDl().setSqliteConnection(this);
-//		BL.getBl().crearTablasBD();
-//		BL.getBl().creaDirectorios();
-
-//		restarMap = getIntent().getIntExtra("restart", 0);
 		init();
 	}
 
@@ -55,22 +39,14 @@ public class TabsAdmPromo extends AppCompatActivity {
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-//		 txtAbSubTitulo = (TextView)
-//		 toolbar.findViewById(R.id.txtAbSubTitulo);
-//		 txtAbSubTitulo.setText("EMPRESA");
-
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		viewPager
-				.setAdapter(new TabsAdapterAdmPromo(getSupportFragmentManager()));
-	
-		
-		 
+		viewPager.setAdapter(new TabsAdapterAdmPromo(
+				getSupportFragmentManager()));
+
 		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
 		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 		tabLayout.setTabMode(TabLayout.MODE_FIXED);
 		tabLayout.setupWithViewPager(viewPager);
-		
-		
 
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
@@ -82,13 +58,10 @@ public class TabsAdmPromo extends AppCompatActivity {
 			@Override
 			public void onPageSelected(int position) {
 				Fragment fragmentTab = null;
-	             if(position==1){
-	            	 fragmentTab = FragmentAdmEmpresaEditar.newInstance();
-	            	 
-	            	
-				}
-				
+				if (position == 1) {
+					fragmentTab = FragmentAdmEmpresaEditar.newInstance();
 
+				}
 			}
 
 			@Override
@@ -104,7 +77,14 @@ public class TabsAdmPromo extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 
-
+		// menu.getItem(0).setVisible(false);//usuario
+		// menu.getItem(1).setVisible(false);//empresa
+		   menu.getItem(2).setVisible(false);//promo
+		//menu.getItem(3).setVisible(false);// info
+		//menu.getItem(4).setVisible(false);// sincro
+		//menu.getItem(5).setVisible(false);// cerrar
+	
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -115,15 +95,14 @@ public class TabsAdmPromo extends AppCompatActivity {
 		// noinspection SimplifiableIfStatement
 		if (id == R.id.action_usuario) {
 
-			Intent usuario = new Intent(TabsAdmPromo.this,
-					TabsUsuario.class);
+			Intent usuario = new Intent(TabsAdmPromo.this, TabsUsuario.class);
 			startActivity(usuario);
 
 			return true;
 		}
-		
+
 		if (id == R.id.action_empresa) {
-			Intent promo = new Intent(TabsAdmPromo.this, TabsAdmPromo.class);
+			Intent promo = new Intent(TabsAdmPromo.this, TabsAdmEmpresa.class);
 			startActivity(promo);
 
 			return true;
@@ -136,25 +115,19 @@ public class TabsAdmPromo extends AppCompatActivity {
 		}
 
 		if (id == R.id.action_sincro) {
-			
-			
+
+			Intent sincro = new Intent(TabsAdmPromo.this,
+					SplashActivityAdm.class);
+			startActivity(sincro);
 			return true;
 		}
 
 		if (id == R.id.action_cerrar) {
 
-			
-		//	 public void close(){
-			   	  Intent intent = new Intent(Intent.ACTION_MAIN);
-			   	  intent.addCategory(Intent.CATEGORY_HOME);
-			   	  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			   	  startActivity(intent);
-			//   	    }  
-			
-			
+			GeneralLogic.close(TabsAdmPromo.this);
+
 			return true;
 		}
-		
 
 		return super.onOptionsItemSelected(item);
 	}

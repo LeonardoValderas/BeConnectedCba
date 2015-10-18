@@ -1,6 +1,5 @@
 package com.beconnected.adm;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +8,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,41 +20,23 @@ import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Info;
 import com.beconnected.databases.Promo;
-import com.beconnected.databases.Request;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Bitmap.CompressFormat;
-import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.BatteryManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 
 public class SplashActivityAdm extends AppCompatActivity {
@@ -68,19 +47,12 @@ public class SplashActivityAdm extends AppCompatActivity {
 	private static final String TAG = "GCMRelated";
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
-	private boolean Promo = false;
-	private Handler hand;
-	private Timer timerActualizacion;
-	private Handler hand1;
-	private final int TIEMPO_SERVICIO = (1000 * 60 * 30); // 1000*60 = 1
 	boolean isGPSEnabled = false;
 	boolean isNetworkEnabled = false;
 	boolean canGetLocation = false;
 	boolean isInternet = false;
 	protected LocationManager locationManager;
 	private AlertsMenu alertsMenu;
-
-	private Intent bateria;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,28 +61,29 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 		splashProgress = (ProgressBar) findViewById(R.id.splashProgress);
 
-
 		if (GeneralLogic.conexionInternet(SplashActivityAdm.this)) {
 			init();
 		} else {
 
-			alertsMenu = new AlertsMenu(SplashActivityAdm.this, "ATENCIÓN!!!", "Por favor verifique su conexión de Internet",  "Aceptar", null);
-			alertsMenu.btnAceptar.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
-					alertsMenu.alertDialog.dismiss();
-					
-					
-					GeneralLogic.close(SplashActivityAdm.this);
-					
-				}
-			});
-			
+			alertsMenu = new AlertsMenu(SplashActivityAdm.this, "ATENCIÓN!!!",
+					"Por favor verifique su conexión de Internet", "Aceptar",
+					null);
+			alertsMenu.btnAceptar
+					.setOnClickListener(new View.OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+
+							alertsMenu.alertDialog.dismiss();
+
+							GeneralLogic.close(SplashActivityAdm.this);
+
+						}
+					});
+
 			alertsMenu.btnCancelar.setVisibility(View.GONE);
-			
+
 		}
 
 	}
@@ -123,15 +96,15 @@ public class SplashActivityAdm extends AppCompatActivity {
 		BL.getBl().dropTablasBDUsuario();
 		BL.getBl().crearTablasBDAmd();
 		BL.getBl().crearTablasBDUsuario();
-	//	BL.getBl().insertarInfoUsuario();
-		
-		registrarCel();
+		BL.getBl().insertarInfo();
+
+		// registrarCel();
 
 		new TaskEmpresa().execute("");
 		new TaskPromo().execute("");
 		new TaskInfo().execute("");
 
-		//Promo = getIntent().getBooleanExtra("PROMO", false);
+		// Promo = getIntent().getBooleanExtra("PROMO", false);
 
 	}
 
@@ -142,8 +115,8 @@ public class SplashActivityAdm extends AppCompatActivity {
 			regid = getRegistrationId(getApplicationContext());
 
 			// if (regid.isEmpty()) {
-			new com.beconnected.adm.RegisterAppAdm(getApplicationContext(), gcm,
-					getAppVersion(getApplicationContext())).execute();
+			new com.beconnected.adm.RegisterAppAdm(getApplicationContext(),
+					gcm, getAppVersion(getApplicationContext())).execute();
 			// }else{
 			//
 			// SharedPreferences preferenciasId = getSharedPreferences(
@@ -289,7 +262,6 @@ public class SplashActivityAdm extends AppCompatActivity {
 						obj.getString("LATITUD"), byteArray,
 						obj.getString("URL_LOGO"));
 
-				
 				BL.getBl().insertarEmpresaAdm(empresa);
 				BL.getBl().insertarEmpresaUsuario(empresa);
 
@@ -379,12 +351,6 @@ public class SplashActivityAdm extends AppCompatActivity {
 			// para listView
 			parseFeedPromo(result);
 
-			// splashProgress.setVisibility(View.INVISIBLE);
-			//
-			// Intent usuario = new Intent(SplashActivity.this,
-			// TabsUsuario.class);
-			// startActivity(usuario);
-
 		}
 
 		@Override
@@ -415,7 +381,7 @@ public class SplashActivityAdm extends AppCompatActivity {
 						obj.getInt("ID_EMPRESA"), null,
 						obj.getString("FECHA_INICIO"),
 						obj.getString("FECHA_FIN"));
-				
+
 				BL.getBl().insertarPromoAdm(promo);
 				BL.getBl().insertarPromoUsuario(promo);
 
@@ -460,8 +426,9 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 			splashProgress.setVisibility(View.INVISIBLE);
 
-			Intent usuario = new Intent(SplashActivityAdm.this, TabsAdmEmpresa.class);
-		//	usuario.putExtra("PROMO", Promo);
+			Intent usuario = new Intent(SplashActivityAdm.this,
+					TabsAdmEmpresa.class);
+			// usuario.putExtra("PROMO", Promo);
 			startActivity(usuario);
 
 		}
@@ -505,5 +472,5 @@ public class SplashActivityAdm extends AppCompatActivity {
 		}
 
 	}
-	
+
 }

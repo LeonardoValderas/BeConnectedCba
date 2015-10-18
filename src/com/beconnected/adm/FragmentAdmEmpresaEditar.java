@@ -1,6 +1,5 @@
 package com.beconnected.adm;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import org.json.JSONException;
@@ -8,33 +7,17 @@ import org.json.JSONObject;
 
 import com.beconnected.DividerItemDecoration;
 import com.beconnected.R;
-import com.beconnected.adm.FragmentAdmEmpresa.TaskEmpresa;
 import com.beconnected.databases.BL;
-import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
-import com.beconnected.databases.Promo;
+import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Request;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,8 +26,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 /**
@@ -54,24 +35,17 @@ import android.widget.Toast;
  */
 public class FragmentAdmEmpresaEditar extends Fragment {
 
-	private static final int SELECT_SINGLE_PICTURE = 1;
-
-	// private byte[] imagenEscudo = null;
 	private RecyclerView recycleViewMapa;
-	// private ImageButton imageButtonEquipo;
-	// private ByteArrayOutputStream baos;
-	private Bitmap myImage;
-	private Promo promo;
+
 	private ArrayList<Empresa> datosEmpresa;
 	private AdaptadorEmpresa adaptador;
-	private boolean insertar = true;
-	private int posicion;
 	private AlertsMenu alertsMenu;
-
+	private AlertsMenu alertsMenuInternet;
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
 	private int idEmpresa;
+
 	public static FragmentAdmEmpresaEditar newInstance() {
 		FragmentAdmEmpresaEditar fragment = new FragmentAdmEmpresaEditar();
 		return fragment;
@@ -96,21 +70,6 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 
 	}
 
-	// @Override
-	// public void onPause() {
-	// // Fragment fragment =
-	// (getChildFragmentManager().findFragmentById(R.id.map));
-	// FragmentAdmMapaEditar fragment = new FragmentAdmMapaEditar();
-	// FragmentTransaction ft =
-	// getActivity().getSupportFragmentManager().beginTransaction();
-	// ft.remove(fragment);
-	// ft.commit();
-	//
-	// //init();
-	// super.onPause();
-	// }
-	//
-
 	private void init() {
 
 		recycleViewMapa = (RecyclerView) getView().findViewById(
@@ -133,7 +92,6 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 								datosEmpresa.get(position).getLONGITUD());
 						empresaEdit.putExtra("latitud",
 								datosEmpresa.get(position).getLATIDUD());
-						//empresaEdit.putExtra("id", datosEmpresa.get(position).getID_EMPRESA());
 						empresaEdit.putExtra("posicion", position);
 
 						startActivity(empresaEdit);
@@ -144,7 +102,8 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 					public void onLongClick(View view, final int position) {
 
 						alertsMenu = new AlertsMenu(getActivity(), "ALERTA",
-								getActivity().getResources().getString(R.string.alert_empresa), null, null);
+								getActivity().getResources().getString(
+										R.string.alert_empresa), null, null);
 						alertsMenu.btnAceptar.setText("Aceptar");
 						alertsMenu.btnCancelar.setText("Cancelar");
 
@@ -155,101 +114,129 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 									@Override
 									public void onClick(View v) {
 										// TODO Auto-generated method stub
-										
-										
-										idEmpresa= datosEmpresa.get(position).getID_EMPRESA();
-										
+
+										idEmpresa = datosEmpresa.get(position)
+												.getID_EMPRESA();
+
 										Request p = new Request();
 										p.setMethod("POST");
 										p.setQuery("ELIMINAR");
-										p.setParametrosDatos("id_empresa",String.valueOf(idEmpresa));
-										
-										TaskEmpresa taskEmpresa = new TaskEmpresa();
-										taskEmpresa.execute(p);
-									
-//										Toast.makeText(
-//												getActivity(),
-//												getActivity().getResources().getString(R.string.empresa_eliminada),
-//												Toast.LENGTH_SHORT).show();
+										p.setParametrosDatos("id_empresa",
+												String.valueOf(idEmpresa));
 
-										alertsMenu.alertDialog.dismiss();
+										if (GeneralLogic
+												.conexionInternet(getActivity())) {
+
+											TaskEmpresa taskEmpresa = new TaskEmpresa();
+											taskEmpresa.execute(p);
+											alertsMenu.alertDialog.dismiss();
+										} else {
+
+											alertsMenuInternet = new AlertsMenu(
+													getActivity(),
+													"ATENCIÓN!!!",
+													"Por favor verifique su conexión de Internet",
+													"Aceptar", null);
+											alertsMenuInternet.btnAceptar
+													.setOnClickListener(new View.OnClickListener() {
+
+														@Override
+														public void onClick(
+																View v) {
+															// TODO
+															// Auto-generated
+															// method stub
+
+															alertsMenuInternet.alertDialog
+																	.dismiss();
+															alertsMenu.alertDialog
+																	.dismiss();
+															// close();
+
+														}
+													});
+
+											alertsMenuInternet.btnCancelar
+													.setVisibility(View.GONE);
+
+										}
+
+									
 
 									}
 
 								});
+						
+						alertsMenu.btnCancelar.setOnClickListener(new View.OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								
+								alertsMenu.alertDialog.dismiss();
+							}
+						});
 					}
 				}));
 
+	
 	}
-	
-	
-	
+
 	// enviar/editar/eliminar empresa
 
-		public class TaskEmpresa extends AsyncTask<Request, String, String> {
+	public class TaskEmpresa extends AsyncTask<Request, String, String> {
 
-			@Override
-			protected void onPreExecute() {
+		@Override
+		protected void onPreExecute() {
 
-				dialog = new ProgressDialog(getActivity());
-				dialog.setMessage("Procesando...");
-				dialog.show();
+			dialog = new ProgressDialog(getActivity());
+			dialog.setMessage("Procesando...");
+			dialog.show();
 
-			}
-
-			@Override
-			protected String doInBackground(Request... params) {
-
-				int success;
-
-				try {
-
-					JSONObject json = BL.getBl().getConnManager()
-							.gestionEmpresa(params[0]);
-
-					success = json.getInt(TAG_SUCCESS);
-					if (success == 1) {
-						BL.getBl().eliminarEmpresa(
-								idEmpresa);
-						BL.getBl().eliminarPromoEmpresa(
-								idEmpresa);
-						return json.getString(TAG_MESSAGE);
-					} else {
-						// Log.d("Registering Failure!",
-						// json.getString(TAG_MESSAGE));
-						return json.getString(TAG_MESSAGE);
-
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-				return null;
-
-				// String content = BL.getBl().getConnManager()
-				// .gestionEmpresa(params[0]);
-				// return content; // retorna string al metodo onPostExecute
-
-			}
-
-			@Override
-			protected void onPostExecute(String result) {
-				dialog.dismiss();
-
-				Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-				recyclerViewLoadEmpresa();
-				// Toast.makeText(context, "El Empre", Toast.LENGTH_SHORT).show();
-				// TaskPromo taskPromo = new TaskPromo();
-				// taskPromo.execute("");
-
-			}
-
-			@Override
-			protected void onProgressUpdate(String... values) {
-				// textViewDato.append(values[0]+"\n");
-			}
 		}
 
+		@Override
+		protected String doInBackground(Request... params) {
+
+			int success;
+
+			try {
+
+				JSONObject json = BL.getBl().getConnManager()
+						.gestionEmpresa(params[0]);
+
+				success = json.getInt(TAG_SUCCESS);
+				if (success == 1) {
+					BL.getBl().eliminarEmpresa(idEmpresa);
+					BL.getBl().eliminarPromoEmpresa(idEmpresa);
+					return json.getString(TAG_MESSAGE);
+				} else {
+					// Log.d("Registering Failure!",
+					// json.getString(TAG_MESSAGE));
+					return json.getString(TAG_MESSAGE);
+
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			return null;
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			dialog.dismiss();
+
+			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+			recyclerViewLoadEmpresa();
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// textViewDato.append(values[0]+"\n");
+		}
+	}
 
 	public void recyclerViewLoadEmpresa() {
 

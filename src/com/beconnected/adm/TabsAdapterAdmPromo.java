@@ -3,14 +3,16 @@ package com.beconnected.adm;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 
 public class TabsAdapterAdmPromo extends FragmentPagerAdapter {
 
 	final int PAGE_COUNT = 2;
-	private String tabTitles[] = new String[] { "CREAR", "EDITAR"};
+	
+	String crear = "CREAR";
+	
+	
+	private String tabTitles[] = new String[] { "CREAR", "EDITAR" };
+
 	
 	public TabsAdapterAdmPromo(FragmentManager fm) {
 		super(fm);
@@ -30,15 +32,11 @@ public class TabsAdapterAdmPromo extends FragmentPagerAdapter {
 		case 0:
 			fragmentTab = FragmentAdmPromo.newInstance();
 
-			
 			break;
 		case 1:
 			fragmentTab = FragmentAdmPromoEditar.newInstance();
 
-			
 			break;
-
-		
 
 		}
 
@@ -47,10 +45,7 @@ public class TabsAdapterAdmPromo extends FragmentPagerAdapter {
 
 	@Override
 	public CharSequence getPageTitle(int position) {
-		// Generate title based on item position
-////		tabTitles[position];
-//		SpannableString spannableString = new SpannableString("");
-//		spannableString.setSpan(tabTitles[position], 0, tabTitles[position].length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		
 		return tabTitles[position];
 	}
 }

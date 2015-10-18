@@ -253,7 +253,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return true;
 	}
 
-	
 	/**
 	 * 
 	 * Metodo que inserta una empresa Usuario.
@@ -274,7 +273,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database.insert("EMPRESA", null, cv);
 		return true;
 	}
-	
+
 	/**
 	 * 
 	 * Metodo que inserta una empresa Usuario.
@@ -428,7 +427,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return arrayEmpresa;
 	}
 
-
 	/**
 	 * 
 	 * Metodo que actualiza una empresa Amd.
@@ -505,7 +503,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database.insert("PROMO", null, cv);
 		return true;
 	}
-	
+
 	public boolean insertPromoAdm(Promo promo) throws SQLiteException {
 		boolean ban = false;
 
@@ -522,7 +520,6 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database.insert("PROMO", null, cv);
 		return true;
 	}
-
 
 	public boolean insertPromoUsuario(Promo promo) throws SQLiteException {
 		boolean ban = false;
@@ -972,11 +969,10 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		return res;
 	}
 
-	
-/**
- * Toma id de GMC para poder actualizar el regID del dispositivo.
- */
-	
+	/**
+	 * Toma id de GMC para poder actualizar el regID del dispositivo.
+	 */
+
 	public boolean insertIdAdm(int id) throws SQLiteException {
 		boolean ban = false;
 
@@ -987,7 +983,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database.insert("ID_ADM", null, cv);
 		return true;
 	}
-	
+
 	public boolean insertIdUsuario(int id) throws SQLiteException {
 		boolean ban = false;
 
@@ -1036,8 +1032,7 @@ public class SqliteConnection extends SQLiteOpenHelper {
 		database = null;
 		return id;
 	}
-	
-	
+
 	public int selectIdUsuario() {
 
 		String sql = "SELECT  * FROM ID";
