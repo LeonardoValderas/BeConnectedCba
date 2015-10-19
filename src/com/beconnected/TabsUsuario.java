@@ -39,6 +39,13 @@ public class TabsUsuario extends AppCompatActivity {
 
 	}
 
+	
+	
+	@Override protected void onRestart() {
+ 	   super.onRestart();
+ 		init();
+ 	  // Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+ 	}
 	public void init() {
 
 		Promo = getIntent().getBooleanExtra("PROMO", false);

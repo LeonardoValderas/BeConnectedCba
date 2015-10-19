@@ -64,7 +64,8 @@ public class FragmentAdmPromo extends Fragment {
 	private ProgressDialog dialog;
 	private static final String TAG_ID = "id";
 	private AlertsMenu alertsMenu;
-
+	private Communicator comm;
+	
 	public static FragmentAdmPromo newInstance() {
 		FragmentAdmPromo fragment = new FragmentAdmPromo();
 		return fragment;
@@ -79,7 +80,7 @@ public class FragmentAdmPromo extends Fragment {
 		super.onActivityCreated(state);
 
 		init();
-
+	    comm= (Communicator)getActivity();
 	}
 
 	@Override
@@ -388,8 +389,12 @@ public class FragmentAdmPromo extends Fragment {
 						int id = json.getInt(TAG_ID);
 						BL.getBl().insertarPromo(id, promo);
 						BL.getBl().getConnManager().push("P");
+						
+						insertar = true;
 					} else {
 						BL.getBl().actualizarPromo(promo);
+						insertar = true;
+						//comm.refresh();
 					}
 					return json.getString(TAG_MESSAGE);
 				} else {
@@ -411,9 +416,10 @@ public class FragmentAdmPromo extends Fragment {
 			dialog.dismiss();
 
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-			Intent i = new Intent(getActivity(), TabsAdmPromo.class);
-			startActivity(i);
-			insertar = true;
+//			Intent i = new Intent(getActivity(), TabsAdmPromo.class);
+//			startActivity(i);
+			comm.refresh();
+		//	insertar = true;
 
 		}
 

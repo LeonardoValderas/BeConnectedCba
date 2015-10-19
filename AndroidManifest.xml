@@ -48,8 +48,9 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDNOK9Duw6OgDkg4kCWYXfcI57kG_W-yXw" />
-        <!-- android:value="AIzaSyDj4iBBjRCw8qYlcjlTFYQRTgqGMcDvABU" /> -->
+             android:value="AIzaSyDj4iBBjRCw8qYlcjlTFYQRTgqGMcDvABU" />
+<!--             android:value="AIzaSyDNOK9Duw6OgDkg4kCWYXfcI57kG_W-yXw" /> -->
+       
         <activity
             android:name=".adm.TabsAdmEmpresa"
              android:screenOrientation="portrait" >

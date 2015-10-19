@@ -75,6 +75,7 @@ public class FragmentAdmEmpresa extends Fragment {
 	private String encodedImage = null;
 	private GPSTracker gps;
 	private AlertsMenu alertsMenu;
+	private Communicator comm;
 
 	public static FragmentAdmEmpresa newInstance() {
 		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
@@ -90,7 +91,7 @@ public class FragmentAdmEmpresa extends Fragment {
 		super.onActivityCreated(state);
 
 		init();
-
+      comm= (Communicator)getActivity();
 	}
 
 	@Override
@@ -242,6 +243,9 @@ public class FragmentAdmEmpresa extends Fragment {
 							latitud = 0.0;
 							longitud = 0.0;
 							imagenLogo = null;
+							mapa.clear();
+						//	insertar = true;
+							
 						} else {
 
 							alertsMenu = new AlertsMenu(
@@ -298,7 +302,7 @@ public class FragmentAdmEmpresa extends Fragment {
 							TaskEmpresa taskEmpresa = new TaskEmpresa();
 							taskEmpresa.execute(p);
 							mapa.clear();
-
+						//insertar = true;
 							if (imagenLogo != null) {
 
 								imagenLogo = null;
@@ -369,9 +373,13 @@ public class FragmentAdmEmpresa extends Fragment {
 						int id = json.getInt(TAG_ID);
 						BL.getBl().insertarEmpresa(id, empresa);
 						BL.getBl().getConnManager().push("E");
+						//comm.refresh();
+						insertar = true;
 
 					} else {
 						BL.getBl().actualizarEmpresa(empresa);
+					//	comm.refresh();
+						insertar = true;
 					}
 					return json.getString(TAG_MESSAGE);
 				} else {
@@ -393,9 +401,11 @@ public class FragmentAdmEmpresa extends Fragment {
 			dialog.dismiss();
 
 			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-			Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
-			startActivity(i);
-			insertar = true;
+//			Intent i = new Intent(getActivity(), TabsAdmEmpresa.class);
+//			startActivity(i);
+			comm.refresh();
+			
+		//	insertar = true;
 
 		}
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class TabsAdmPromo extends AppCompatActivity {
+public class TabsAdmPromo extends AppCompatActivity implements Communicator{
 
 	private Toolbar toolbar;
 	private ViewPager viewPager;
@@ -71,6 +72,18 @@ public class TabsAdmPromo extends AppCompatActivity {
 		});
 
 	}
+	
+	
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
+		FragmentManager manager = getSupportFragmentManager();
+			FragmentAdmPromoEditar fragment = (FragmentAdmPromoEditar) manager.findFragmentByTag("android:switcher:" + viewPager.getId() + ":" + 1);
+	
+			fragment.recyclerViewLoadPromo();		
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

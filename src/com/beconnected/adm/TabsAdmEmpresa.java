@@ -3,10 +3,17 @@ package com.beconnected.adm;
 import com.beconnected.R;
 import com.beconnected.TabsUsuario;
 import com.beconnected.databases.GeneralLogic;
+
+
+//import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+//import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +21,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class TabsAdmEmpresa extends AppCompatActivity {
+public class TabsAdmEmpresa extends AppCompatActivity implements Communicator{
 
 	private Toolbar toolbar;
 	private ViewPager viewPager;
@@ -26,6 +33,8 @@ public class TabsAdmEmpresa extends AppCompatActivity {
 		setContentView(R.layout.tabs_usuario);
 		
 		init();
+		
+
 	}
 
 	public void init() {
@@ -140,4 +149,16 @@ public class TabsAdmEmpresa extends AppCompatActivity {
 
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
+		FragmentManager manager = getSupportFragmentManager();
+			FragmentAdmEmpresaEditar fragment = (FragmentAdmEmpresaEditar) manager.findFragmentByTag("android:switcher:" + viewPager.getId() + ":" + 1);
+	
+			fragment.recyclerViewLoadEmpresa();		
+	}
+
+	
 }
