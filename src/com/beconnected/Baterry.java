@@ -1,5 +1,6 @@
 package com.beconnected;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -18,6 +19,7 @@ public class Baterry extends Service {
 	private int level;
 	private NotificationManager myNotificationManager;
 	private int notificationIdOne = 111;
+	private boolean battery = true;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -60,9 +62,11 @@ public class Baterry extends Service {
 			// int voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,
 			// 0);
 
-			if (level <= 20) {
+			if (level >= 20) {
 
 				displayNotificationOne();
+			
+				
 			}
 
 		}
@@ -72,18 +76,22 @@ public class Baterry extends Service {
 
 		// Invoking the default notification service
 
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				this);
+//		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+//				this);
+		NotificationManager	mNotificationManager = (NotificationManager) this
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		
 		Uri soundUri = RingtoneManager
 				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		mBuilder.setContentTitle("ATENCION!!!");
+	//	mBuilder.setContentTitle("ATENCION!!!");
+//
+	//	mBuilder.setContentText("Atención su bateria esta por debajo del 20%.");
+//
+	//	mBuilder.setTicker("Busque su centro de recarga mas cercano.");
 
-		mBuilder.setContentText("Atención su bateria esta por debajo del 20%.");
-
-		mBuilder.setTicker("Busque su centro de recarga mas cercano.");
-
-		mBuilder.setSmallIcon(R.drawable.ic_logo_bc);
-		mBuilder.setSound(soundUri);
+	//	mBuilder.setSmallIcon(R.drawable.ic_logo_bc);
+	//	mBuilder.setSound(soundUri);
 
 		// Increase notification number every time a new notification arrives
 
@@ -92,41 +100,63 @@ public class Baterry extends Service {
 		// Creates an explicit intent for an Activity in your app
 
 		Intent resultIntent = new Intent(this, TabsUsuario.class);
+     
+		resultIntent.putExtra("battery", battery);
 
-		resultIntent.putExtra("notificationId", level);
-
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				resultIntent, 0);
 		// This ensures that navigating backward from the Activity leads out of
 		// the app to Home page
+		
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				this)
+				// .setSmallIcon(R.drawable.ic_stat_gcm)
+				.setContentTitle("Be Connected")
+				.setSmallIcon(R.drawable.ic_logo_bc)
+				.setStyle(new NotificationCompat.BigTextStyle().bigText("Atención su bateria esta por debajo del 20%."))
+				.setAutoCancel(true).setSound(soundUri).setContentText("Busque su centro de recarga mas cercano.");
 
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		mBuilder.setContentIntent(contentIntent);
+		mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
+		mNotificationManager.notify(0, mBuilder.build());
+
+	//	TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
 		// Adds the back stack for the Intent
 
-		stackBuilder.addParentStack(TabsUsuario.class);
+//	stackBuilder.addParentStack(TabsUsuario.class);
 
 		// Adds the Intent that starts the Activity to the top of the stack
 
-		stackBuilder.addNextIntent(resultIntent);
+//		stackBuilder.addNextIntent(resultIntent);
 
-		PendingIntent resultPendingIntent =
+//		PendingIntent resultPendingIntent =
 
-		stackBuilder.getPendingIntent(
+//		stackBuilder.getPendingIntent(
 
-		0,
+	//	0,
 
-		PendingIntent.FLAG_ONE_SHOT // can only be used once
+	//	PendingIntent.FLAG_ONE_SHOT // can only be used once
 
-				);
+		//		);
 
 		// start the activity when the user clicks the notification text
 
-		mBuilder.setContentIntent(resultPendingIntent);
-
-		myNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	//	mBuilder.setContentIntent(resultPendingIntent);
+	//	mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
+	//	myNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 		// pass the Notification object to the system
 
-		myNotificationManager.notify(notificationIdOne, mBuilder.build());
+	//	myNotificationManager.notify(notificationIdOne, mBuilder.build());
 
 	}
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+	
 }

@@ -97,6 +97,7 @@ public class SplashActivityAdm extends AppCompatActivity {
 		BL.getBl().crearTablasBDAmd();
 		BL.getBl().crearTablasBDUsuario();
 		BL.getBl().insertarInfo();
+		BL.getBl().insertarInfoUsuario();
 
 		// registrarCel();
 

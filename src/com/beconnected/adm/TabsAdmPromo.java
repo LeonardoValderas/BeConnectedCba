@@ -4,6 +4,7 @@ import com.beconnected.R;
 import com.beconnected.TabsUsuario;
 import com.beconnected.databases.GeneralLogic;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -39,16 +40,18 @@ public class TabsAdmPromo extends AppCompatActivity implements Communicator{
 
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
+	
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPager.setAdapter(new TabsAdapterAdmPromo(
 				getSupportFragmentManager()));
 
 		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
+		
 		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 		tabLayout.setTabMode(TabLayout.MODE_FIXED);
 		tabLayout.setupWithViewPager(viewPager);
-
+	
+	
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset,

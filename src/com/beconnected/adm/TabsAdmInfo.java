@@ -11,6 +11,7 @@ import com.beconnected.databases.Info;
 import com.beconnected.databases.Request;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -32,7 +33,7 @@ public class TabsAdmInfo extends AppCompatActivity {
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
-
+	private  Typeface cFont;
 	private AlertsMenu alertsMenu;
 
 	@Override
@@ -47,9 +48,12 @@ public class TabsAdmInfo extends AppCompatActivity {
 
 		arrayInfo = BL.getBl().selectListaInfo();
 
-		editTextSomos = (EditText) findViewById(R.id.editTextSomos);
-		editTextContacto = (EditText) findViewById(R.id.editTextContacto);
 
+        cFont = Typeface.createFromAsset(getAssets(), "fonts/NEUROPOL.ttf");
+		editTextSomos = (EditText) findViewById(R.id.editTextSomos);
+		editTextSomos.setTypeface(cFont);
+		editTextContacto = (EditText) findViewById(R.id.editTextContacto);
+		editTextContacto.setTypeface(cFont);
 		if (arrayInfo.size() != 0) {
 
 			editTextSomos.setText(arrayInfo.get(0).getSOMOS().toString());

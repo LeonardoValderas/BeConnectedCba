@@ -14,6 +14,7 @@ import com.beconnected.databases.Request;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -65,7 +66,7 @@ public class FragmentAdmPromo extends Fragment {
 	private static final String TAG_ID = "id";
 	private AlertsMenu alertsMenu;
 	private Communicator comm;
-	
+	private  Typeface cFont;
 	public static FragmentAdmPromo newInstance() {
 		FragmentAdmPromo fragment = new FragmentAdmPromo();
 		return fragment;
@@ -92,11 +93,18 @@ public class FragmentAdmPromo extends Fragment {
 
 	private void init() {
 
+
+       cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 		empresaArray = BL.getBl().selectListaEmpresa();
 
 		editTextTitulo = (EditText) getView().findViewById(R.id.editTextTitulo);
+		editTextTitulo.setTypeface(cFont);
+		
 		editTextDescripcion = (EditText) getView().findViewById(
 				R.id.editTextDescripcion);
+		
+		editTextDescripcion.setTypeface(cFont);
+		
 		spinnerEmpresa = (Spinner) getView().findViewById(R.id.spinnerEmpresa);
 
 		adapterAdmPromo = new AdapterAdmPromo(getActivity(),

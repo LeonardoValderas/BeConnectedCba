@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Promo;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -26,6 +27,7 @@ public class FragmentPromos extends Fragment {
 	private RecyclerView recycleViewPromo;
 	private ArrayList<Promo> datosPromo;
 	private AdaptadorPromos adaptador;
+	   private  Typeface cFont;
 
 	public static FragmentPromos newInstance() {
 		FragmentPromos fragment = new FragmentPromos();
@@ -74,7 +76,7 @@ public class FragmentPromos extends Fragment {
 	}
 
 	public void recyclerViewLoadPromo() {
-
+		cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 		recycleViewPromo.setLayoutManager(new LinearLayoutManager(
 				getActivity(), LinearLayoutManager.VERTICAL, false));
 		recycleViewPromo.addItemDecoration(new DividerItemDecoration(
@@ -82,7 +84,7 @@ public class FragmentPromos extends Fragment {
 		recycleViewPromo.setItemAnimator(new DefaultItemAnimator());
 		datosPromo = BL.getBl().selectListaPromoUsuario();
 
-		adaptador = new AdaptadorPromos(datosPromo);
+		adaptador = new AdaptadorPromos(datosPromo,cFont);
 		// adaptador.notifyDataSetChanged();
 		recycleViewPromo.setAdapter(adaptador);
 

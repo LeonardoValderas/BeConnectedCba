@@ -7,6 +7,7 @@ import com.beconnected.databases.Promo;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ public class AdaptadorPromos extends
 	private View.OnClickListener listener;
 	private ArrayList<Promo> datosPromo;
 
+    private static  Typeface cFont;
 	public static class PromosViewHolder extends RecyclerView.ViewHolder {
 
 		private TextView tituloRecyclerView;
@@ -46,10 +48,12 @@ public class AdaptadorPromos extends
 		public void bindTitular(Promo promo) {
 
 			tituloRecyclerView.setText(promo.getTITULO());
+			tituloRecyclerView.setTypeface(cFont);
 			descripcionRecyclerView.setText(promo.getDESCRIPCION());
-			vigenciaRecyclerView.setText(promo.getFECHA_INICIO() + "-"
+			descripcionRecyclerView.setTypeface(cFont);
+			vigenciaRecyclerView.setText(promo.getFECHA_INICIO() + " al "
 					+ promo.getFECHA_FIN());
-
+			vigenciaRecyclerView.setTypeface(cFont);
 			byte[] image = promo.getLOGO();
 			if (image == null) {
 
@@ -64,9 +68,10 @@ public class AdaptadorPromos extends
 		}
 	}
 
-	public AdaptadorPromos(ArrayList<Promo> datosPromo) {
+	public AdaptadorPromos(ArrayList<Promo> datosPromo,
+			 Typeface cFont) {
 		this.datosPromo = datosPromo;
-
+		this.cFont = cFont;
 	}
 
 	@Override

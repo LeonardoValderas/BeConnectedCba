@@ -2,6 +2,7 @@ package com.beconnected.databases;
 
 import java.io.File;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -33,7 +34,7 @@ public class GeneralLogic {
 		intent.addCategory(Intent.CATEGORY_HOME);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
-		System.exit(0);
+		
 	}
 
 	public static boolean conexionInternet(Context context) {

@@ -14,6 +14,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,7 @@ public class FragmentAdmPromoEditar extends Fragment {
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
 	private int idPromo;
+    private  Typeface cFont;
 
 	public static FragmentAdmPromoEditar newInstance() {
 		FragmentAdmPromoEditar fragment = new FragmentAdmPromoEditar();
@@ -236,7 +238,7 @@ public class FragmentAdmPromoEditar extends Fragment {
 	}
 
 	public void recyclerViewLoadPromo() {
-
+		cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 		recycleViewPromo.setLayoutManager(new LinearLayoutManager(
 				getActivity(), LinearLayoutManager.VERTICAL, false));
 		recycleViewPromo.addItemDecoration(new DividerItemDecoration(
@@ -244,7 +246,7 @@ public class FragmentAdmPromoEditar extends Fragment {
 		recycleViewPromo.setItemAnimator(new DefaultItemAnimator());
 		datosPromo = BL.getBl().selectListaPromo();
 
-		adaptador = new AdaptadorPromos(datosPromo);
+		adaptador = new AdaptadorPromos(datosPromo,cFont);
 		// adaptador.notifyDataSetChanged();
 		recycleViewPromo.setAdapter(adaptador);
 

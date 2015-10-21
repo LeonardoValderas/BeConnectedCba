@@ -15,6 +15,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
 	private int idEmpresa;
+	private  Typeface cFont;
 
 	public static FragmentAdmEmpresaEditar newInstance() {
 		FragmentAdmEmpresaEditar fragment = new FragmentAdmEmpresaEditar();
@@ -246,8 +248,8 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewMapa.setItemAnimator(new DefaultItemAnimator());
 		datosEmpresa = BL.getBl().selectListaEmpresa();
-
-		adaptador = new AdaptadorEmpresa(datosEmpresa);
+	    cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
+		adaptador = new AdaptadorEmpresa(datosEmpresa,cFont);
 		// adaptador.notifyDataSetChanged();
 		recycleViewMapa.setAdapter(adaptador);
 

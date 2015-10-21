@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import com.beconnected.R;
 import com.beconnected.databases.Empresa;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +20,14 @@ public class AdaptadorEmpresa extends
 		RecyclerView.Adapter<AdaptadorEmpresa.EmpresaViewHolder> implements
 		View.OnClickListener {
 
-	// private final static Context context;
+	// private final Context context;
 
 	private View.OnClickListener listener;
 	private ArrayList<Empresa> datosEmpresa;
+	private static Typeface tf;
 
 	public static class EmpresaViewHolder extends RecyclerView.ViewHolder {
-
+		
 		private TextView tituloRecyclerView;
 
 		private ImageView imageViewLogo;
@@ -32,9 +35,11 @@ public class AdaptadorEmpresa extends
 		public EmpresaViewHolder(View itemView) {
 			super(itemView);
 
+		
+			
 			tituloRecyclerView = (TextView) itemView
 					.findViewById(R.id.tituloRecyclerView);
-
+			
 			imageViewLogo = (ImageView) itemView
 					.findViewById(R.id.imageViewLogo);
 		}
@@ -43,7 +48,7 @@ public class AdaptadorEmpresa extends
 		public void bindTitular(Empresa empresa) {
 
 			tituloRecyclerView.setText(empresa.getEMPRESA());
-
+			tituloRecyclerView.setTypeface(tf);
 			byte[] image = empresa.getLOGO();
 			if (image == null) {
 
@@ -58,8 +63,9 @@ public class AdaptadorEmpresa extends
 		}
 	}
 
-	public AdaptadorEmpresa(ArrayList<Empresa> datosEmpresa) {
+	public AdaptadorEmpresa(ArrayList<Empresa> datosEmpresa, Typeface tf) {
 		this.datosEmpresa = datosEmpresa;
+		 this.tf = tf;
 		// notifyItemInserted(datosEquipoArray);
 	}
 

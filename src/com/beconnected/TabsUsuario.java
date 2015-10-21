@@ -1,6 +1,8 @@
 package com.beconnected;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,10 +11,14 @@ import com.beconnected.adm.TabsAdmEmpresa;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
+
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +35,7 @@ public class TabsUsuario extends AppCompatActivity {
 	private TabLayout tabLayout;
 	private ProgressDialog dialog;
 	private boolean Promo = false;
+	private boolean battery = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +54,17 @@ public class TabsUsuario extends AppCompatActivity {
  	  // Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
  	}
 	public void init() {
-
+		battery = getIntent().getBooleanExtra("battery", false);
+		if(battery){
+			Intent	bateria = new Intent(getApplicationContext(), Baterry.class);
+		
+			stopService(bateria);
+			//startService(bateria);
+		}
+		
 		Promo = getIntent().getBooleanExtra("PROMO", false);
 		// Toolbar
+		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
@@ -152,6 +167,12 @@ public class TabsUsuario extends AppCompatActivity {
 
 	}
 
+
+	
+	
+	
+
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -168,6 +189,8 @@ public class TabsUsuario extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_usuario, menu);
 
+		 menu.getItem(0).setVisible(false);
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -184,6 +207,9 @@ public class TabsUsuario extends AppCompatActivity {
 		}
 		if (id == R.id.action_cerrar) {
 
+			
+			//finish();
+			
 			GeneralLogic.close(TabsUsuario.this);
 			return true;
 		}

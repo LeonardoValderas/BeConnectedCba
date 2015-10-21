@@ -4,6 +4,7 @@ import com.beconnected.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,8 @@ public class AlertsMenu {
 	public EditText editTextUno;
 	public EditText editTextDos;
 
+    private  Typeface cFont;
+
 	public AlertsMenu(Context context, String tituloA, String mensajeA,
 			String hint, String hint2) {
 		this.context = context;
@@ -29,23 +32,20 @@ public class AlertsMenu {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		cFont = Typeface.createFromAsset(context.getAssets(), "fonts/NEUROPOL.ttf");
 		View layout = inflater.inflate(R.layout.alerts_menu, null);
 		titulo = (TextView) layout.findViewById(R.id.alertGenericoTitulo);
+		titulo.setTypeface(cFont);
 		mensaje = (TextView) layout.findViewById(R.id.alertGenericoTxtMensaje);
-		//editTextUno = (EditText) layout.findViewById(R.id.editTextUno);
-
-		//editTextUno.setHint(hint);
-
-		//editTextDos = (EditText) layout.findViewById(R.id.editTextDos);
-
-		//editTextDos.setHint(hint2);
-
-//		tableroTextErrorVacio = (TextView) layout
-//				.findViewById(R.id.tableroTextErrorVacio);
+		mensaje.setTypeface(cFont);
+		
 		btnAceptar = (Button) layout.findViewById(R.id.alerGenericoBtnAceptar);
+		btnAceptar.setTypeface(cFont);
+		btnAceptar.setText(hint);
 		btnCancelar = (Button) layout
 				.findViewById(R.id.alerGenericoBtnCancelar);
-
+		btnCancelar.setTypeface(cFont);
+		btnCancelar.setText(hint2);
 		titulo.setText(tituloA);
 
 		builder.setView(layout);

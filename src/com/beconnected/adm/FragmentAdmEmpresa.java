@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,7 +77,7 @@ public class FragmentAdmEmpresa extends Fragment {
 	private GPSTracker gps;
 	private AlertsMenu alertsMenu;
 	private Communicator comm;
-
+	private  Typeface cFont;
 	public static FragmentAdmEmpresa newInstance() {
 		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
 		return fragment;
@@ -117,13 +118,14 @@ public class FragmentAdmEmpresa extends Fragment {
 				false);
 		imageLogo = (ImageView) getView().findViewById(R.id.imageLogo);
 		imageLogo.setImageResource(R.drawable.logo);
-
+        if(mapa==null){
 		mapa = ((SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
-
+        }
 		editTextEmpresa = (EditText) getView().findViewById(
 				R.id.editTextEmpresa);
-
+		cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
+		editTextEmpresa.setTypeface(cFont);
 		imageButtonLogo = (ImageButton) getView().findViewById(
 				R.id.imageButtonLogo);
 

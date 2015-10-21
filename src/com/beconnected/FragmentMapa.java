@@ -61,12 +61,6 @@ public class FragmentMapa extends Fragment {
 	}
 
 	@Override
-	public void onViewStateRestored(Bundle savedInstanceState) {
-		super.onViewStateRestored(savedInstanceState);
-		Log.i("leo", "onViewStateRestored");
-	}
-
-	@Override
 	public void onPause() {
 
 		Fragment fragment = (getChildFragmentManager()
@@ -77,6 +71,37 @@ public class FragmentMapa extends Fragment {
 		ft.commit();
 
 		super.onPause();
+	}
+//	@Override
+	public void onDestroyView() {
+		
+		commitMaps();
+		super.onDestroyView(); 
+//		Fragment fragment = (getChildFragmentManager()
+//				.findFragmentById(R.id.map));
+//		FragmentTransaction ft = getActivity().getSupportFragmentManager()
+//				.beginTransaction();
+//		ft.remove(fragment);
+//		ft.commit();
+	}
+
+	private void commitMaps() {
+		Fragment fragment = (getChildFragmentManager()
+				.findFragmentById(R.id.map));
+	    if (null != fragment) {
+	        getFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+	    }
+
+	
+	
+//		public void onDestroyView() 
+//		{
+//		        super.onDestroyView(); 
+//		        Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));  
+//		        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//		        ft.remove(fragment);
+//		        ft.commit();
+//		super.onDestroyView();
 	}
 
 	private void init() {
@@ -92,9 +117,11 @@ public class FragmentMapa extends Fragment {
 		}
 
 		empresaArray = BL.getBl().selectListaEmpresaUsuario();
+		
+		if (mapa==null){
 		mapa = ((SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
-
+		}
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
 				longCba), 14.0f));
 		// zoom long y lat de bariloche
@@ -115,6 +142,7 @@ public class FragmentMapa extends Fragment {
 					new LatLng(
 							Double.valueOf(empresaArray.get(i).getLATIDUD()),
 							Double.valueOf(empresaArray.get(i).getLONGITUD())))
+					.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map))		
 					.title(empresaArray.get(i).getEMPRESA()));
 		}
 

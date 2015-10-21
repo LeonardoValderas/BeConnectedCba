@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Info;
+
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,7 +18,7 @@ public class FragmentInfo extends Fragment {
 	private TextView editTextSomos;
 	private TextView editTextContacto;
 	private ArrayList<Info> arrayInfo;
-
+	private  Typeface cFont;
 	public static FragmentInfo newInstance() {
 		FragmentInfo fragment = new FragmentInfo();
 		return fragment;
@@ -42,12 +44,15 @@ public class FragmentInfo extends Fragment {
 
 	private void init() {
 
+
+     cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 		arrayInfo = BL.getBl().selectListaInfoUsuario();
 
 		editTextSomos = (TextView) getView().findViewById(R.id.editTextSomos);
-		editTextContacto = (TextView) getView().findViewById(
+		editTextSomos.setTypeface(cFont);
+		editTextContacto = (TextView) getView().findViewById(		
 				R.id.editTextContacto);
-
+		editTextContacto.setTypeface(cFont);
 		if (arrayInfo.size() != 0) {
 
 			editTextSomos.setText(arrayInfo.get(0).getSOMOS().toString());
