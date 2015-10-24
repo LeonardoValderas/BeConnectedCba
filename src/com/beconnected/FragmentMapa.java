@@ -6,11 +6,19 @@ import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.app.FragmentManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -30,6 +38,7 @@ import android.widget.ImageButton;
  */
 public class FragmentMapa extends Fragment {
 	private GoogleMap mapa;
+	private SupportMapFragment supportMapFragment; 
 	public static double latCba = -31.400000000000000;
 	public static double longCba = -64.183300000000000;
 	private double mi_latitude;
@@ -37,6 +46,8 @@ public class FragmentMapa extends Fragment {
 	private ArrayList<Empresa> empresaArray;
 	private GPSTracker gps;
 
+
+	
 	public static FragmentMapa newInstance() {
 		FragmentMapa fragment = new FragmentMapa();
 		return fragment;
@@ -117,34 +128,108 @@ public class FragmentMapa extends Fragment {
 		}
 
 		empresaArray = BL.getBl().selectListaEmpresaUsuario();
+	
+		//1
+		supportMapFragment =(SupportMapFragment) getChildFragmentManager()
+		.findFragmentById(R.id.map);
 		
-		if (mapa==null){
-		mapa = ((SupportMapFragment) getChildFragmentManager()
-				.findFragmentById(R.id.map)).getMap();
+		
+		//2
+		if(supportMapFragment==null){
+			
+			android.support.v4.app.FragmentManager fragment = getFragmentManager();
+		        FragmentTransaction fragmentTransaction = fragment.beginTransaction();
+		        supportMapFragment = SupportMapFragment.newInstance();
+		        fragmentTransaction.replace(R.id.map, supportMapFragment).commit();
+			
 		}
-		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
-				longCba), 14.0f));
-		// zoom long y lat de bariloche
-		CameraPosition cameraPosition = new CameraPosition.Builder()
-				.target(new LatLng(mi_latitude, mi_longitude)).zoom(15).build();
-		mapa.animateCamera(CameraUpdateFactory
-				.newCameraPosition(cameraPosition));
+		 if (supportMapFragment != null)
+		    { 
+			 supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+		    
+	            @Override public void onMapReady(GoogleMap mapa) {
+	                if (mapa != null) {
+	                	
+	                	mapa.getUiSettings().setAllGesturesEnabled(true);
+	                	mapa.getUiSettings().setMapToolbarEnabled(false);
+	                	mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
+	            				longCba), 14.0f));
+	            		// zoom long y lat de bariloche
+	            		CameraPosition cameraPosition = new CameraPosition.Builder()
+	            				.target(new LatLng(mi_latitude, mi_longitude)).zoom(15).build();
+	            		mapa.animateCamera(CameraUpdateFactory
+	            				.newCameraPosition(cameraPosition));
 
-		mapa.addMarker(new MarkerOptions()
-				.position(new LatLng(mi_latitude, mi_longitude))
-				.title("Mi Posicion")
-				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+	            		mapa.addMarker(new MarkerOptions()
+	            				.position(new LatLng(mi_latitude, mi_longitude))
+	            				.title("Mi Posicion")
+	            				.icon(BitmapDescriptorFactory
+	            						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
-		for (int i = 0; i < empresaArray.size(); i++) {
+	            		for (int i = 0; i < empresaArray.size(); i++) {
+	            		
+	            			
+	            			
+	            			mapa.addMarker(new MarkerOptions().position(
+	            					new LatLng(
+	            							Double.valueOf(empresaArray.get(i).getLATIDUD()),
+	            							Double.valueOf(empresaArray.get(i).getLONGITUD())))
+	            					.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map))
+	            			
+	            					.title(empresaArray.get(i).getEMPRESA()));
+	            		}
+	                
+	            		
+	            		mapa.setOnInfoWindowClickListener(new OnInfoWindowClickListener()
+	                     {   
+	                         @Override
+	                         public void onInfoWindowClick(Marker arg0) {
+	                        	
+	                        
+	                        	 Uri gmmIntentUri = Uri.parse("geo:"+arg0.getPosition().latitude +","+arg0.getPosition().longitude+"?q="+arg0.getTitle().toString());
+	                        	 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+	                        	 mapIntent.setPackage("com.google.android.apps.maps");
+	                        	 startActivity(mapIntent);
+	                 
+	                         }
 
-			mapa.addMarker(new MarkerOptions().position(
-					new LatLng(
-							Double.valueOf(empresaArray.get(i).getLATIDUD()),
-							Double.valueOf(empresaArray.get(i).getLONGITUD())))
-					.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map))		
-					.title(empresaArray.get(i).getEMPRESA()));
-		}
+	                     });   
+	            		
+	                }
+
+	            }
+	        });
+		    }
+//		if (mapa==null){
+//	
+//			
+//			
+//        mapa = ((SupportMapFragment) getChildFragmentManager()
+//				.findFragmentById(R.id.map)).getMap();
+//		}
+//		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
+//				longCba), 14.0f));
+//		// zoom long y lat de bariloche
+//		CameraPosition cameraPosition = new CameraPosition.Builder()
+//				.target(new LatLng(mi_latitude, mi_longitude)).zoom(15).build();
+//		mapa.animateCamera(CameraUpdateFactory
+//				.newCameraPosition(cameraPosition));
+//
+//		mapa.addMarker(new MarkerOptions()
+//				.position(new LatLng(mi_latitude, mi_longitude))
+//				.title("Mi Posicion")
+//				.icon(BitmapDescriptorFactory
+//						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+//
+//		for (int i = 0; i < empresaArray.size(); i++) {
+//
+//			mapa.addMarker(new MarkerOptions().position(
+//					new LatLng(
+//							Double.valueOf(empresaArray.get(i).getLATIDUD()),
+//							Double.valueOf(empresaArray.get(i).getLONGITUD())))
+//					.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map))		
+//					.title(empresaArray.get(i).getEMPRESA()));
+//		}
 
 	}
 

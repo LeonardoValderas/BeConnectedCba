@@ -6,6 +6,7 @@ import com.beconnected.databases.GeneralLogic;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,7 +30,9 @@ public class TabsAdmPromo extends AppCompatActivity implements Communicator{
 
 		init();
 	}
-
+	public Parcelable saveState() {
+	    return null;
+	}
 	public void init() {
 
 		// Toolbar

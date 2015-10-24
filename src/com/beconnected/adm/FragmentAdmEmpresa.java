@@ -13,6 +13,7 @@ import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Request;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
@@ -78,6 +80,7 @@ public class FragmentAdmEmpresa extends Fragment {
 	private AlertsMenu alertsMenu;
 	private Communicator comm;
 	private  Typeface cFont;
+	private SupportMapFragment supportMapFragment; 
 	public static FragmentAdmEmpresa newInstance() {
 		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
 		return fragment;
@@ -118,7 +121,38 @@ public class FragmentAdmEmpresa extends Fragment {
 				false);
 		imageLogo = (ImageView) getView().findViewById(R.id.imageLogo);
 		imageLogo.setImageResource(R.drawable.logo);
-        if(mapa==null){
+
+//		//1
+//				supportMapFragment =(SupportMapFragment) getChildFragmentManager()
+//				.findFragmentById(R.id.map);
+//				
+//				
+//				//2
+//				if(supportMapFragment==null){
+//					
+//					android.support.v4.app.FragmentManager fragment = getFragmentManager();
+//				        FragmentTransaction fragmentTransaction = fragment.beginTransaction();
+//				        supportMapFragment = SupportMapFragment.newInstance();
+//				        fragmentTransaction.replace(R.id.map, supportMapFragment).commit();
+//					
+//				}
+//				 if (supportMapFragment != null)
+//				    { 
+//					 supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+//				    
+//			            @Override public void onMapReady(GoogleMap mapa) {
+//			                if (mapa != null) {
+//			                	
+//			                	mapa.getUiSettings().setAllGesturesEnabled(true);
+//			                	mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
+//			            				longCba), 14.0f));
+//			                }
+//
+//			            }
+//			        });
+//				    }
+//		
+		if(mapa==null){
 		mapa = ((SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
         }

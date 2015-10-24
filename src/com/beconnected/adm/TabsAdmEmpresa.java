@@ -8,6 +8,7 @@ import com.beconnected.databases.GeneralLogic;
 //import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -36,7 +37,9 @@ public class TabsAdmEmpresa extends AppCompatActivity implements Communicator{
 		
 
 	}
-
+	public Parcelable saveState() {
+	    return null;
+	}
 	public void init() {
 
 		// Toolbar

@@ -6,8 +6,9 @@ import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class TabsAdapterAdmPromo extends FragmentPagerAdapter {
+public class TabsAdapterAdmPromo extends FragmentStatePagerAdapter {
 
 	final int PAGE_COUNT = 2;
 

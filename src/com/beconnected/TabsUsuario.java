@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +54,11 @@ public class TabsUsuario extends AppCompatActivity {
  		init();
  	  // Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
  	}
+	
+	//@Override
+	public Parcelable saveState() {
+	    return null;
+	}
 	public void init() {
 		battery = getIntent().getBooleanExtra("battery", false);
 		if(battery){

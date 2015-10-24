@@ -3,11 +3,12 @@ package com.beconnected.adm;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 
-public class TabsAdapterAdmEmpresa extends FragmentPagerAdapter {
+public class TabsAdapterAdmEmpresa extends FragmentStatePagerAdapter {
 
 	final int PAGE_COUNT = 2;
 	private String tabTitles[] = new String[] { "CREAR", "EDITAR" };

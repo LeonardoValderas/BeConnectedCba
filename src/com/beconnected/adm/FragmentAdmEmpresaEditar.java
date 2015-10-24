@@ -60,7 +60,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
-
+		
 		init();
 	}
 
@@ -73,9 +73,9 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	}
 
 	private void init() {
-
 		recycleViewMapa = (RecyclerView) getView().findViewById(
 				R.id.recycleViewMapa);
+		
 
 		recyclerViewLoadEmpresa();
 		recycleViewMapa.addOnItemTouchListener(new RecyclerTouchListener(

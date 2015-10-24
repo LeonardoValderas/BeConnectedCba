@@ -62,7 +62,7 @@ public class Baterry extends Service {
 			// int voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,
 			// 0);
 
-			if (level >= 20) {
+			if (level <= 20) {
 
 				displayNotificationOne();
 			
