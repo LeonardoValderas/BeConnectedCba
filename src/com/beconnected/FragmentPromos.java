@@ -1,5 +1,6 @@
 package com.beconnected;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import com.beconnected.databases.BL;
@@ -12,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +29,7 @@ public class FragmentPromos extends Fragment {
 	private RecyclerView recycleViewPromo;
 	private ArrayList<Promo> datosPromo;
 	private AdaptadorPromos adaptador;
+	private static View view;
 	   private  Typeface cFont;
 
 	public static FragmentPromos newInstance() {
@@ -48,10 +51,43 @@ public class FragmentPromos extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_promo, container, false);
+		
+		 if (view != null) {
+	            ViewGroup parent = (ViewGroup) view.getParent();
+	            if (parent != null)
+	                parent.removeView(view);
+	        }
+	        try {
+	            view = inflater.inflate(R.layout.fragment_promo, container, false);
+	          //  TextView messageTextView = (TextView)view.findViewById(R.id.textView);
+	           // messageTextView.setText(message);
+	        } catch (InflateException e) {
+	            /* map is already there, just return view as it is */
+	        }
+
+//	      View v = inflater.inflate(R.layout.myfragment_layout, container, false);
+
+
+	    return view;
+		//return inflater.inflate(R.layout.fragment_promo, container, false);
 
 	}
 
+	
+	   @Override
+		public void onDetach() {
+		    super.onDetach();
+		    try {
+		        Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+		        childFragmentManager.setAccessible(true);
+		        childFragmentManager.set(this, null);
+		    } catch (NoSuchFieldException e) {
+		        throw new RuntimeException(e);
+		    } catch (IllegalAccessException e) {
+		        throw new RuntimeException(e);
+		    }
+		}
+	
 	private void init() {
 
 		recycleViewPromo = (RecyclerView) getView().findViewById(
@@ -75,6 +111,13 @@ public class FragmentPromos extends Fragment {
 
 	}
 
+	
+	@Override
+	public void onResume() {
+		
+		super.onResume();
+	}
+	
 	public void recyclerViewLoadPromo() {
 		cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 		recycleViewPromo.setLayoutManager(new LinearLayoutManager(

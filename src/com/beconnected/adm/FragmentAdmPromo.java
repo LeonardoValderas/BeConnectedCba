@@ -87,6 +87,7 @@ public class FragmentAdmPromo extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+	
 		return inflater.inflate(R.layout.fragment_adm_promo, container, false);
 
 	}
@@ -127,13 +128,14 @@ public class FragmentAdmPromo extends Fragment {
 
 			idEmpresaExtra = getActivity().getIntent()
 					.getIntExtra("empresa", 0);
+			
 			tituloExtra = getActivity().getIntent().getStringExtra("titulo");
 			descripcionExtra = getActivity().getIntent().getStringExtra(
 					"descripcion");
 			desdeExtra = getActivity().getIntent().getStringExtra("desde");
 			hastaExtra = getActivity().getIntent().getStringExtra("hasta");
-
-			spinnerEmpresa.setSelection(idEmpresaExtra - 1);
+		   
+			spinnerEmpresa.setSelection(getPositionEmpresa(idEmpresaExtra));
 			editTextTitulo.setText(tituloExtra);
 			editTextDescripcion.setText(descripcionExtra);
 			buttonDesde.setText(desdeExtra);
@@ -224,10 +226,10 @@ public class FragmentAdmPromo extends Fragment {
 							Toast.LENGTH_SHORT).show();
 
 				} else {
-
+					empresa = (Empresa) spinnerEmpresa.getSelectedItem();
 					if (insertar) {
 
-						empresa = (Empresa) spinnerEmpresa.getSelectedItem();
+						
 
 						if (radioButtonStock.isChecked()) {
 
@@ -267,6 +269,7 @@ public class FragmentAdmPromo extends Fragment {
 							editTextDescripcion.setText("");
 							buttonDesde.setText("Desde");
 							buttonHasta.setText("Hasta");
+							buttonHasta.setEnabled(true);
 							radioButtonStock.setChecked(false);
 						} else {
 
@@ -300,18 +303,16 @@ public class FragmentAdmPromo extends Fragment {
 							promo = new Promo(promoArray.get(posicion)
 									.getID_PROMO(), editTextTitulo.getText()
 									.toString(), editTextDescripcion.getText()
-									.toString(), promoArray.get(posicion)
-									.getID_EMPRESA(), null, buttonDesde
+									.toString(), empresa.getID_EMPRESA(), null, buttonDesde
 									.getText().toString(), "Hasta Agotar Stock");
 
 						} else {
 							promoArray = BL.getBl().selectListaPromo();
-
+							//promoArray.get(posicion).getID_EMPRESA()
 							promo = new Promo(promoArray.get(posicion)
 									.getID_PROMO(), editTextTitulo.getText()
 									.toString(), editTextDescripcion.getText()
-									.toString(), promoArray.get(posicion)
-									.getID_EMPRESA(), null, buttonDesde
+									.toString(), empresa.getID_EMPRESA() , null, buttonDesde
 									.getText().toString(), buttonHasta
 									.getText().toString());
 
@@ -367,6 +368,20 @@ public class FragmentAdmPromo extends Fragment {
 			}
 		});
 	}
+	
+	//get posicion en el spinner de la empresa promo
+	private int getPositionEmpresa(int idEmpresa){
+
+		int index = 0;
+
+        for (int i=0;i<empresaArray.size();i++){
+            if (empresaArray.get(i).getID_EMPRESA()==(idEmpresa)){
+            	 index = i;
+            }
+        }
+        return index;
+}
+	
 
 	// enviar/editar promo
 

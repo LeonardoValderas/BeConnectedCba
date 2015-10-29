@@ -1,6 +1,7 @@
 package com.beconnected;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,55 +13,58 @@ import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 public class TabsUsuario extends AppCompatActivity {
-
+	List<Fragment> listFragments;
 	private Toolbar toolbar;
 	private ViewPager viewPager;
 	private TabLayout tabLayout;
 	private ProgressDialog dialog;
 	private boolean Promo = false;
 	private boolean battery = false;
-
+	private FragmentTransaction mCurTransaction;
+	private static final String TAG = "FragmentPagerAdapter";
+	private static final boolean DEBUG = false;
+	final int PAGE_COUNT = 3;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
-
+		
 		init();
-
+		
+	
+		
 	}
 
 	
 	
-	@Override protected void onRestart() {
- 	   super.onRestart();
- 		init();
- 	  // Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
- 	}
+
 	
-	//@Override
-	public Parcelable saveState() {
-	    return null;
-	}
+
+	
 	public void init() {
 		battery = getIntent().getBooleanExtra("battery", false);
+		Promo = getIntent().getBooleanExtra("PROMO", false);
+		
 		if(battery){
 			Intent	bateria = new Intent(getApplicationContext(), Baterry.class);
 		
@@ -68,7 +72,7 @@ public class TabsUsuario extends AppCompatActivity {
 			//startService(bateria);
 		}
 		
-		Promo = getIntent().getBooleanExtra("PROMO", false);
+		
 		// Toolbar
 		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -80,16 +84,26 @@ public class TabsUsuario extends AppCompatActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
+		viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
 		viewPager
 				.setAdapter(new TabsAdapterUsuario(getSupportFragmentManager()));
 
+	
 		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
 		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 		tabLayout.setTabMode(TabLayout.MODE_FIXED);
 		tabLayout.setupWithViewPager(viewPager);
 
 		if (Promo) {
-			viewPager.setCurrentItem(1);
+		viewPager.post(new Runnable() {
+	        @Override
+	        public void run() {
+	            viewPager.setCurrentItem(1);
+	            getIntent().removeExtra("PROMO"); 
+	        }
+	        
+	    });
+		
 		}
 
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -102,16 +116,109 @@ public class TabsUsuario extends AppCompatActivity {
 			@Override
 			public void onPageSelected(int position) {
 
+//				if (Promo) {
+//					viewPager.setCurrentItem(1);
+//				}
 			}
 
 			@Override
 			public void onPageScrollStateChanged(int state) {
 
 			}
+		   
 		});
 
+		  Promo=false;
 	}
 
+	
+	public class TabsAdapterUsuario extends FragmentPagerAdapter  {
+		private FragmentManager fm;
+		//final int PAGE_COUNT = 3;
+		private String tabTitles[] = new String[] { "MAPA", "PROMOS", "INFO" };
+
+		public TabsAdapterUsuario(FragmentManager fm) {
+			super(fm);
+			this.fm = fm;
+		}
+
+		@Override
+		public int getCount() {
+			return PAGE_COUNT;
+		}
+
+				
+		@Override
+		public Fragment getItem(int position) {
+		
+			Fragment fragmentTab = fm.findFragmentByTag("android:switcher:"
+					+ viewPager.getId() + ":" + getItemId(position));
+			// Fragment fragmentTab = null;
+
+			if (fragmentTab != null) {
+				return fragmentTab;
+			}
+
+			switch (position) {
+			case 0:
+				fragmentTab = FragmentMapa.newInstance();
+
+				break;
+			case 1:
+				fragmentTab = FragmentPromos.newInstance();
+
+				break;
+
+			case 2:
+				fragmentTab = FragmentInfo.newInstance();
+
+				break;
+
+			}
+
+			return fragmentTab;
+		}
+
+		
+		@Override
+		public Object instantiateItem(View container, int position) {
+
+			if (fm == null) {
+				mCurTransaction = fm.beginTransaction();
+			}
+
+			// Do we already have this fragment?
+			String name = makeFragmentName(container.getId(), position);
+			Fragment fragment = fm.findFragmentByTag(name);
+			if (fragment != null) {
+				if (DEBUG)
+					Log.v(TAG, "Attaching item #" + position + ": f="
+							+ fragment);
+				mCurTransaction.attach(fragment);
+			} else {
+				fragment = getItem(position);
+				if (DEBUG)
+					Log.v(TAG, "Adding item #" + position + ": f=" + fragment);
+				mCurTransaction.add(container.getId(), fragment,
+						makeFragmentName(container.getId(), position));
+			}
+
+			return fragment;
+		}
+
+		private String makeFragmentName(int viewId, int index) {
+			return "android:switcher:" + viewId + ":" + index;
+		}
+		@Override
+		public CharSequence getPageTitle(int position) {
+
+			return tabTitles[position];
+		}
+	
+	}
+	
+	
+	
 	public class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -173,11 +280,6 @@ public class TabsUsuario extends AppCompatActivity {
 
 	}
 
-
-	
-	
-	
-
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -195,11 +297,18 @@ public class TabsUsuario extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_usuario, menu);
 
-		 menu.getItem(0).setVisible(false);
+	//	 menu.getItem(0).setVisible(false);
 		
 		return super.onCreateOptionsMenu(menu);
 	}
 
+//	@Override
+//	protected void onDestroy() {
+//		// TODO Auto-generated method stub
+//		//finish();
+//		super.onDestroy();
+//	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();

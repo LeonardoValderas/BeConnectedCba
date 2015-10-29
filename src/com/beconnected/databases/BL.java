@@ -82,13 +82,13 @@ public class BL {
 
 	}
 
-	public ArrayList<Empresa> selectListaEmpresa() {
+	public synchronized ArrayList<Empresa> selectListaEmpresa() {
 
 		return DL.getDl().getSqliteConnection().selectListaEmpresa();
 
 	}
 
-	public ArrayList<Empresa> selectListaEmpresaUsuario() {
+	public synchronized ArrayList<Empresa> selectListaEmpresaUsuario() {
 
 		return DL.getDl().getSqliteConnection().selectListaEmpresaUsuario();
 
@@ -124,13 +124,13 @@ public class BL {
 
 	}
 
-	public ArrayList<Promo> selectListaPromo() {
+	public synchronized ArrayList<Promo> selectListaPromo() {
 
 		return DL.getDl().getSqliteConnection().selectListaPromo();
 
 	}
 
-	public ArrayList<Promo> selectListaPromoUsuario() {
+	public synchronized ArrayList<Promo> selectListaPromoUsuario() {
 
 		return DL.getDl().getSqliteConnection().selectListaPromoUsuario();
 

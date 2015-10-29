@@ -1,5 +1,6 @@
 package com.beconnected;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import com.beconnected.databases.BL;
@@ -25,6 +26,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +47,7 @@ public class FragmentMapa extends Fragment {
 	private double mi_longitude;
 	private ArrayList<Empresa> empresaArray;
 	private GPSTracker gps;
-
+	private static View view;
 
 	
 	public static FragmentMapa newInstance() {
@@ -67,8 +69,40 @@ public class FragmentMapa extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_mapa, container, false);
+		
+		 if (view != null) {
+	            ViewGroup parent = (ViewGroup) view.getParent();
+	            if (parent != null)
+	                parent.removeView(view);
+	        }
+	        try {
+	            view = inflater.inflate(R.layout.fragment_mapa, container, false);
+	          //  TextView messageTextView = (TextView)view.findViewById(R.id.textView);
+	           // messageTextView.setText(message);
+	        } catch (InflateException e) {
+	            /* map is already there, just return view as it is */
+	        }
 
+//	      View v = inflater.inflate(R.layout.myfragment_layout, container, false);
+
+
+	    return view;
+	//	return inflater.inflate(R.layout.fragment_mapa, container, false);
+
+	}
+	
+	   @Override
+	public void onDetach() {
+	    super.onDetach();
+	    try {
+	        Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+	        childFragmentManager.setAccessible(true);
+	        childFragmentManager.set(this, null);
+	    } catch (NoSuchFieldException e) {
+	        throw new RuntimeException(e);
+	    } catch (IllegalAccessException e) {
+	        throw new RuntimeException(e);
+	    }
 	}
 
 	@Override
@@ -83,37 +117,20 @@ public class FragmentMapa extends Fragment {
 
 		super.onPause();
 	}
-//	@Override
-	public void onDestroyView() {
-		
-		commitMaps();
-		super.onDestroyView(); 
-//		Fragment fragment = (getChildFragmentManager()
-//				.findFragmentById(R.id.map));
-//		FragmentTransaction ft = getActivity().getSupportFragmentManager()
-//				.beginTransaction();
-//		ft.remove(fragment);
-//		ft.commit();
-	}
 
-	private void commitMaps() {
-		Fragment fragment = (getChildFragmentManager()
-				.findFragmentById(R.id.map));
-	    if (null != fragment) {
-	        getFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+
+	
+	@Override
+	public void onResume() {
+	    super.onResume();
+	    if (mapa == null) {
+	        mapa = supportMapFragment.getMap();
+	        mapa.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
 	    }
+	  }
 
-	
-	
-//		public void onDestroyView() 
-//		{
-//		        super.onDestroyView(); 
-//		        Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));  
-//		        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//		        ft.remove(fragment);
-//		        ft.commit();
-//		super.onDestroyView();
-	}
+
+
 
 	private void init() {
 

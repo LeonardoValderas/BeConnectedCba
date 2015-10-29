@@ -50,10 +50,10 @@ public class AdaptadorPromos extends
 			tituloRecyclerView.setText(promo.getTITULO());
 			tituloRecyclerView.setTypeface(cFont);
 			descripcionRecyclerView.setText(promo.getDESCRIPCION());
-			descripcionRecyclerView.setTypeface(cFont);
+			//descripcionRecyclerView.setTypeface(cFont);
 			vigenciaRecyclerView.setText(promo.getFECHA_INICIO() + " al "
 					+ promo.getFECHA_FIN());
-			vigenciaRecyclerView.setTypeface(cFont);
+		//	vigenciaRecyclerView.setTypeface(cFont);
 			byte[] image = promo.getLOGO();
 			if (image == null) {
 

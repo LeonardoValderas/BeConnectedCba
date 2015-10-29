@@ -75,7 +75,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	private void init() {
 		recycleViewMapa = (RecyclerView) getView().findViewById(
 				R.id.recycleViewMapa);
-		
+		   cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 
 		recyclerViewLoadEmpresa();
 		recycleViewMapa.addOnItemTouchListener(new RecyclerTouchListener(
@@ -248,7 +248,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewMapa.setItemAnimator(new DefaultItemAnimator());
 		datosEmpresa = BL.getBl().selectListaEmpresa();
-	    cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
+	 
 		adaptador = new AdaptadorEmpresa(datosEmpresa,cFont);
 		// adaptador.notifyDataSetChanged();
 		recycleViewMapa.setAdapter(adaptador);
@@ -327,4 +327,9 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 
 	}
 
+	@Override
+	public void onDestroyView() {
+		// TODO Auto-generated method stub
+		super.onDestroyView();
+	}
 }

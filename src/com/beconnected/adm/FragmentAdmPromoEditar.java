@@ -73,6 +73,7 @@ public class FragmentAdmPromoEditar extends Fragment {
 
 		recycleViewPromo = (RecyclerView) getView().findViewById(
 				R.id.recycleViewPromo);
+		cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 		recyclerViewLoadPromo();
 
 		recycleViewPromo.addOnItemTouchListener(new RecyclerTouchListener(
@@ -238,7 +239,7 @@ public class FragmentAdmPromoEditar extends Fragment {
 	}
 
 	public void recyclerViewLoadPromo() {
-		cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
+	
 		recycleViewPromo.setLayoutManager(new LinearLayoutManager(
 				getActivity(), LinearLayoutManager.VERTICAL, false));
 		recycleViewPromo.addItemDecoration(new DividerItemDecoration(

@@ -26,24 +26,11 @@ public class AdapterAdmPromo extends ArrayAdapter<Empresa> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) { // Ordinary
-																			// view
-																			// in
-																			// Spinner,
-																			// we
-																			// use
-																			// android.R.layout.simple_spinner_item
+	public View getView(int position, View convertView, ViewGroup parent) {
 		return super.getView(position, convertView, parent);
 	}
 
-	public View getDropDownView(int position, View convertView, ViewGroup parent) { // This
-																					// view
-																					// starts
-																					// when
-																					// we
-																					// click
-																					// the
-																					// spinner.
+	public View getDropDownView(int position, View convertView, ViewGroup parent) { 
 		View row = convertView;
 		if (row == null) {
 			LayoutInflater inflater = context.getLayoutInflater();
