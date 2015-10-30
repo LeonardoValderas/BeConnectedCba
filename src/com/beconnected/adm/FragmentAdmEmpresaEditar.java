@@ -47,9 +47,19 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	private ProgressDialog dialog;
 	private int idEmpresa;
 	private  Typeface cFont;
+    private int mCurCheckPosition;
+	private static final String ARG_PARAM1 = "param1";
+	private static final String ARG_PARAM2 = "param2";
+
+	private String mParam1;
+	private String mParam2;
 
 	public static FragmentAdmEmpresaEditar newInstance() {
 		FragmentAdmEmpresaEditar fragment = new FragmentAdmEmpresaEditar();
+		Bundle args = new Bundle();
+		args.putString(ARG_PARAM1, "1");
+		args.putString(ARG_PARAM2, "2");
+		fragment.setArguments(args);
 		return fragment;
 	}
 
@@ -61,23 +71,69 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
 		
+
+		
+		
+//		  Fragment newFragment = new MainFragment();
+//	       FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//	       transaction.replace(R.id.fragment, newFragment);
+//	       transaction.commit();
+//		
 		init();
 	}
 
+	
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater
+		View v = inflater
 				.inflate(R.layout.fragment_mapa_editar, container, false);
+		
+		recycleViewMapa = (RecyclerView) v.findViewById(
+				R.id.recycleViewMapa);
+		
+		
+		
+		return v;
 
 	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
 
+
+		recycleViewMapa.setLayoutManager(new LinearLayoutManager(getActivity(),
+				LinearLayoutManager.VERTICAL, false));
+		recycleViewMapa.addItemDecoration(new DividerItemDecoration(
+				getActivity(), DividerItemDecoration.VERTICAL_LIST));
+		recycleViewMapa.setItemAnimator(new DefaultItemAnimator());
+		datosEmpresa = BL.getBl().selectListaEmpresa();
+	 
+		adaptador = new AdaptadorEmpresa(datosEmpresa,cFont);
+		// adaptador.notifyDataSetChanged();
+		recycleViewMapa.setAdapter(adaptador);
+		super.onViewCreated(view, savedInstanceState);
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		if (getArguments() != null) {
+			mParam1 = getArguments().getString(ARG_PARAM1);
+			mParam2 = getArguments().getString(ARG_PARAM2);
+		}
+	}
+	
+	
 	private void init() {
-		recycleViewMapa = (RecyclerView) getView().findViewById(
-				R.id.recycleViewMapa);
+//		recycleViewMapa = (RecyclerView) getView().findViewById(
+//				R.id.recycleViewMapa);
 		   cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 
-		recyclerViewLoadEmpresa();
+		//recyclerViewLoadEmpresa();
 		recycleViewMapa.addOnItemTouchListener(new RecyclerTouchListener(
 				getActivity(), recycleViewMapa, new ClickListener() {
 
@@ -184,6 +240,14 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putInt("curChoice", mCurCheckPosition);
+	}
+	
+	
+	
 	// enviar/editar/eliminar empresa
 
 	public class TaskEmpresa extends AsyncTask<Request, String, String> {

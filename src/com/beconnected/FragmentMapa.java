@@ -105,29 +105,29 @@ public class FragmentMapa extends Fragment {
 	    }
 	}
 
-	@Override
-	public void onPause() {
+//	@Override
+//	public void onPause() {
+//
+//		Fragment fragment = (getChildFragmentManager()
+//				.findFragmentById(R.id.map));
+//		FragmentTransaction ft = getActivity().getSupportFragmentManager()
+//				.beginTransaction();
+//		ft.remove(fragment);
+//		ft.commit();
+//
+//		super.onPause();
+//	}
 
-		Fragment fragment = (getChildFragmentManager()
-				.findFragmentById(R.id.map));
-		FragmentTransaction ft = getActivity().getSupportFragmentManager()
-				.beginTransaction();
-		ft.remove(fragment);
-		ft.commit();
 
-		super.onPause();
-	}
-
-
-	
-	@Override
-	public void onResume() {
-	    super.onResume();
-	    if (mapa == null) {
-	        mapa = supportMapFragment.getMap();
-	        mapa.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
-	    }
-	  }
+//	
+//	@Override
+//	public void onResume() {
+//	    super.onResume();
+//	    if (mapa == null) {
+//	        mapa = supportMapFragment.getMap();
+//	        mapa.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
+//	    }
+//	  }
 
 
 

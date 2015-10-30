@@ -81,8 +81,21 @@ public class FragmentAdmEmpresa extends Fragment {
 	private Communicator comm;
 	private  Typeface cFont;
 	private SupportMapFragment supportMapFragment; 
+	int mCurCheckPosition;
+	
+
+	private static final String ARG_PARAM1 = "param1";
+	private static final String ARG_PARAM2 = "param2";
+	
+	private String mParam1;
+	private String mParam2;
+	
 	public static FragmentAdmEmpresa newInstance() {
 		FragmentAdmEmpresa fragment = new FragmentAdmEmpresa();
+		Bundle args = new Bundle();
+		args.putString(ARG_PARAM1, "1");
+		args.putString(ARG_PARAM2, "2");
+		fragment.setArguments(args);
 		return fragment;
 	}
 
@@ -91,22 +104,57 @@ public class FragmentAdmEmpresa extends Fragment {
 	}
 
 	@Override
-	public void onActivityCreated(Bundle state) {
-		super.onActivityCreated(state);
-
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		  comm= (Communicator)getActivity();
+		if (savedInstanceState != null) {
+			mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
+			
+		}
+		else{
 		init();
-      comm= (Communicator)getActivity();
+		}
 	}
 
+	
+
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_mapa_adm, container, false);
 		
-	
-		return inflater.inflate(R.layout.fragment_mapa_adm, container, false);
+		
+
+		imageLogo = (ImageView) v.findViewById(R.id.imageLogo);
+		editTextEmpresa = (EditText) v.findViewById(
+				R.id.editTextEmpresa);
+		imageButtonLogo = (ImageButton) v.findViewById(
+				R.id.imageButtonLogo);
+		buttonGuardar = (Button) v.findViewById(R.id.buttonGuardar);
+		return v;
 
 	}
 
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putInt("curChoice", mCurCheckPosition);
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		if (getArguments() != null) {
+			mParam1 = getArguments().getString(ARG_PARAM1);
+			mParam2 = getArguments().getString(ARG_PARAM2);
+		}
+	}
+
+	
+	
 	private void init() {
 
 		gps = new GPSTracker(getActivity());
@@ -120,8 +168,11 @@ public class FragmentAdmEmpresa extends Fragment {
 		}
 
 		actualizar = getActivity().getIntent().getBooleanExtra("actualizar",
-				false);
-		imageLogo = (ImageView) getView().findViewById(R.id.imageLogo);
+		
+			false);
+	//	imageLogo = (ImageView) getView().findViewById(R.id.imageLogo);
+	
+		
 		imageLogo.setImageResource(R.drawable.logo);
 
 //		//1
@@ -158,12 +209,12 @@ public class FragmentAdmEmpresa extends Fragment {
 		mapa = ((SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
         }
-		editTextEmpresa = (EditText) getView().findViewById(
-				R.id.editTextEmpresa);
+//		editTextEmpresa = (EditText) getView().findViewById(
+//				R.id.editTextEmpresa);
 		cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
 		editTextEmpresa.setTypeface(cFont);
-		imageButtonLogo = (ImageButton) getView().findViewById(
-				R.id.imageButtonLogo);
+//		imageButtonLogo = (ImageButton) getView().findViewById(
+//				R.id.imageButtonLogo);
 
 		imageButtonLogo.setOnClickListener(new View.OnClickListener() {
 
@@ -177,7 +228,7 @@ public class FragmentAdmEmpresa extends Fragment {
 			}
 		});
 
-		buttonGuardar = (Button) getView().findViewById(R.id.buttonGuardar);
+//		buttonGuardar = (Button) getView().findViewById(R.id.buttonGuardar);
 
 		mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latCba,
 				longCba), 14.0f));

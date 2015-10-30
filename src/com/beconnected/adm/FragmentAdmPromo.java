@@ -200,7 +200,17 @@ public class FragmentAdmPromo extends Fragment {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 
-				if (editTextTitulo.getText().toString().equals("")
+			
+				
+			
+			
+				if (spinnerEmpresa.getSelectedItem()==null) {
+
+					Toast.makeText(getActivity(),
+							"Debe cargar una empresa",
+							Toast.LENGTH_SHORT).show();
+				}
+					else if (editTextTitulo.getText().toString().equals("")
 						|| editTextDescripcion.getText().toString().equals("")) {
 
 					Toast.makeText(getActivity(),

@@ -27,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -222,8 +223,13 @@ public class SplashActivityAdm extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
+			if(result!=null)
+			{
 			parseFeed(result);
-
+			}else
+			{
+				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			}
 		}
 
 		@Override
@@ -349,8 +355,15 @@ public class SplashActivityAdm extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			// para listView
-			parseFeedPromo(result);
+			
+			if(result!=null)
+			{
+				parseFeedPromo(result);
+			}else
+			{
+				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			}
+			
 
 		}
 
@@ -421,9 +434,16 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-
-			// para listView
-			parseFeedInfo(result);
+			
+			
+			if(result!=null)
+			{
+				parseFeedInfo(result);
+			}else
+			{
+				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			}
+			
 
 			splashProgress.setVisibility(View.INVISIBLE);
 

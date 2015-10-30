@@ -2,6 +2,7 @@ package com.beconnected.adm;
 
 import com.beconnected.R;
 import com.beconnected.TabsUsuario;
+import com.beconnected.adm.TabsAdmEmpresa.TabsAdapterAdmEmpresa;
 import com.beconnected.databases.GeneralLogic;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -30,20 +31,13 @@ public class TabsAdmPromo extends AppCompatActivity implements Communicator {
 	private static final String TAG = "FragmentPagerAdapter";
 	private static final boolean DEBUG = false;
 	final int PAGE_COUNT = 2;
+	int viewpagerid;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
 
-		init();
-	}
-
-	public Parcelable saveState() {
-		return null;
-	}
-
-	public void init() {
 
 		// Toolbar
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,16 +48,44 @@ public class TabsAdmPromo extends AppCompatActivity implements Communicator {
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
-		viewPager.setAdapter(new TabsAdapterAdmPromo(
-				getSupportFragmentManager()));
+		
+		if (savedInstanceState != null){
+		       viewpagerid =savedInstanceState.getInt("viewpagerid", -1 );  
+			
+		      
+			 viewPager = (ViewPager) findViewById(R.id.viewpager);
+			 
+			 viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
+			    if (viewpagerid != -1 ){
+			    	viewPager.setId(viewpagerid);
+			    }else{
+			        viewpagerid=viewPager.getId();
+			    }
+			    viewPager.setAdapter( new TabsAdapterAdmPromo (getSupportFragmentManager()));
+			}else{
+			
+			viewPager = (ViewPager) findViewById(R.id.viewpager);
+			viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
+			viewPager.setAdapter(new TabsAdapterAdmPromo(
+					getSupportFragmentManager()));
 
+			}
+		
 		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
-
 		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 		tabLayout.setTabMode(TabLayout.MODE_FIXED);
 		tabLayout.setupWithViewPager(viewPager);
+		
+		
+		
+		init();
+	}
+
+
+
+	public void init() {
+
+		
 
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override

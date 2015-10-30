@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.beconnected.adm.TabsAdmEmpresa;
+import com.beconnected.adm.TabsAdmPromo.TabsAdapterAdmPromo;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
@@ -44,10 +45,54 @@ public class TabsUsuario extends AppCompatActivity {
 	private static final String TAG = "FragmentPagerAdapter";
 	private static final boolean DEBUG = false;
 	final int PAGE_COUNT = 3;
+	int viewpagerid;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
+		
+	
+		
+
+		// Toolbar
+		
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+		if (savedInstanceState != null){
+		       viewpagerid =savedInstanceState.getInt("viewpagerid", -1 );  
+			
+		      
+			 viewPager = (ViewPager) findViewById(R.id.viewpager);
+			 
+			 viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
+			    if (viewpagerid != -1 ){
+			    	viewPager.setId(viewpagerid);
+			    }else{
+			        viewpagerid=viewPager.getId();
+			    }
+			    viewPager.setAdapter( new TabsAdapterUsuario (getSupportFragmentManager()));
+			}else{
+			
+			viewPager = (ViewPager) findViewById(R.id.viewpager);
+			viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
+			viewPager.setAdapter(new TabsAdapterUsuario(
+					getSupportFragmentManager()));
+
+			}
+	
+	
+		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
+		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+		tabLayout.setTabMode(TabLayout.MODE_FIXED);
+		tabLayout.setupWithViewPager(viewPager);
+		
+		
 		
 		init();
 		
@@ -65,6 +110,19 @@ public class TabsUsuario extends AppCompatActivity {
 		battery = getIntent().getBooleanExtra("battery", false);
 		Promo = getIntent().getBooleanExtra("PROMO", false);
 		
+		if (Promo) {
+			viewPager.post(new Runnable() {
+		        @Override
+		        public void run() {
+		            viewPager.setCurrentItem(1);
+		            getIntent().removeExtra("PROMO"); 
+		        }
+		        
+		    });
+			
+			}
+		
+		
 		if(battery){
 			Intent	bateria = new Intent(getApplicationContext(), Baterry.class);
 		
@@ -73,38 +131,8 @@ public class TabsUsuario extends AppCompatActivity {
 		}
 		
 		
-		// Toolbar
-		
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
-
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-		getSupportActionBar().setHomeButtonEnabled(true);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
-		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
-		viewPager
-				.setAdapter(new TabsAdapterUsuario(getSupportFragmentManager()));
 
 	
-		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
-		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-		tabLayout.setTabMode(TabLayout.MODE_FIXED);
-		tabLayout.setupWithViewPager(viewPager);
-
-		if (Promo) {
-		viewPager.post(new Runnable() {
-	        @Override
-	        public void run() {
-	            viewPager.setCurrentItem(1);
-	            getIntent().removeExtra("PROMO"); 
-	        }
-	        
-	    });
-		
-		}
 
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
@@ -297,18 +325,12 @@ public class TabsUsuario extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_usuario, menu);
 
-	//	 menu.getItem(0).setVisible(false);
+		 menu.getItem(0).setVisible(false);
 		
 		return super.onCreateOptionsMenu(menu);
 	}
 
-//	@Override
-//	protected void onDestroy() {
-//		// TODO Auto-generated method stub
-//		//finish();
-//		super.onDestroy();
-//	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();

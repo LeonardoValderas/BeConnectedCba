@@ -35,30 +35,15 @@ public class TabsAdmEmpresa extends AppCompatActivity implements Communicator {
 	private static final String TAG = "FragmentPagerAdapter";
 	private static final boolean DEBUG = false;
 	final int PAGE_COUNT = 2;
+	int viewpagerid;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
-
-		init();
-
-	}
-
-	
-//	@Override
-//	protected void onRestart() {
-//		TabsAdapterAdmEmpresa
-//		super.onRestart();
-//		init();
-//		 Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show(); 
-//	}
-	
-	
-	public void init() {
-
-		// Toolbar
+		
+		
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
@@ -66,12 +51,28 @@ public class TabsAdmEmpresa extends AppCompatActivity implements Communicator {
 
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
+		
+		
+		if (savedInstanceState != null){
+	       viewpagerid =savedInstanceState.getInt("viewpagerid", -1 );  
+		
+	      
+		 viewPager = (ViewPager) findViewById(R.id.viewpager);
+		 viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
+		    if (viewpagerid != -1 ){
+		    	viewPager.setId(viewpagerid);
+		    }else{
+		        viewpagerid=viewPager.getId();
+		    }
+		    viewPager.setAdapter( new TabsAdapterAdmEmpresa (getSupportFragmentManager()));
+		}else{
+		
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPager.setOffscreenPageLimit(PAGE_COUNT-1);
 		viewPager.setAdapter(new TabsAdapterAdmEmpresa(
 				getSupportFragmentManager()));
 
+		}
 		
 		
 		tabLayout = (TabLayout) findViewById(R.id.appbartabs);
@@ -79,6 +80,23 @@ public class TabsAdmEmpresa extends AppCompatActivity implements Communicator {
 		tabLayout.setTabMode(TabLayout.MODE_FIXED);
 		tabLayout.setupWithViewPager(viewPager);
 
+		
+		
+		init();
+
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putInt("viewpagerid" , viewPager.getId() );
+	}
+
+	
+	
+	public void init() {
+
+	
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset,
@@ -250,15 +268,6 @@ public class TabsAdmEmpresa extends AppCompatActivity implements Communicator {
 		return super.onOptionsItemSelected(item);
 	}
 	
-//	@Override
-//	protected void onDestroy() {
-//		 Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show(); 
-//		//	  onDestroyThreads();
-//			  finish();
-//			
-//		
-//		super.onDestroy();
-//	}
 
 	@Override
 	public void refresh() {

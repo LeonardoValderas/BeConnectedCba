@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.beconnected.adm.AlertsMenu;
+import com.beconnected.adm.SplashActivityAdm;
 import com.beconnected.databases.BL;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
@@ -26,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -249,7 +251,16 @@ public class SplashActivity extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			parseFeed(result);
+			if(result!=null)
+			{
+				parseFeed(result);
+			}else
+			{
+				Toast.makeText(SplashActivity.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			}
+			
+			
+		
 
 		}
 
@@ -374,8 +385,17 @@ public class SplashActivity extends AppCompatActivity {
 		protected void onPostExecute(String result) {
 
 			// para listView
-			parseFeedPromo(result);
+		
 
+			if(result!=null)
+			{
+				parseFeedPromo(result);
+			}else
+			{
+				Toast.makeText(SplashActivity.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			}
+			
+			
 		}
 
 		@Override
@@ -446,7 +466,16 @@ public class SplashActivity extends AppCompatActivity {
 		protected void onPostExecute(String result) {
 
 			// para listView
-			parseFeedInfo(result);
+			
+			
+			if(result!=null)
+			{
+				parseFeedInfo(result);
+			}else
+			{
+				Toast.makeText(SplashActivity.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			}
+			
 
 			splashProgress.setVisibility(View.INVISIBLE);
 
