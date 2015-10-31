@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.beconnected.R;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorAdm;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Promo;
@@ -67,6 +69,7 @@ public class FragmentAdmPromo extends Fragment {
 	private AlertsMenu alertsMenu;
 	private Communicator comm;
 	private  Typeface cFont;
+	private ControladorAdm controladorAdm;
 	public static FragmentAdmPromo newInstance() {
 		FragmentAdmPromo fragment = new FragmentAdmPromo();
 		return fragment;
@@ -79,6 +82,8 @@ public class FragmentAdmPromo extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
+		 controladorAdm = new ControladorAdm(
+					getActivity());
 
 		init();
 	    comm= (Communicator)getActivity();
@@ -96,7 +101,14 @@ public class FragmentAdmPromo extends Fragment {
 
 
        cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
-		empresaArray = BL.getBl().selectListaEmpresa();
+		
+
+      
+       controladorAdm.abrirBaseDeDatos();
+		  empresaArray = controladorAdm.selectListaEmpresa();
+		  controladorAdm.cerrarBaseDeDatos();
+       
+      // empresaArray = BL.getBl().selectListaEmpresa();
 
 		editTextTitulo = (EditText) getView().findViewById(R.id.editTextTitulo);
 		editTextTitulo.setTypeface(cFont);
@@ -307,7 +319,11 @@ public class FragmentAdmPromo extends Fragment {
 
 					} else {
 
-						promoArray = BL.getBl().selectListaPromo();
+						controladorAdm.abrirBaseDeDatos();
+						promoArray = controladorAdm.selectListaPromo();
+						controladorAdm.cerrarBaseDeDatos();
+						
+						//promoArray = BL.getBl().selectListaPromo();
 						if (radioButtonStock.isChecked()) {
 
 							promo = new Promo(promoArray.get(posicion)
@@ -317,7 +333,15 @@ public class FragmentAdmPromo extends Fragment {
 									.getText().toString(), "Hasta Agotar Stock");
 
 						} else {
-							promoArray = BL.getBl().selectListaPromo();
+						
+							
+
+
+							controladorAdm.abrirBaseDeDatos();
+							promoArray = controladorAdm.selectListaPromo();
+							controladorAdm.cerrarBaseDeDatos();
+							
+							//promoArray = BL.getBl().selectListaPromo();
 							//promoArray.get(posicion).getID_EMPRESA()
 							promo = new Promo(promoArray.get(posicion)
 									.getID_PROMO(), editTextTitulo.getText()
@@ -410,22 +434,35 @@ public class FragmentAdmPromo extends Fragment {
 		protected String doInBackground(Request... params) {
 
 			int success;
-
+			JSONObject json=null;
 			try {
 
-				JSONObject json = BL.getBl().getConnManager()
+				 json = BL.getBl().getConnManager()
 						.gestionPromo(params[0]);
 
+				 if(json!=null){
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
 					if (insertar) {
 						int id = json.getInt(TAG_ID);
-						BL.getBl().insertarPromo(id, promo);
+						
+					
+
+						controladorAdm.abrirBaseDeDatos();
+						controladorAdm.insertPromo(id, promo);
+						controladorAdm.cerrarBaseDeDatos();
+						
+					//	BL.getBl().insertarPromo(id, promo);
 						BL.getBl().getConnManager().push("P");
 						
-						insertar = true;
+						//insertar = true;
 					} else {
-						BL.getBl().actualizarPromo(promo);
+						controladorAdm.abrirBaseDeDatos();
+						controladorAdm.actualizarPromo( promo);
+						controladorAdm.cerrarBaseDeDatos();
+						
+						
+					//	BL.getBl().actualizarPromo(promo);
 						insertar = true;
 						//comm.refresh();
 					}
@@ -436,6 +473,12 @@ public class FragmentAdmPromo extends Fragment {
 					return json.getString(TAG_MESSAGE);
 
 				}
+				 } else {
+						// Log.d("Registering Failure!",
+						// json.getString(TAG_MESSAGE));
+						 String erroString="Problemas con la Conexión.";
+						 return erroString;
+					}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

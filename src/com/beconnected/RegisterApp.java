@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.beconnected.SplashActivity;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.Request;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import android.content.Context;
@@ -30,6 +31,7 @@ public class RegisterApp extends AsyncTask<Void, Void, String> {
 	public static String URLNOTI = "http://beconnected.esy.es/BeConnected/Notification/";
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
+	private ControladorUsuario controladorUsuario;
 
 	private static final String TAG_ID = "id";
 
@@ -93,8 +95,13 @@ public class RegisterApp extends AsyncTask<Void, Void, String> {
 
 	private void requestGMC() {
 		Request p = new Request();
-
-		id_base = BL.getBl().selectIdUsuario();
+		controladorUsuario = new ControladorUsuario(ctx);
+		//id_base = BL.getBl().selectIdUsuario();
+		
+		controladorUsuario.abrirBaseDeDatos();
+		id_base = controladorUsuario.selectIdUsuario();
+		controladorUsuario.cerrarBaseDeDatos();
+		
 		p.setMethod("POST");
 		p.setQuery("USUARIO");
 
@@ -125,10 +132,16 @@ public class RegisterApp extends AsyncTask<Void, Void, String> {
 
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
-
-					// String a = json.getString(TAG_ID);
+					controladorUsuario = new ControladorUsuario(ctx);
+					//id_base = BL.getBl().selectIdUsuario();
+					
+					controladorUsuario.abrirBaseDeDatos();
 					id_base = json.getInt(TAG_ID);
-					BL.getBl().insertarIdUsuario(id_base);
+					controladorUsuario.insertIdUsuario(id_base);
+					controladorUsuario.cerrarBaseDeDatos();
+					// String a = json.getString(TAG_ID);
+					//id_base = json.getInt(TAG_ID);
+				//	BL.getBl().insertarIdUsuario(id_base);
 
 					return json.getString(TAG_MESSAGE);
 				} else {

@@ -55,6 +55,8 @@
         <activity
             android:name=".adm.TabsAdmEmpresa"
             android:screenOrientation="portrait" >
+     
+            
         </activity>
         <activity
             android:name=".adm.TabsAdmPromo"

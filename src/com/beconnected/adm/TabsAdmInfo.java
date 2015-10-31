@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.beconnected.R;
 import com.beconnected.TabsUsuario;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorAdm;
 import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Info;
 import com.beconnected.databases.Request;
@@ -33,8 +34,9 @@ public class TabsAdmInfo extends AppCompatActivity {
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 	private ProgressDialog dialog;
-	private  Typeface cFont;
+	//private  Typeface cFont;
 	private AlertsMenu alertsMenu;
+	private ControladorAdm controladorAdm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +48,29 @@ public class TabsAdmInfo extends AppCompatActivity {
 
 	public void init() {
 
-		arrayInfo = BL.getBl().selectListaInfo();
+		controladorAdm =  new ControladorAdm(TabsAdmInfo.this);
+		controladorAdm.abrirBaseDeDatos();
+		
+		arrayInfo = controladorAdm.selectListaInfo();
+		controladorAdm.cerrarBaseDeDatos();
 
-
-        cFont = Typeface.createFromAsset(getAssets(), "fonts/NEUROPOL.ttf");
+      //  cFont = Typeface.createFromAsset(getAssets(), "fonts/NEUROPOL.ttf");
 		editTextSomos = (EditText) findViewById(R.id.editTextSomos);
-		editTextSomos.setTypeface(cFont);
+	//	editTextSomos.setTypeface(cFont);
 		editTextContacto = (EditText) findViewById(R.id.editTextContacto);
-		editTextContacto.setTypeface(cFont);
+		//editTextContacto.setTypeface(cFont);
 		if (arrayInfo.size() != 0) {
 
 			editTextSomos.setText(arrayInfo.get(0).getSOMOS().toString());
 			editTextContacto.setText(arrayInfo.get(0).getCONTACTO().toString());
 		} else {
-			BL.getBl().insertarInfo();
-			arrayInfo = BL.getBl().selectListaInfo();
+			
+			controladorAdm =  new ControladorAdm(TabsAdmInfo.this);
+			controladorAdm.abrirBaseDeDatos();
+			controladorAdm.insertInfo();
+			arrayInfo = controladorAdm.selectListaInfo();
+			controladorAdm.cerrarBaseDeDatos();
+			
 			editTextSomos.setText(arrayInfo.get(0).getSOMOS().toString());
 			editTextContacto.setText(arrayInfo.get(0).getCONTACTO().toString());
 		}
@@ -129,24 +139,40 @@ public class TabsAdmInfo extends AppCompatActivity {
 		protected String doInBackground(Request... params) {
 
 			int success;
-
+			JSONObject json = null;
 			try {
 
-				JSONObject json = BL.getBl().getConnManager()
+				json = BL.getBl().getConnManager()
 						.gestionInfo(params[0]);
-
+              if(json!=null){
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
 
-					BL.getBl().actualizarInfo(info);
+					//BL.getBl().actualizarInfo(info);
 
+					controladorAdm =  new ControladorAdm(TabsAdmInfo.this);
+					controladorAdm.abrirBaseDeDatos();
+					
+				    controladorAdm.actualizarInfo(info);
+					controladorAdm.cerrarBaseDeDatos();
+
+					
+					
 					return json.getString(TAG_MESSAGE);
 				} else {
 
 					return json.getString(TAG_MESSAGE);
 
 				}
-			} catch (JSONException e) {
+              } else {
+					// Log.d("Registering Failure!",
+					// json.getString(TAG_MESSAGE));
+					 String erroString="Problemas con la Conexión.";
+					 return erroString;
+				}
+              
+              
+              } catch (JSONException e) {
 				e.printStackTrace();
 			}
 

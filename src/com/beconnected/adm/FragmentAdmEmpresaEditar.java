@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import com.beconnected.DividerItemDecoration;
 import com.beconnected.R;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorAdm;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Request;
@@ -38,7 +39,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 
 	private RecyclerView recycleViewMapa;
 
-	private ArrayList<Empresa> datosEmpresa;
+	private ArrayList<Empresa> datosEmpresa = null;
 	private AdaptadorEmpresa adaptador;
 	private AlertsMenu alertsMenu;
 	private AlertsMenu alertsMenuInternet;
@@ -50,6 +51,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
     private int mCurCheckPosition;
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
+	private ControladorAdm base = new ControladorAdm(getActivity());
 
 	private String mParam1;
 	private String mParam2;
@@ -103,17 +105,7 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 
-
-		recycleViewMapa.setLayoutManager(new LinearLayoutManager(getActivity(),
-				LinearLayoutManager.VERTICAL, false));
-		recycleViewMapa.addItemDecoration(new DividerItemDecoration(
-				getActivity(), DividerItemDecoration.VERTICAL_LIST));
-		recycleViewMapa.setItemAnimator(new DefaultItemAnimator());
-		datosEmpresa = BL.getBl().selectListaEmpresa();
-	 
-		adaptador = new AdaptadorEmpresa(datosEmpresa,cFont);
-		// adaptador.notifyDataSetChanged();
-		recycleViewMapa.setAdapter(adaptador);
+		recyclerViewLoadEmpresa();
 		super.onViewCreated(view, savedInstanceState);
 	}
 
@@ -265,22 +257,36 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 		protected String doInBackground(Request... params) {
 
 			int success;
-
+			JSONObject json=null;
 			try {
 
-				JSONObject json = BL.getBl().getConnManager()
+				json = BL.getBl().getConnManager()
 						.gestionEmpresa(params[0]);
-
+               if(json!=null){
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
-					BL.getBl().eliminarEmpresa(idEmpresa);
-					BL.getBl().eliminarPromoEmpresa(idEmpresa);
-					return json.getString(TAG_MESSAGE);
+					
+					base =  new ControladorAdm(getActivity());
+					
+					base.abrirBaseDeDatos();
+					base.eliminarEmpresa(idEmpresa);
+					base.eliminarPromoEmpresa(idEmpresa);
+					base.cerrarBaseDeDatos();
+					
+//					
+//					BL.getBl().eliminarEmpresa(idEmpresa);
+//					BL.getBl().eliminarPromoEmpresa(idEmpresa);
+					
 				} else {
-					// Log.d("Registering Failure!",
-					// json.getString(TAG_MESSAGE));
+
 					return json.getString(TAG_MESSAGE);
 
+				}
+				
+               } else {
+
+					 String erroString="Problemas con la Conexión.";
+					 return erroString;
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -306,12 +312,19 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 
 	public void recyclerViewLoadEmpresa() {
 
+		base = new ControladorAdm(getActivity());
 		recycleViewMapa.setLayoutManager(new LinearLayoutManager(getActivity(),
 				LinearLayoutManager.VERTICAL, false));
 		recycleViewMapa.addItemDecoration(new DividerItemDecoration(
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewMapa.setItemAnimator(new DefaultItemAnimator());
-		datosEmpresa = BL.getBl().selectListaEmpresa();
+	   
+	    base.abrirBaseDeDatos();
+	    
+	    datosEmpresa= base.selectListaEmpresa();
+	    base.cerrarBaseDeDatos();
+	    
+	    //datosEmpresa = BL.getBl().selectListaEmpresa();
 	 
 		adaptador = new AdaptadorEmpresa(datosEmpresa,cFont);
 		// adaptador.notifyDataSetChanged();

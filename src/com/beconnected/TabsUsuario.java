@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import com.beconnected.adm.TabsAdmEmpresa;
 import com.beconnected.adm.TabsAdmPromo.TabsAdapterAdmPromo;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
 
@@ -46,13 +47,14 @@ public class TabsUsuario extends AppCompatActivity {
 	private static final boolean DEBUG = false;
 	final int PAGE_COUNT = 3;
 	int viewpagerid;
+	private ControladorUsuario controladorUsuario;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabs_usuario);
 		
 	
-		
+		controladorUsuario = new ControladorUsuario(TabsUsuario.this);
 
 		// Toolbar
 		
@@ -282,7 +284,7 @@ public class TabsUsuario extends AppCompatActivity {
 		}
 	}
 
-	public static ArrayList<Empresa> parseFeed(String content) {
+	public  ArrayList<Empresa> parseFeed(String content) {
 
 		try {
 			JSONArray ar = new JSONArray(content);
@@ -295,7 +297,14 @@ public class TabsUsuario extends AppCompatActivity {
 						obj.getString("LONGITUD"), obj.getString("LATITUD"),
 						null, obj.getString("URL_LOGO"));
 
-				BL.getBl().insertarEmpresaUsuario(empresa);
+				
+				
+				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.insertEmpresaSplash(empresa);
+		
+				controladorUsuario.cerrarBaseDeDatos();
+				
+				//BL.getBl().insertarEmpresaUsuario(empresa);
 
 				datasJson.add(empresa);
 			}

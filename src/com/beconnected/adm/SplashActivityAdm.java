@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import com.beconnected.R;
 import com.beconnected.adm.AlertsMenu;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorAdm;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
@@ -54,6 +56,8 @@ public class SplashActivityAdm extends AppCompatActivity {
 	boolean isInternet = false;
 	protected LocationManager locationManager;
 	private AlertsMenu alertsMenu;
+	private ControladorAdm controladorAdm;
+	private ControladorUsuario controladorUsuario;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,8 @@ public class SplashActivityAdm extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		splashProgress = (ProgressBar) findViewById(R.id.splashProgress);
-
+		controladorAdm = new ControladorAdm(SplashActivityAdm.this);
+		controladorUsuario = new ControladorUsuario(SplashActivityAdm.this);
 		if (GeneralLogic.conexionInternet(SplashActivityAdm.this)) {
 			init();
 		} else {
@@ -91,20 +96,32 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 	public void init() {
 
-		DL.getDl().setSqliteConnection(this);
-		BL.getBl().creaDirectorios();
-		BL.getBl().dropTablasBDAdm();
-		BL.getBl().dropTablasBDUsuario();
-		BL.getBl().crearTablasBDAmd();
-		BL.getBl().crearTablasBDUsuario();
-		BL.getBl().insertarInfo();
-		BL.getBl().insertarInfoUsuario();
+	
+
+		controladorAdm.abrirBaseDeDatos();
+		controladorAdm.dropTablasBDAdm();
+		controladorAdm.cerrarBaseDeDatos();
+
+		
+
+		controladorUsuario.abrirBaseDeDatos();
+		controladorUsuario.dropTablasBDUsuario();
+		controladorUsuario.cerrarBaseDeDatos();
+
+//		DL.getDl().setSqliteConnection(this);
+//		BL.getBl().creaDirectorios();
+//		BL.getBl().dropTablasBDAdm();
+//		BL.getBl().dropTablasBDUsuario();
+//		BL.getBl().crearTablasBDAmd();
+//		BL.getBl().crearTablasBDUsuario();
+//		BL.getBl().insertarInfo();
+//		BL.getBl().insertarInfoUsuario();
 
 		// registrarCel();
 
 		new TaskEmpresa().execute("");
-		new TaskPromo().execute("");
-		new TaskInfo().execute("");
+		//new TaskPromo().execute("");
+	//	new TaskInfo().execute("");
 
 		// Promo = getIntent().getBooleanExtra("PROMO", false);
 
@@ -223,12 +240,23 @@ public class SplashActivityAdm extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			if(result!=null)
-			{
-			parseFeed(result);
-			}else
-			{
-				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			if (result != null) {
+				
+				if(parseFeed(result))
+				{
+					
+					new TaskPromo().execute("");
+					
+				}else{
+					
+					Toast.makeText(SplashActivityAdm.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+							Toast.LENGTH_SHORT).show();
+					finish();
+				}
+			} else {
+				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
 			}
 		}
 
@@ -246,12 +274,12 @@ public class SplashActivityAdm extends AppCompatActivity {
 	 * 
 	 */
 
-	public static ArrayList<Empresa> parseFeed(String content) {
+	public boolean parseFeed(String content) {
+		boolean gestionOk= true; 
 
 		try {
 			JSONArray ar = new JSONArray(content);
-			ArrayList<Empresa> datasJson = new ArrayList<>();
-
+		
 			for (int i = 0; i < ar.length(); i++) {
 
 				JSONObject obj = ar.getJSONObject(i);
@@ -261,6 +289,7 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 				Bitmap b = getBitmap(a);
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				if(stream!=null){
 				b.compress(Bitmap.CompressFormat.PNG, 0, stream);
 				byte[] byteArray = stream.toByteArray();
 
@@ -269,17 +298,35 @@ public class SplashActivityAdm extends AppCompatActivity {
 						obj.getString("LATITUD"), byteArray,
 						obj.getString("URL_LOGO"));
 
-				BL.getBl().insertarEmpresaAdm(empresa);
-				BL.getBl().insertarEmpresaUsuario(empresa);
+		//		controladorAdm = new ControladorAdm(SplashActivityAdm.this);
 
-				datasJson.add(empresa);
+				controladorAdm.abrirBaseDeDatos();
+				controladorAdm.insertEmpresaSplash(empresa);
+				controladorAdm.cerrarBaseDeDatos();
 
+				//controladorUsuario = new ControladorUsuario(
+					//	SplashActivityAdm.this);
+
+				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.insertEmpresaSplash(empresa);
+				controladorUsuario.cerrarBaseDeDatos();
+
+				// BL.getBl().insertarEmpresaAdm(empresa);
+				// BL.getBl().insertarEmpresaUsuario(empresa);
+
+				
+				}else
+				{
+					gestionOk=false;
+				}
+				
 			}
-			return datasJson;
+			return gestionOk;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			gestionOk=false;
+			return gestionOk;
 		}
 
 	}
@@ -355,18 +402,24 @@ public class SplashActivityAdm extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			
-			if(result!=null)
-			{
-				parseFeedPromo(result);
-			}else
-			{
-				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			if (result != null) {
+				if(parseFeedPromo(result)){
+				
+					new TaskInfo().execute("");
+                 }else{
+				
+				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
 			}
-			
+			} else {
+				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
 
 		}
-
+						
 		@Override
 		protected void onProgressUpdate(String... values) {
 			// textViewDato.append(values[0]+"\n");
@@ -381,11 +434,11 @@ public class SplashActivityAdm extends AppCompatActivity {
 	 * @return
 	 */
 
-	public static ArrayList<Promo> parseFeedPromo(String contentPromo) {
-
+	public boolean parseFeedPromo(String contentPromo) {
+      boolean gestionOk=true;
 		try {
 			JSONArray ar = new JSONArray(contentPromo);
-			ArrayList<Promo> datasJson = new ArrayList<>();
+		
 
 			for (int i = 0; i < ar.length(); i++) {
 
@@ -396,16 +449,34 @@ public class SplashActivityAdm extends AppCompatActivity {
 						obj.getString("FECHA_INICIO"),
 						obj.getString("FECHA_FIN"));
 
-				BL.getBl().insertarPromoAdm(promo);
-				BL.getBl().insertarPromoUsuario(promo);
+			//	controladorAdm = new ControladorAdm(SplashActivityAdm.this);
 
-				datasJson.add(promo);
+				controladorAdm.abrirBaseDeDatos();
+				controladorAdm.insertPromoSplash(promo);
+				controladorAdm.cerrarBaseDeDatos();
+
+				
+				
+
+			//	controladorUsuario = new ControladorUsuario(
+					//	SplashActivityAdm.this);
+
+				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.insertPromoUsuario(promo);
+				controladorUsuario.cerrarBaseDeDatos();
+				
+				
+				// BL.getBl().insertarPromoAdm(promo);
+				//BL.getBl().insertarPromoUsuario(promo);
+
+				
 			}
-			return datasJson;
+			return gestionOk;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			gestionOk=false;
+			return gestionOk;
 		}
 
 	}
@@ -434,23 +505,28 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			
-			
-			if(result!=null)
-			{
-				parseFeedInfo(result);
-			}else
-			{
-				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+
+			if (result != null) {
+				if(parseFeedInfo(result)){
+					splashProgress.setVisibility(View.INVISIBLE);
+
+					Intent usuario = new Intent(SplashActivityAdm.this,
+							TabsAdmEmpresa.class);
+					startActivity(usuario);
+					
+				}else{
+					
+					Toast.makeText(SplashActivityAdm.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+							Toast.LENGTH_SHORT).show();
+					finish();
+				}
+			} else {
+				Toast.makeText(SplashActivityAdm.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
 			}
+
 			
-
-			splashProgress.setVisibility(View.INVISIBLE);
-
-			Intent usuario = new Intent(SplashActivityAdm.this,
-					TabsAdmEmpresa.class);
-			// usuario.putExtra("PROMO", Promo);
-			startActivity(usuario);
 
 		}
 
@@ -468,11 +544,11 @@ public class SplashActivityAdm extends AppCompatActivity {
 	 * @return
 	 */
 
-	public static ArrayList<Info> parseFeedInfo(String contentPromo) {
-
+	public boolean parseFeedInfo(String contentPromo) {
+		boolean gestionOk=true;
 		try {
 			JSONArray ar = new JSONArray(contentPromo);
-			ArrayList<Info> datasJson = new ArrayList<>();
+
 
 			for (int i = 0; i < ar.length(); i++) {
 
@@ -480,16 +556,36 @@ public class SplashActivityAdm extends AppCompatActivity {
 				Info info = new Info(obj.getString("SOMOS"),
 						obj.getString("CONTACTOS"));
 
-				BL.getBl().actualizarInfo(info);
-				BL.getBl().actualizarInfoUsuario(info);
+			//	controladorAdm = new ControladorAdm(SplashActivityAdm.this);
 
-				datasJson.add(info);
+				controladorAdm.abrirBaseDeDatos();
+				controladorAdm.actualizarInfo(info);
+				controladorAdm.cerrarBaseDeDatos();
+
+				
+		
+				
+
+			//	controladorUsuario = new ControladorUsuario(
+				//		SplashActivityAdm.this);
+
+				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.insertInfo();
+				controladorUsuario.actualizarInfo(info);
+				controladorUsuario.cerrarBaseDeDatos();
+				
+				
+				// BL.getBl().actualizarInfo(info);
+			//	BL.getBl().actualizarInfoUsuario(info);
+
+			
 			}
-			return datasJson;
+			return gestionOk;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			gestionOk = false;
+			return gestionOk;
 		}
 
 	}

@@ -7,6 +7,7 @@ import com.beconnected.AdaptadorPromos;
 import com.beconnected.DividerItemDecoration;
 import com.beconnected.R;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorAdm;
 import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Promo;
 import com.beconnected.databases.Request;
@@ -45,6 +46,7 @@ public class FragmentAdmPromoEditar extends Fragment {
 	private ProgressDialog dialog;
 	private int idPromo;
     private  Typeface cFont;
+    private ControladorAdm controladorAdm;
 
 	public static FragmentAdmPromoEditar newInstance() {
 		FragmentAdmPromoEditar fragment = new FragmentAdmPromoEditar();
@@ -58,6 +60,8 @@ public class FragmentAdmPromoEditar extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
+		controladorAdm = new ControladorAdm(
+				getActivity());
 
 		init();
 	}
@@ -199,15 +203,25 @@ public class FragmentAdmPromoEditar extends Fragment {
 		protected String doInBackground(Request... params) {
 
 			int success;
+			JSONObject json =null;
 
 			try {
 
-				JSONObject json = BL.getBl().getConnManager()
+				 json = BL.getBl().getConnManager()
 						.gestionPromo(params[0]);
 
+				 if(json!=null){
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
-					BL.getBl().eliminarPromo(idPromo);
+					controladorAdm = new ControladorAdm(
+							getActivity());
+
+					controladorAdm.abrirBaseDeDatos();
+					controladorAdm.eliminarPromo(idPromo);
+					controladorAdm.cerrarBaseDeDatos();
+					
+					
+				//	BL.getBl().eliminarPromo(idPromo);
 					return json.getString(TAG_MESSAGE);
 				} else {
 					// Log.d("Registering Failure!",
@@ -215,6 +229,13 @@ public class FragmentAdmPromoEditar extends Fragment {
 					return json.getString(TAG_MESSAGE);
 
 				}
+				
+				 } else {
+						// Log.d("Registering Failure!",
+						// json.getString(TAG_MESSAGE));
+						 String erroString="Problemas con la Conexión.";
+						 return erroString;
+					}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -245,7 +266,13 @@ public class FragmentAdmPromoEditar extends Fragment {
 		recycleViewPromo.addItemDecoration(new DividerItemDecoration(
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewPromo.setItemAnimator(new DefaultItemAnimator());
-		datosPromo = BL.getBl().selectListaPromo();
+		
+	
+		controladorAdm.abrirBaseDeDatos();
+		datosPromo=	controladorAdm.selectListaPromo();
+		controladorAdm.cerrarBaseDeDatos();
+		
+		//datosPromo = BL.getBl().selectListaPromo();
 
 		adaptador = new AdaptadorPromos(datosPromo,cFont);
 		// adaptador.notifyDataSetChanged();

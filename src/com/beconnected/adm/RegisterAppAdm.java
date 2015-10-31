@@ -87,7 +87,7 @@ public class RegisterAppAdm extends AsyncTask<Void, Void, String> {
 	private void requestGMC() {
 		Request p = new Request();
 
-		id_base = BL.getBl().selectIdAdm();
+	//	id_base = BL.getBl().selectIdAdm();
 		p.setMethod("POST");
 		p.setQuery("ADM");
 		p.setParametrosDatos("regId", regid);
@@ -119,7 +119,7 @@ public class RegisterAppAdm extends AsyncTask<Void, Void, String> {
 				if (success == 1) {
 
 					id_base = json.getInt(TAG_ID);
-					BL.getBl().insertarIdAdm(id_base);
+			//		BL.getBl().insertarIdAdm(id_base);
 
 					return json.getString(TAG_MESSAGE);
 				} else {

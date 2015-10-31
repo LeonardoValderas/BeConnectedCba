@@ -3,6 +3,7 @@ package com.beconnected;
 import java.util.ArrayList;
 
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.Info;
 
 import android.graphics.Typeface;
@@ -18,7 +19,8 @@ public class FragmentInfo extends Fragment {
 	private TextView editTextSomos;
 	private TextView editTextContacto;
 	private ArrayList<Info> arrayInfo;
-	private  Typeface cFont;
+	//private  Typeface cFont;
+	private ControladorUsuario controladorUsuario;
 	public static FragmentInfo newInstance() {
 		FragmentInfo fragment = new FragmentInfo();
 		return fragment;
@@ -31,7 +33,7 @@ public class FragmentInfo extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
-
+		controladorUsuario = new ControladorUsuario(getActivity());
 		init();
 	}
 
@@ -45,14 +47,19 @@ public class FragmentInfo extends Fragment {
 	private void init() {
 
 
-     cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
-		arrayInfo = BL.getBl().selectListaInfoUsuario();
+     //cFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/NEUROPOL.ttf");
+        
+        controladorUsuario.abrirBaseDeDatos();
+        arrayInfo=controladorUsuario.selectListaInfo();
+		controladorUsuario.cerrarBaseDeDatos();
+     
+		//arrayInfo = BL.getBl().selectListaInfoUsuario();
 
 		editTextSomos = (TextView) getView().findViewById(R.id.editTextSomos);
-		editTextSomos.setTypeface(cFont);
+		//editTextSomos.setTypeface(cFont);
 		editTextContacto = (TextView) getView().findViewById(		
 				R.id.editTextContacto);
-		editTextContacto.setTypeface(cFont);
+		//editTextContacto.setTypeface(cFont);
 		if (arrayInfo.size() != 0) {
 
 			editTextSomos.setText(arrayInfo.get(0).getSOMOS().toString());

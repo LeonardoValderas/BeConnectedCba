@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.Empresa;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,7 +49,7 @@ public class FragmentMapa extends Fragment {
 	private ArrayList<Empresa> empresaArray;
 	private GPSTracker gps;
 	private static View view;
-
+	private ControladorUsuario controladorUsuario;
 	
 	public static FragmentMapa newInstance() {
 		FragmentMapa fragment = new FragmentMapa();
@@ -62,7 +63,7 @@ public class FragmentMapa extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
-
+		controladorUsuario = new ControladorUsuario(getActivity());
 		init();
 	}
 
@@ -144,7 +145,10 @@ public class FragmentMapa extends Fragment {
 			gps.showSettingsAlert();
 		}
 
-		empresaArray = BL.getBl().selectListaEmpresaUsuario();
+		controladorUsuario.abrirBaseDeDatos();
+		empresaArray=controladorUsuario.selectListaEmpresa();
+		controladorUsuario.cerrarBaseDeDatos();
+	//	empresaArray = BL.getBl().selectListaEmpresaUsuario();
 	
 		//1
 		supportMapFragment =(SupportMapFragment) getChildFragmentManager()

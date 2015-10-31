@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import com.beconnected.GPSTracker;
 import com.beconnected.R;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorAdm;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
 import com.beconnected.databases.Request;
@@ -82,7 +83,7 @@ public class FragmentAdmEmpresa extends Fragment {
 	private  Typeface cFont;
 	private SupportMapFragment supportMapFragment; 
 	int mCurCheckPosition;
-	
+	private ControladorAdm base;
 
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
@@ -107,7 +108,9 @@ public class FragmentAdmEmpresa extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		  comm= (Communicator)getActivity();
-		if (savedInstanceState != null) {
+	
+		  base =  new ControladorAdm(getActivity());
+		  if (savedInstanceState != null) {
 			mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
 			
 		}
@@ -244,7 +247,17 @@ public class FragmentAdmEmpresa extends Fragment {
 			posicion = getActivity().getIntent().getIntExtra("posicion", 0);
 			empresaExtra = getActivity().getIntent().getStringExtra("empresa");
 			editTextEmpresa.setText(empresaExtra);
-			empresaArray = BL.getBl().selectListaEmpresa();
+			
+			
+			
+			
+			base.abrirBaseDeDatos();
+			empresaArray=base.selectListaEmpresa();
+			base.cerrarBaseDeDatos();
+			
+			
+			//empresaArray = BL.getBl().selectListaEmpresa();
+			
 			imagenLogo = empresaArray.get(posicion).getLOGO();
 
 			if (imagenLogo != null) {
@@ -323,6 +336,9 @@ public class FragmentAdmEmpresa extends Fragment {
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
+						String input = empresa.getEMPRESA().replace(" ", "");
+						input = input.trim();
+						p.setParametrosDatos("url_empresa", input);
 
 						if (GeneralLogic.conexionInternet(getActivity())) {
 							TaskEmpresa taskEmpresa = new TaskEmpresa();
@@ -361,7 +377,13 @@ public class FragmentAdmEmpresa extends Fragment {
 
 					} else {
 						Request p = new Request();
-						empresaArray = BL.getBl().selectListaEmpresa();
+						
+						base.abrirBaseDeDatos();
+						empresaArray=base.selectListaEmpresa();
+						base.cerrarBaseDeDatos();
+						
+						
+						//empresaArray = BL.getBl().selectListaEmpresa();
 						empresa = new Empresa(empresaArray.get(posicion)
 								.getID_EMPRESA(), editTextEmpresa.getText()
 								.toString(), String.valueOf(longitud), String
@@ -386,6 +408,9 @@ public class FragmentAdmEmpresa extends Fragment {
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
+						String input = empresa.getEMPRESA().replace(" ", "");
+						input = input.trim();
+						p.setParametrosDatos("url_empresa", input);
 
 						if (GeneralLogic.conexionInternet(getActivity())) {
 							TaskEmpresa taskEmpresa = new TaskEmpresa();
@@ -449,36 +474,57 @@ public class FragmentAdmEmpresa extends Fragment {
 		protected String doInBackground(Request... params) {
 
 			int success;
-
+			JSONObject json= null;
 			try {
 
-				JSONObject json = BL.getBl().getConnManager()
+				 json = BL.getBl().getConnManager()
 						.gestionEmpresa(params[0]);
 
+				if(json!=null){
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
 					if (insertar) {
 						String a = json.getString(TAG_ID);
 						int id = json.getInt(TAG_ID);
-						BL.getBl().insertarEmpresa(id, empresa);
+						
+					//	base =  new ControladorAdm(getActivity());
+						
+						base.abrirBaseDeDatos();
+						base.insertEmpresa(id, empresa);
+						base.cerrarBaseDeDatos();
+						//BL.getBl().insertarEmpresa(id, empresa);
+						
+						
 						BL.getBl().getConnManager().push("E");
-						//comm.refresh();
-						insertar = true;
-
-					} else {
-						BL.getBl().actualizarEmpresa(empresa);
+						
+						
+					}
+					
+					else {
+					//	BL.getBl().actualizarEmpresa(empresa);
+                     
+					//	base =  new ControladorAdm(getActivity());
+						
+						base.abrirBaseDeDatos();
+						base.actualizarEmpresa(empresa);
+						base.cerrarBaseDeDatos();
 					//	comm.refresh();
 						insertar = true;
 					}
 					return json.getString(TAG_MESSAGE);
+				}
+					
+	
 				} else {
 					// Log.d("Registering Failure!",
 					// json.getString(TAG_MESSAGE));
-					return json.getString(TAG_MESSAGE);
-
+					 String erroString="Problemas con la Conexión.";
+					 return erroString;
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
+				 //return erroString;
+				
 			}
 
 			return null;

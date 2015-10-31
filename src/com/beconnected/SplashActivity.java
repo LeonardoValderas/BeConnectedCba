@@ -14,7 +14,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.beconnected.adm.AlertsMenu;
 import com.beconnected.adm.SplashActivityAdm;
+import com.beconnected.adm.TabsAdmEmpresa;
+import com.beconnected.adm.SplashActivityAdm.TaskInfo;
+import com.beconnected.adm.SplashActivityAdm.TaskPromo;
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.DL;
 import com.beconnected.databases.Empresa;
 import com.beconnected.databases.GeneralLogic;
@@ -60,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
 	boolean isInternet = false;
 	protected LocationManager locationManager;
 	private AlertsMenu alertsMenu;
+	private ControladorUsuario controladorUsuario;
 
 	private Intent bateria;
 
@@ -69,7 +74,7 @@ public class SplashActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		splashProgress = (ProgressBar) findViewById(R.id.splashProgress);
-
+		controladorUsuario = new ControladorUsuario(SplashActivity.this);
 		/**
 		 * Activa el servicio que buscar el nivel de bateria cada 30 min
 		 */
@@ -123,16 +128,21 @@ public class SplashActivity extends AppCompatActivity {
 
 	public void init() {
 
-		DL.getDl().setSqliteConnection(this);
-		BL.getBl().dropTablasBDUsuario();
-		BL.getBl().crearTablasBDUsuario();
-		BL.getBl().creaDirectorios();
-		BL.getBl().insertarInfoUsuario();
+		
+		controladorUsuario.abrirBaseDeDatos();
+		controladorUsuario.dropTablasBDUsuario();
+		controladorUsuario.insertInfo();
+		controladorUsuario.cerrarBaseDeDatos();
+	//	DL.getDl().setSqliteConnection(this);
+	//	BL.getBl().dropTablasBDUsuario();
+	//	BL.getBl().crearTablasBDUsuario();
+	//	BL.getBl().creaDirectorios();
+	//BL.getBl().insertarInfoUsuario();
 		registrarCel();
 
 		new TaskEmpresa().execute("");
-		new TaskPromo().execute("");
-		new TaskInfo().execute("");
+		//new TaskPromo().execute("");
+		//new TaskInfo().execute("");
 
 		Promo = getIntent().getBooleanExtra("PROMO", false);
 
@@ -253,10 +263,23 @@ public class SplashActivity extends AppCompatActivity {
 
 			if(result!=null)
 			{
-				parseFeed(result);
-			}else
-			{
-				Toast.makeText(SplashActivity.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+			//	parseFeed(result);
+				
+				if(parseFeed(result))
+				{
+					
+					new TaskPromo().execute("");
+				
+	              }else{
+					
+					Toast.makeText(SplashActivity.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+							Toast.LENGTH_SHORT).show();
+					finish();
+				}
+			} else {
+				Toast.makeText(SplashActivity.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
 			}
 			
 			
@@ -278,11 +301,11 @@ public class SplashActivity extends AppCompatActivity {
 	 * 
 	 */
 
-	public static ArrayList<Empresa> parseFeed(String content) {
-
+	public  boolean parseFeed(String content) {
+		boolean gestionOk= true; 
 		try {
 			JSONArray ar = new JSONArray(content);
-			ArrayList<Empresa> datasJson = new ArrayList<>();
+
 
 			for (int i = 0; i < ar.length(); i++) {
 
@@ -291,6 +314,9 @@ public class SplashActivity extends AppCompatActivity {
 
 				Bitmap b = getBitmap(a);
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				
+				if(stream!=null)
+				{	
 				b.compress(Bitmap.CompressFormat.PNG, 0, stream);
 				byte[] byteArray = stream.toByteArray();
 
@@ -299,16 +325,29 @@ public class SplashActivity extends AppCompatActivity {
 						obj.getString("LATITUD"), byteArray,
 						obj.getString("URL_LOGO"));
 
-				BL.getBl().insertarEmpresaUsuario(empresa);
+				
+				//controladorUsuario = new ControladorUsuario(SplashActivity.this);
+				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.insertEmpresaSplash(empresa);
+				//controladorUsuario.insertInfo();
+				controladorUsuario.cerrarBaseDeDatos();
+				
+			//	BL.getBl().insertarEmpresaUsuario(empresa);
 
-				datasJson.add(empresa);
-
+			
+				}
+				else
+				{
+					gestionOk=false;
+				}
+				
 			}
-			return datasJson;
+			return gestionOk;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			gestionOk=false;
+			return gestionOk;
 		}
 
 	}
@@ -389,10 +428,19 @@ public class SplashActivity extends AppCompatActivity {
 
 			if(result!=null)
 			{
-				parseFeedPromo(result);
-			}else
-			{
-				Toast.makeText(SplashActivity.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+				if(parseFeedPromo(result)){
+					
+					new TaskInfo().execute("");
+                 }else{
+				
+				Toast.makeText(SplashActivity.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
+			} else {
+				Toast.makeText(SplashActivity.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
 			}
 			
 			
@@ -412,11 +460,11 @@ public class SplashActivity extends AppCompatActivity {
 	 * @return
 	 */
 
-	public static ArrayList<Promo> parseFeedPromo(String contentPromo) {
-
+	public  boolean parseFeedPromo(String contentPromo) {
+		boolean gestionOk=true;
 		try {
 			JSONArray ar = new JSONArray(contentPromo);
-			ArrayList<Promo> datasJson = new ArrayList<>();
+		
 
 			for (int i = 0; i < ar.length(); i++) {
 
@@ -427,15 +475,22 @@ public class SplashActivity extends AppCompatActivity {
 						obj.getString("FECHA_INICIO"),
 						obj.getString("FECHA_FIN"));
 
-				BL.getBl().insertarPromoUsuario(promo);
-
-				datasJson.add(promo);
+				
+				//controladorUsuario = new ControladorUsuario(SplashActivity.this);
+				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.insertPromoUsuario(promo);
+			//	controladorUsuario.insertInfo();
+				controladorUsuario.cerrarBaseDeDatos();
+				
+			
+				
 			}
-			return datasJson;
+			return gestionOk;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			gestionOk=false;
+			return gestionOk;
 		}
 
 	}
@@ -470,19 +525,24 @@ public class SplashActivity extends AppCompatActivity {
 			
 			if(result!=null)
 			{
-				parseFeedInfo(result);
-			}else
-			{
-				Toast.makeText(SplashActivity.this, "Problemas de conexión", Toast.LENGTH_SHORT).show();
+				if(parseFeedInfo(result)){
+					splashProgress.setVisibility(View.INVISIBLE);
+
+					Intent usuario = new Intent(SplashActivity.this,
+							TabsUsuario.class);
+					startActivity(usuario);
+					
+				}else{
+					
+					Toast.makeText(SplashActivity.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+							Toast.LENGTH_SHORT).show();
+					finish();
+				}
+			} else {
+				Toast.makeText(SplashActivity.this, "Problemas de conexión.Cierre y vuelva a intentarlo.",
+						Toast.LENGTH_SHORT).show();
+				finish();
 			}
-			
-
-			splashProgress.setVisibility(View.INVISIBLE);
-
-			Intent usuario = new Intent(SplashActivity.this, TabsUsuario.class);
-			usuario.putExtra("PROMO", Promo);
-			startActivity(usuario);
-
 		}
 
 		@Override
@@ -499,11 +559,12 @@ public class SplashActivity extends AppCompatActivity {
 	 * @return
 	 */
 
-	public static ArrayList<Info> parseFeedInfo(String contentPromo) {
+	public boolean parseFeedInfo(String contentPromo) {
 
+		boolean gestionOk=true;
 		try {
 			JSONArray ar = new JSONArray(contentPromo);
-			ArrayList<Info> datasJson = new ArrayList<>();
+			
 
 			for (int i = 0; i < ar.length(); i++) {
 
@@ -511,16 +572,23 @@ public class SplashActivity extends AppCompatActivity {
 				Info info = new Info(obj.getString("SOMOS"),
 						obj.getString("CONTACTOS"));
 
-				BL.getBl().actualizarInfo(info);
-				BL.getBl().actualizarInfoUsuario(info);
+				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.actualizarInfo(info);
+				//controladorUsuario.insertInfo();
+				controladorUsuario.cerrarBaseDeDatos();
+				
+				
 
-				datasJson.add(info);
+				//BL.getBl().actualizarInfoUsuario(info);
+
+				
 			}
-			return datasJson;
+			return gestionOk;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			gestionOk = false;
+			return gestionOk;
 		}
 
 	}

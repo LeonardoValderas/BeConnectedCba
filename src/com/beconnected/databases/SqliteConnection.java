@@ -211,7 +211,8 @@ public class SqliteConnection extends SQLiteOpenHelper {
 				database.execSQL(sql1);
 				database.execSQL(sql2);
 				database.execSQL(sql3);
-
+		
+				
 			} catch (Exception e) {
 
 				Log.e("dropTablasBDAdm", e.toString());

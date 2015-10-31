@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import com.beconnected.databases.BL;
+import com.beconnected.databases.ControladorUsuario;
 import com.beconnected.databases.Promo;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -30,8 +31,9 @@ public class FragmentPromos extends Fragment {
 	private ArrayList<Promo> datosPromo;
 	private AdaptadorPromos adaptador;
 	private static View view;
-	   private  Typeface cFont;
-
+	private  Typeface cFont;
+	private ControladorUsuario controladorUsuario;
+	
 	public static FragmentPromos newInstance() {
 		FragmentPromos fragment = new FragmentPromos();
 		return fragment;
@@ -44,7 +46,7 @@ public class FragmentPromos extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle state) {
 		super.onActivityCreated(state);
-
+		controladorUsuario = new ControladorUsuario(getActivity());
 		init();
 	}
 
@@ -59,6 +61,8 @@ public class FragmentPromos extends Fragment {
 	        }
 	        try {
 	            view = inflater.inflate(R.layout.fragment_promo, container, false);
+	            recycleViewPromo = (RecyclerView) view.findViewById(
+	    				R.id.recycleViewPromo);
 	          //  TextView messageTextView = (TextView)view.findViewById(R.id.textView);
 	           // messageTextView.setText(message);
 	        } catch (InflateException e) {
@@ -90,8 +94,8 @@ public class FragmentPromos extends Fragment {
 	
 	private void init() {
 
-		recycleViewPromo = (RecyclerView) getView().findViewById(
-				R.id.recycleViewPromo);
+//		recycleViewPromo = (RecyclerView) getView().findViewById(
+//				R.id.recycleViewPromo);
 		recyclerViewLoadPromo();
 
 		recycleViewPromo.addOnItemTouchListener(new RecyclerTouchListener(
@@ -125,7 +129,13 @@ public class FragmentPromos extends Fragment {
 		recycleViewPromo.addItemDecoration(new DividerItemDecoration(
 				getActivity(), DividerItemDecoration.VERTICAL_LIST));
 		recycleViewPromo.setItemAnimator(new DefaultItemAnimator());
-		datosPromo = BL.getBl().selectListaPromoUsuario();
+		
+
+		controladorUsuario.abrirBaseDeDatos();
+		datosPromo= controladorUsuario.selectListaPromo();
+		controladorUsuario.cerrarBaseDeDatos();
+		
+		//datosPromo = BL.getBl().selectListaPromoUsuario();
 
 		adaptador = new AdaptadorPromos(datosPromo,cFont);
 		// adaptador.notifyDataSetChanged();
