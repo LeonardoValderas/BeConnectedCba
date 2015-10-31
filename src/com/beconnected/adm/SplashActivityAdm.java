@@ -276,9 +276,9 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 	public boolean parseFeed(String content) {
 		boolean gestionOk= true; 
-
+		JSONArray ar=null;
 		try {
-			JSONArray ar = new JSONArray(content);
+			 ar = new JSONArray(content);
 		
 			for (int i = 0; i < ar.length(); i++) {
 
@@ -288,8 +288,9 @@ public class SplashActivityAdm extends AppCompatActivity {
 				// "http://beconnected.esy.es/BeConnected/picture/mv.PGN";
 
 				Bitmap b = getBitmap(a);
+				if(b!=null){
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				if(stream!=null){
+				
 				b.compress(Bitmap.CompressFormat.PNG, 0, stream);
 				byte[] byteArray = stream.toByteArray();
 
@@ -325,10 +326,14 @@ public class SplashActivityAdm extends AppCompatActivity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			if(ar==null){
+				gestionOk=true;
+				return gestionOk;
+			}
 			gestionOk=false;
 			return gestionOk;
 		}
-
+		//return gestionOk;
 	}
 
 	public static Bitmap getBitmap(String url) {
@@ -436,8 +441,12 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 	public boolean parseFeedPromo(String contentPromo) {
       boolean gestionOk=true;
+  	JSONArray ar=null;
+ 
 		try {
-			JSONArray ar = new JSONArray(contentPromo);
+			
+			
+			 ar = new JSONArray(contentPromo);
 		
 
 			for (int i = 0; i < ar.length(); i++) {
@@ -475,10 +484,15 @@ public class SplashActivityAdm extends AppCompatActivity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		
+			if(ar==null){
+				gestionOk=true;
+				return gestionOk;
+			}
 			gestionOk=false;
 			return gestionOk;
 		}
-
+		
 	}
 
 	/**
@@ -546,8 +560,9 @@ public class SplashActivityAdm extends AppCompatActivity {
 
 	public boolean parseFeedInfo(String contentPromo) {
 		boolean gestionOk=true;
+		JSONArray ar=null;
 		try {
-			JSONArray ar = new JSONArray(contentPromo);
+			 ar = new JSONArray(contentPromo);
 
 
 			for (int i = 0; i < ar.length(); i++) {
@@ -559,6 +574,7 @@ public class SplashActivityAdm extends AppCompatActivity {
 			//	controladorAdm = new ControladorAdm(SplashActivityAdm.this);
 
 				controladorAdm.abrirBaseDeDatos();
+				controladorAdm.insertInfo();
 				controladorAdm.actualizarInfo(info);
 				controladorAdm.cerrarBaseDeDatos();
 
@@ -584,6 +600,10 @@ public class SplashActivityAdm extends AppCompatActivity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			if(ar==null){
+				gestionOk=true;
+				return gestionOk;
+			}
 			gestionOk = false;
 			return gestionOk;
 		}

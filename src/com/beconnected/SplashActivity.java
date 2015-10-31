@@ -131,7 +131,6 @@ public class SplashActivity extends AppCompatActivity {
 		
 		controladorUsuario.abrirBaseDeDatos();
 		controladorUsuario.dropTablasBDUsuario();
-		controladorUsuario.insertInfo();
 		controladorUsuario.cerrarBaseDeDatos();
 	//	DL.getDl().setSqliteConnection(this);
 	//	BL.getBl().dropTablasBDUsuario();
@@ -139,12 +138,12 @@ public class SplashActivity extends AppCompatActivity {
 	//	BL.getBl().creaDirectorios();
 	//BL.getBl().insertarInfoUsuario();
 		registrarCel();
-
+		Promo = getIntent().getBooleanExtra("PROMO", false);
 		new TaskEmpresa().execute("");
 		//new TaskPromo().execute("");
 		//new TaskInfo().execute("");
 
-		Promo = getIntent().getBooleanExtra("PROMO", false);
+	
 
 	}
 
@@ -303,8 +302,10 @@ public class SplashActivity extends AppCompatActivity {
 
 	public  boolean parseFeed(String content) {
 		boolean gestionOk= true; 
+		JSONArray ar =null;
+		
 		try {
-			JSONArray ar = new JSONArray(content);
+			 ar = new JSONArray(content);
 
 
 			for (int i = 0; i < ar.length(); i++) {
@@ -313,10 +314,11 @@ public class SplashActivity extends AppCompatActivity {
 				String a = obj.getString("URL_LOGO").toString();
 
 				Bitmap b = getBitmap(a);
+				if(b!=null)
+				{	
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				
-				if(stream!=null)
-				{	
+			
 				b.compress(Bitmap.CompressFormat.PNG, 0, stream);
 				byte[] byteArray = stream.toByteArray();
 
@@ -346,6 +348,10 @@ public class SplashActivity extends AppCompatActivity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			if(ar==null){
+				gestionOk=true;
+				return gestionOk;
+			}
 			gestionOk=false;
 			return gestionOk;
 		}
@@ -462,8 +468,9 @@ public class SplashActivity extends AppCompatActivity {
 
 	public  boolean parseFeedPromo(String contentPromo) {
 		boolean gestionOk=true;
+		JSONArray ar=null;
 		try {
-			JSONArray ar = new JSONArray(contentPromo);
+			 ar = new JSONArray(contentPromo);
 		
 
 			for (int i = 0; i < ar.length(); i++) {
@@ -489,6 +496,11 @@ public class SplashActivity extends AppCompatActivity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+
+			if(ar==null){
+				gestionOk=true;
+				return gestionOk;
+			}
 			gestionOk=false;
 			return gestionOk;
 		}
@@ -526,10 +538,14 @@ public class SplashActivity extends AppCompatActivity {
 			if(result!=null)
 			{
 				if(parseFeedInfo(result)){
+				
+					
+					
 					splashProgress.setVisibility(View.INVISIBLE);
 
 					Intent usuario = new Intent(SplashActivity.this,
 							TabsUsuario.class);
+					usuario.putExtra("PROMO", Promo);
 					startActivity(usuario);
 					
 				}else{
@@ -562,8 +578,9 @@ public class SplashActivity extends AppCompatActivity {
 	public boolean parseFeedInfo(String contentPromo) {
 
 		boolean gestionOk=true;
+		JSONArray ar=null;
 		try {
-			JSONArray ar = new JSONArray(contentPromo);
+			 ar = new JSONArray(contentPromo);
 			
 
 			for (int i = 0; i < ar.length(); i++) {
@@ -573,6 +590,7 @@ public class SplashActivity extends AppCompatActivity {
 						obj.getString("CONTACTOS"));
 
 				controladorUsuario.abrirBaseDeDatos();
+				controladorUsuario.insertInfo();
 				controladorUsuario.actualizarInfo(info);
 				//controladorUsuario.insertInfo();
 				controladorUsuario.cerrarBaseDeDatos();
@@ -587,6 +605,10 @@ public class SplashActivity extends AppCompatActivity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			if(ar==null){
+				gestionOk=true;
+				return gestionOk;
+			}
 			gestionOk = false;
 			return gestionOk;
 		}

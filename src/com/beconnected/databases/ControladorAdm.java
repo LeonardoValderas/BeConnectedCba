@@ -67,7 +67,7 @@ public class ControladorAdm {
  
  public ArrayList<Empresa> selectListaEmpresa() {
 
-		String sql = "SELECT * FROM EMPRESA";
+		String sql = "SELECT * FROM EMPRESA ORDER BY ID_EMPRESA DESC";
 		ArrayList<Empresa> arrayEmpresa = new ArrayList<Empresa>();
 		String empresaa = null, longitud = null, latitud = null, url_logo = null;
 		byte[] logo = null;

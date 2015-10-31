@@ -316,7 +316,7 @@ public class ControladorUsuario {
 			
 			String sql1 = "DELETE FROM  EMPRESA_U";
 			String sql2 = "DELETE FROM  PROMO_U";
-			String sql3 = "DELETE FROM  INFO_U";
+			//String sql3 = "DELETE FROM  INFO_U";
 
 		
 			if (database != null && database.isOpen()) {
@@ -325,7 +325,7 @@ public class ControladorUsuario {
 
 					database.execSQL(sql1);
 					database.execSQL(sql2);
-					database.execSQL(sql3);
+				//	database.execSQL(sql3);
 					
 
 				} catch (Exception e) {
@@ -339,7 +339,7 @@ public class ControladorUsuario {
 
 			sql1 = null;
 			sql2 = null;
-			sql3 = null;
+		//	sql3 = null;
 			database = null;
 		}
 

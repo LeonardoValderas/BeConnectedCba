@@ -318,7 +318,7 @@ public class FragmentAdmEmpresa extends Fragment {
 								.valueOf(latitud), imagenLogo,
 								GeneralLogic.URL_LOGO
 										+ editTextEmpresa.getText().toString()
-												.replace(" ", "") + ".PNG");
+												.replace(" ", "").trim() + ".PNG");
 
 						// subimos los datos al server.
 
@@ -389,7 +389,7 @@ public class FragmentAdmEmpresa extends Fragment {
 								.toString(), String.valueOf(longitud), String
 								.valueOf(latitud), imagenLogo,
 								GeneralLogic.URL_LOGO
-										+ editTextEmpresa.getText().toString()
+										+ editTextEmpresa.getText().toString().replace(" ", "").trim()
 										+ ".PNG");
 
 						if (imagenLogo != null) {
@@ -408,9 +408,9 @@ public class FragmentAdmEmpresa extends Fragment {
 						p.setParametrosDatos("empresa", empresa.getEMPRESA());
 						p.setParametrosDatos("longitud", empresa.getLONGITUD());
 						p.setParametrosDatos("latitud", empresa.getLATIDUD());
-						String input = empresa.getEMPRESA().replace(" ", "");
-						input = input.trim();
-						p.setParametrosDatos("url_empresa", input);
+//						String input = empresa.getEMPRESA().replace(" ", "");
+//						input = input.trim();
+//						p.setParametrosDatos("url_empresa", input);
 
 						if (GeneralLogic.conexionInternet(getActivity())) {
 							TaskEmpresa taskEmpresa = new TaskEmpresa();

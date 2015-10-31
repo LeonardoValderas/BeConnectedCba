@@ -94,10 +94,14 @@ private  Typeface cFont;
 
 		Intent notificationIntent = new Intent(getApplicationContext(),
 				SplashActivity.class);
+		//Bundle extras = new Bundle();
+		//extras.putBoolean("PROMO", Promo);
+		//extras.putString(key, value);
+		//notificationIntent.putExtras(extras);
 		notificationIntent.putExtra("PROMO", Promo);
 
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
+				notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		// new Intent(this, TabsUsuario.class), 0);
 
 		// PendingIntent contentIntent = PendingIntent.getActivity(this, 0,

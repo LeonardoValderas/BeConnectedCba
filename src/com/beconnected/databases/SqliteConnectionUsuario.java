@@ -27,7 +27,7 @@ public class SqliteConnectionUsuario extends SQLiteOpenHelper {
 			String TABLA_INFO_U = "CREATE TABLE IF NOT EXISTS INFO_U (SOMOS VARCHAR(500),"
 					+ " CONTACTO VARCHAR(500));";
 
-
+			String TABLA_ID = "CREATE TABLE IF NOT EXISTS ID (ID INTEGER);";
 	
 	public SqliteConnectionUsuario(Context context, String name,
 			CursorFactory factory, int version) {
@@ -41,6 +41,7 @@ public class SqliteConnectionUsuario extends SQLiteOpenHelper {
 		db.execSQL(TABLA_EMPRESA_U);
 		db.execSQL(TABLA_PROMO_U);
 		db.execSQL(TABLA_INFO_U);
+		db.execSQL(TABLA_ID);
 	}
 
 	@Override
@@ -49,10 +50,12 @@ public class SqliteConnectionUsuario extends SQLiteOpenHelper {
 		 db.execSQL("DROP TABLE IF EXISTS EMPRESA_U");
 		 db.execSQL("DROP TABLE IF EXISTS PROMO_U");
 		 db.execSQL("DROP TABLE IF EXISTS INFO_U");
+		 db.execSQL("DROP TABLE IF EXISTS ID");
 	        //Se crea la nueva versión de la tabla
 			db.execSQL(TABLA_EMPRESA_U);
 			db.execSQL(TABLA_PROMO_U);
 			db.execSQL(TABLA_INFO_U);
+			db.execSQL(TABLA_ID);
 	}
 
 }

@@ -273,7 +273,8 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 					base.eliminarPromoEmpresa(idEmpresa);
 					base.cerrarBaseDeDatos();
 					
-//					
+					return json.getString(TAG_MESSAGE);
+
 //					BL.getBl().eliminarEmpresa(idEmpresa);
 //					BL.getBl().eliminarPromoEmpresa(idEmpresa);
 					
