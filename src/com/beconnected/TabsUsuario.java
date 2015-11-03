@@ -334,7 +334,7 @@ public class TabsUsuario extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_usuario, menu);
 
-		 menu.getItem(0).setVisible(false);
+		// menu.getItem(0).setVisible(false);
 		
 		return super.onCreateOptionsMenu(menu);
 	}

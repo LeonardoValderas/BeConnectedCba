@@ -325,7 +325,8 @@ public class FragmentAdmPromo extends Fragment {
 						
 						//promoArray = BL.getBl().selectListaPromo();
 						if (radioButtonStock.isChecked()) {
-
+					
+							
 							promo = new Promo(promoArray.get(posicion)
 									.getID_PROMO(), editTextTitulo.getText()
 									.toString(), editTextDescripcion.getText()
@@ -337,9 +338,9 @@ public class FragmentAdmPromo extends Fragment {
 							
 
 
-							controladorAdm.abrirBaseDeDatos();
-							promoArray = controladorAdm.selectListaPromo();
-							controladorAdm.cerrarBaseDeDatos();
+//							controladorAdm.abrirBaseDeDatos();
+//							promoArray = controladorAdm.selectListaPromo();
+//							controladorAdm.cerrarBaseDeDatos();
 							
 							//promoArray = BL.getBl().selectListaPromo();
 							//promoArray.get(posicion).getID_EMPRESA()
@@ -458,7 +459,7 @@ public class FragmentAdmPromo extends Fragment {
 						//insertar = true;
 					} else {
 						controladorAdm.abrirBaseDeDatos();
-						controladorAdm.actualizarPromo( promo);
+						controladorAdm.actualizarPromo(promo);
 						controladorAdm.cerrarBaseDeDatos();
 						
 						

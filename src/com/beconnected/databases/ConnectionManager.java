@@ -219,8 +219,8 @@ public class ConnectionManager {
 			}
 			StringBuilder sb = new StringBuilder();
 			reader = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-
+					con.getInputStream(),"UTF-8"),8);
+			
 			String line;
 			while ((line = reader.readLine()) != null) {
 

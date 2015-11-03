@@ -97,7 +97,7 @@ public class SplashActivity extends AppCompatActivity {
 				});
 			}
 		};
-		timerActualizacion.scheduleAtFixedRate(taskActualizacion, 0,
+		timerActualizacion.scheduleAtFixedRate(taskActualizacion, TIEMPO_SERVICIO,
 				TIEMPO_SERVICIO);
 
 		if (GeneralLogic.conexionInternet(SplashActivity.this)) {

@@ -274,40 +274,57 @@ public class ControladorAdm {
 		return arrayPromo;
 	}
 	
-	public boolean actualizarPromo(Promo promo) {
+	public boolean actualizarPromo(Promo promo) throws SQLiteException {
+		boolean ban = false;
 
-		boolean res = false;
+		ContentValues cv = new ContentValues();
+		cv.put("TITULO", promo.getTITULO());
+		cv.put("DESCRIPCION", promo.getDESCRIPCION());
+		cv.put("ID_EMPRESA", promo.getID_EMPRESA());
+		cv.put("FECHA_INICIO", promo.getFECHA_INICIO());
+		cv.put("FECHA_FIN", promo.getFECHA_FIN());
+		cv.put("FECHA_INICIO", promo.getFECHA_INICIO());
 		
-		String sql = "UPDATE PROMO SET TITULO='" + promo.getTITULO()
-				+ "', DESCRIPCION='" + promo.getDESCRIPCION()
-				+ "', ID_EMPRESA='" + promo.getID_EMPRESA()
-				+ "', FECHA_INICIO='" + promo.getFECHA_INICIO()
-				+ "', FECHA_FIN = '" + promo.getFECHA_FIN()
-				+ "' WHERE ID_PROMO ='" + promo.getID_PROMO() + "'";
-
-		if (database != null && database.isOpen()) {
-
-			try {
-
-				database.execSQL(sql);
-				res = true;
-
-			} catch (Exception e) {
-
-				res = false;
-				Log.e("actualizarPromo", e.toString());
-			}
-
-		} else {
-
-			res = false;
-			Log.e("actualizarPromo", "Error Conexión Base de Datos");
-		}
-
-		database = null;
-		sql = null;
-		return res;
+	   database.update("PROMO", cv,
+				"ID_PROMO" + "=" + promo.getID_PROMO(), null);
+		return true;
 	}
+	
+	
+//	public boolean actualizarPromo(Promo promo) {
+//
+//		boolean res = false;
+//		
+//		String sql = "UPDATE PROMO SET TITULO='" + promo.getTITULO()
+//				+ "', DESCRIPCION='" + promo.getDESCRIPCION()
+//				+ "', ID_EMPRESA='" + promo.getID_EMPRESA()
+//				+ "', FECHA_INICIO='" + promo.getFECHA_INICIO()
+//				+ "', FECHA_FIN = '" + promo.getFECHA_FIN()
+//				+ "' WHERE ID_PROMO ='" + promo.getID_PROMO() + "'";
+//		sql = sql.replace("'", "''");
+//		if (database != null && database.isOpen()) {
+//
+//			try {
+//
+//				database.execSQL(sql);
+//				res = true;
+//
+//			} catch (Exception e) {
+//
+//				res = false;
+//				Log.e("actualizarPromo", e.toString());
+//			}
+//
+//		} else {
+//
+//			res = false;
+//			Log.e("actualizarPromo", "Error Conexión Base de Datos");
+//		}
+//
+//		database = null;
+//		sql = null;
+//		return res;
+//	}
 
 	public boolean eliminarPromo(int id) {
 

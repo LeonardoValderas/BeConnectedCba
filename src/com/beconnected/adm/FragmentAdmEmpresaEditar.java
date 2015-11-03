@@ -1,6 +1,8 @@
 package com.beconnected.adm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -405,6 +407,10 @@ public class FragmentAdmEmpresaEditar extends Fragment {
 
 	}
 
+	
+
+	
+	
 	@Override
 	public void onDestroyView() {
 		// TODO Auto-generated method stub
